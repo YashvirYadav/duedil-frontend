@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -39,28 +38,28 @@ function Copyright(props: any) {
   );
 }
 
-const CssTextField = styled(TextField, {
-  shouldForwardProp: (props) => props !== "focusColor",
-})((p) => ({
-  // input label when focused
-  "& label.Mui-focused": {
-    color: "#FFF",
-  },
-  // focused color for input with variant='standard'
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "#FFF",
-  },
-  // focused color for input with variant='filled'
-  "& .MuiFilledInput-underline:after": {
-    borderBottomColor: "#FFF",
-  },
-  // focused color for input with variant='outlined'
-  "& .MuiOutlinedInput-root": {
-    "&.Mui-focused fieldset": {
-      borderColor: "#FFF",
-    },
-  },
-}));
+// const CssTextField = styled(TextField, {
+//   shouldForwardProp: (props) => props !== "focusColor",
+// })((p) => ({
+//   // input label when focused
+//   "& label.Mui-focused": {
+//     color: "#FFF",
+//   },
+//   // focused color for input with variant='standard'
+//   "& .MuiInput-underline:after": {
+//     borderBottomColor: "#FFF",
+//   },
+//   // focused color for input with variant='filled'
+//   "& .MuiFilledInput-underline:after": {
+//     borderBottomColor: "#FFF",
+//   },
+//   // focused color for input with variant='outlined'
+//   "& .MuiOutlinedInput-root": {
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#FFF",
+//     },
+//   },
+// }));
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -82,7 +81,7 @@ export default function SignIn() {
     if (email && password) {
       const loginRequest: ILoginRequest = { email: email, password: password };
       dispatch(login(loginRequest as ILoginRequest)).then()
-      navigate("/dashboard");
+      navigate("/admin");
 }
   };
   const theme = useTheme();
