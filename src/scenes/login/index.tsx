@@ -12,13 +12,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import { styled } from "@mui/material/styles";
-import { useDispatch } from 'react-redux';
+
+import { useDispatch } from "react-redux";
 import { login } from "../../redux/authSlice/authslice";
 import { ILoginRequest } from "../../redux/authSlice/user.type";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
-
 
 function Copyright(props: any) {
   return (
@@ -38,51 +37,33 @@ function Copyright(props: any) {
   );
 }
 
-// const CssTextField = styled(TextField, {
-//   shouldForwardProp: (props) => props !== "focusColor",
-// })((p) => ({
-//   // input label when focused
-//   "& label.Mui-focused": {
-//     color: "#FFF",
-//   },
-//   // focused color for input with variant='standard'
-//   "& .MuiInput-underline:after": {
-//     borderBottomColor: "#FFF",
-//   },
-//   // focused color for input with variant='filled'
-//   "& .MuiFilledInput-underline:after": {
-//     borderBottomColor: "#FFF",
-//   },
-//   // focused color for input with variant='outlined'
-//   "& .MuiOutlinedInput-root": {
-//     "&.Mui-focused fieldset": {
-//       borderColor: "#FFF",
-//     },
-//   },
-// }));
-
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function SignIn() {
   const navigate = useNavigate();
 
-  const dispatch = useDispatch<AppDispatch>();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [errorEmailID, setErrorEmailID] = React.useState<boolean>(false);
+  const [errorPassword, setErrorPassword] = React.useState<boolean>(false);
 
-    const email = data.get("email")?.toString();
-    const password = data.get("password")?.toString();
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSubmit = () => {
+    if (email === "" || (email && email?.length < 3)) {
+      setErrorEmailID(true);
+    }
+    if (password === "" || (password && password?.length < 3)) {
+      setErrorPassword(true);
+    }
 
     if (email && password) {
       const loginRequest: ILoginRequest = { email: email, password: password };
-      dispatch(login(loginRequest as ILoginRequest)).then()
-      navigate("/admin");
-}
+      dispatch(login(loginRequest as ILoginRequest)).then(() => {
+        navigate("/admin");
+      });
+    }
   };
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -105,7 +86,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
@@ -115,6 +96,13 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            error={errorEmailID}
+            value={email}
+            onChange={(e) => {
+              setErrorEmailID(false);
+              setEmail(e.target.value);
+            }}
+            helperText={errorEmailID ? "Invalid email" : ""} // Error message
           />
           <TextField
             margin="normal"
@@ -125,6 +113,13 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={errorPassword}
+            value={password}
+            onChange={(e) => {
+              setErrorPassword(false);
+              setPassword(e.target.value);
+            }}
+            helperText={errorPassword ? "Invalid password" : ""} // Error message
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -136,6 +131,7 @@ export default function SignIn() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             color="secondary"
+            onClick={handleSubmit}
           >
             Sign In
           </Button>

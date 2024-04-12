@@ -34,7 +34,11 @@ const initialState: InitialState = {
 const postSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser :(state)=>{
+      state.data= null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -56,6 +60,8 @@ const postSlice = createSlice({
   },
 });
 
+
+export const {resetUser} = postSlice.actions
 
 export default postSlice.reducer
 
