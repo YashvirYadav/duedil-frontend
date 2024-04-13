@@ -1,19 +1,25 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
 
 const AdminHome = () => {
-  return (
-    <div>
-      <div className="app">
-        <Sidebar />
-        <main className="content">
-          <Topbar />
+  const authToken = sessionStorage.getItem("token");
 
-          <Outlet />
-        </main>
-      </div>
+  
+
+  return (
+    authToken ? <div>
+    <div className="app">
+      <Sidebar />
+      <main className="content">
+        <Topbar />
+
+        <Outlet />
+      </main>
     </div>
+  </div> : <Navigate to="/"/>
+
+    
   );
 };
 
