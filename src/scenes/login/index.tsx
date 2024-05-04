@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
+import { Toast } from "../../components/Toast";
 
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/authSlice/authslice";
@@ -77,92 +78,103 @@ export default function SignIn() {
   const colors = tokens(theme.palette.mode);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          backgroundColor: colors.primary[400],
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            error={errorEmailID}
-            value={email}
-            onChange={(e) => {
-              setErrorEmailID(false);
-              setEmail(e.target.value);
-            }}
-            helperText={errorEmailID ? "Invalid email" : ""} // Error message
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            error={errorPassword}
-            value={password}
-            onChange={(e) => {
-              setErrorPassword(false);
-              setPassword(e.target.value);
-            }}
-            helperText={errorPassword ? "Invalid password" : ""} // Error message
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            color="secondary"
-            onClick={handleSubmit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2" color="#ffff">
-                Forgot password?
-              </Link>
-            </Grid>
+    <>
+      <Container component="main" maxWidth="xs">
+        <Box
+          sx={{
+            backgroundColor: colors.primary[400],
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "30px",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              error={errorEmailID}
+              value={email}
+              onChange={(e) => {
+                setErrorEmailID(false);
+                setEmail(e.target.value);
+              }}
+              helperText={errorEmailID ? "Invalid email" : ""} // Error message
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              error={errorPassword}
+              value={password}
+              onChange={(e) => {
+                setErrorPassword(false);
+                setPassword(e.target.value);
+              }}
+              helperText={errorPassword ? "Invalid password" : ""} // Error message
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              color="secondary"
+              onClick={handleSubmit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2" color="#ffff">
+                  Forgot password?
+                </Link>
+              </Grid>
 
-            <Grid item>
-              <Link href="#" variant="body2" color="#ffff">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <Grid item>
+                <Link href="#" variant="body2" color="#ffff">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
-      {
-      lodingState === "loading" ? <Loader /> : null
-      }
-     
-      <Copyright sx={{ mt: 8, mb: 4 }} />
-    </Container>
+
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+      {lodingState ? (
+        lodingState === "failed" ? (
+          <Toast
+            open={true}
+            handleClose={() => {}}
+            message="Invalid email or password"
+            severity="error"
+          />
+        ) : lodingState === "loading" ? (
+          <Loader />
+        ) : null
+      ) : null}
+    </>
   );
 }
