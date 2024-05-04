@@ -87,37 +87,19 @@ const RegisterCompany = () => {
             sx={{ gridColumn: "span 12" }}
           />
 
-          <InputLabel id="demo-simple-select-autowidth-label">
-            Country
-          </InputLabel>
+          <InputLabel id="demo-simple-select-helper-label">Country</InputLabel>
           <Select
-            fullWidth
-            labelId="demo-simple-select-autowidth-label"
-            id="demo-simple-select-autowidth"
-            autoWidth
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
             label="Country"
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Twenty</MenuItem>
-            <MenuItem value={21}>Twenty one</MenuItem>
-            <MenuItem value={22}>Twenty one and a half</MenuItem>
+            <MenuItem value={10}>India</MenuItem>
+            <MenuItem value={20}>India</MenuItem>
+            <MenuItem value={30}>India</MenuItem>
           </Select>
-
-          <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          label="Age"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
 
           <TextField
             fullWidth
@@ -127,21 +109,18 @@ const RegisterCompany = () => {
             name="Currency"
             sx={{ gridColumn: "span 12" }}
           />
-
-          <InputLabel id="demo-simple-select-autowidth-label">State</InputLabel>
+          <InputLabel id="demo-simple-select-helper-label">State</InputLabel>
           <Select
-            fullWidth
-            labelId="demo-simple-select-autowidth-label"
-            id="demo-simple-select-autowidth"
-            autoWidth
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
             label="State"
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Twenty</MenuItem>
-            <MenuItem value={21}>Twenty one</MenuItem>
-            <MenuItem value={22}>Twenty one and a half</MenuItem>
+            <MenuItem value={10}>Uttar Pradesh</MenuItem>
+            <MenuItem value={20}>Uttar Pradesh</MenuItem>
+            <MenuItem value={30}>Uttar Pradesh</MenuItem>
           </Select>
 
           <TextField

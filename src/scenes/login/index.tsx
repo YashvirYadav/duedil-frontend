@@ -13,11 +13,14 @@ import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/authSlice/authslice";
 import { ILoginRequest } from "../../redux/authSlice/user.type";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
+import { loading } from "../../redux/authSlice/auth.selector";
+import { useEffect } from "react";
+import { Loader } from "../../components/Lodar";
 
 function Copyright(props: any) {
   return (
@@ -49,6 +52,13 @@ export default function SignIn() {
   const [password, setPassword] = React.useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
+  const lodingState = useSelector(loading);
+
+  useEffect(() => {
+    if (lodingState === "succeeded") {
+      navigate("/admin");
+    }
+  }, [lodingState]);
 
   const handleSubmit = () => {
     if (email === "" || (email && email?.length < 3)) {
@@ -60,9 +70,7 @@ export default function SignIn() {
 
     if (email && password) {
       const loginRequest: ILoginRequest = { email: email, password: password };
-      dispatch(login(loginRequest as ILoginRequest)).then(() => {
-        navigate("/admin");
-      });
+      dispatch(login(loginRequest as ILoginRequest)).then(() => {});
     }
   };
   const theme = useTheme();
@@ -150,6 +158,10 @@ export default function SignIn() {
           </Grid>
         </Box>
       </Box>
+      {
+      lodingState === "loading" ? <Loader /> : null
+      }
+     
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );

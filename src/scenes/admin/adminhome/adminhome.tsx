@@ -1,25 +1,34 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "../../global/Sidebar";
 import Topbar from "../../global/Topbar";
+import { useEffect, useState } from "react";
 
 const AdminHome = () => {
-  const authToken = sessionStorage.getItem("token");
+  const [isAuth,setIsAuth] = useState<boolean>(true)
+ // const navigate = useNavigate();
+ const authToken = sessionStorage.getItem("token");
 
-  
+  useEffect(() => {
+    console.log("authToken=>")
+
+    if (!authToken) {
+      setIsAuth(false)
+    //  navigate("/");
+    }
+  },[authToken]);
 
   return (
-    authToken ? <div>
-    <div className="app">
-      <Sidebar />
-      <main className="content">
-        <Topbar />
+    isAuth?
+    <div>
+      <div className="app">
+        <Sidebar />
+        <main className="content">
+          <Topbar />
 
-        <Outlet />
-      </main>
-    </div>
-  </div> : <Navigate to="/"/>
-
-    
+          <Outlet />
+        </main>
+      </div>
+    </div>:<Navigate to={"/"} ></Navigate>
   );
 };
 
