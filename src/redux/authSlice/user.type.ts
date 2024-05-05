@@ -3,8 +3,7 @@ export interface ILoginSuccessResponce {
   data: IData;
   message: string;
   success: boolean;
-  
-}
+  }
 
 export interface IData {
   user: IUser;
