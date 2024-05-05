@@ -19,7 +19,7 @@ import { login } from "../../redux/authSlice/authslice";
 import { ILoginRequest } from "../../redux/authSlice/user.type";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
-import { loading } from "../../redux/authSlice/auth.selector";
+import { loading,userrole } from "../../redux/authSlice/auth.selector";
 import { useEffect } from "react";
 import { Loader } from "../../components/Lodar";
 
@@ -54,12 +54,23 @@ export default function SignIn() {
 
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
-
+  const role = useSelector(userrole);
+console.log("role => ",role)
   useEffect(() => {
     if (lodingState === "succeeded") {
-      navigate("/admin");
+      switch(role) {
+        case 'superadmin':
+          navigate("/admin");
+          break;
+        case 'user':
+          navigate("/user");
+          break;
+        default:
+          navigate("/");
+      }
+      //navigate("/admin");
     }
-  }, [lodingState]);
+  }, [lodingState, role, navigate]);
 
   const handleSubmit = () => {
     if (email === "" || (email && email?.length < 3)) {

@@ -52,7 +52,7 @@ const postSlice = createSlice({
           state.status = "succeeded";
           state.error = "";
           state.data = action.payload;
-          sessionStorage.setItem("token", action.payload.accessToken);
+          sessionStorage.setItem("token", action.payload.data.accessToken);
         }
       )
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {
