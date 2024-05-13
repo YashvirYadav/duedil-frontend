@@ -20,7 +20,7 @@ import { ILoginRequest } from "../../redux/authSlice/user.type";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
 import { loading,userrole } from "../../redux/authSlice/auth.selector";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Loader } from "../../components/Lodar";
 
 function Copyright(props: any) {
@@ -44,6 +44,7 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function SignIn() {
+  const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const [errorEmailID, setErrorEmailID] = React.useState<boolean>(false);
@@ -72,6 +73,12 @@ console.log("role => ",role)
     }
   }, [lodingState, role, navigate]);
 
+  useEffect(() => {
+    if (lodingState === "failed") {
+      setOpen(true);
+    }
+  }, [lodingState]);
+
   const handleSubmit = () => {
     if (email === "" || (email && email?.length < 3)) {
       setErrorEmailID(true);
@@ -87,6 +94,10 @@ console.log("role => ",role)
   };
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const onClodeToast = () => {
+    console.log("onClodeToast");
+  }
 
   return (
     <>
@@ -177,8 +188,9 @@ console.log("role => ",role)
       {lodingState ? (
         lodingState === "failed" ? (
           <Toast
-            open={true}
-            handleClose={() => {}}
+            open={open}
+            handleClose={onClodeToast}
+            setShowToast = {setOpen}
             message="Invalid email or password"
             severity="error"
           />

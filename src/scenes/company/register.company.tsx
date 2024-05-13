@@ -8,20 +8,16 @@ import {
   Button,
 } from "@mui/material";
 import Box from "@mui/material/Box";
-
 import { tokens } from "../../theme";
-
 import InputLabel from "@mui/material/InputLabel";
-
 import Header from "../../components/Header";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
-
-import { registerCompany } from "../../redux/company/companyslice";
+import { useEffect, useState } from "react";
+import { registerCompany } from "./companyRedux/companyslice";
 import { Loader } from "../../components/Lodar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { loading } from "../../redux/company/company.selector";
+import { loading,message } from "./companyRedux/company.selector";
 import { Toast } from "../../components/Toast";
 
 const RegisterCompany = () => {
@@ -29,10 +25,11 @@ const RegisterCompany = () => {
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
+  const getMessage  = useSelector(message)
 
   const [CompanyName, setCompanyName] = useState<string>("");
   const [code, setCode] = useState<string>("");
-  const [logo, setLogo] = useState<File | null>(null);
+  const [logo, setLogo] = useState<File>();
   const [Country, setCountry] = useState<string>("");
 
   const [State, setState] = useState<string>("");
@@ -47,32 +44,47 @@ const RegisterCompany = () => {
   const [AdminName, setAdminName] = useState<string>("");
   const [emailAdmin, setemailAdmin] = useState<string>("");
   const [Mobile, setMobile] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+
 
   const ragisterCompanySubmit = () => {
-    const formData = new FormData();
-    formData.append("CompanyName", CompanyName);
-    formData.append("code", code);
-    formData.append("logo", logo as Blob);
-    formData.append("Country", Country);
-    formData.append("State", State);
-    formData.append("City", City);
-    formData.append("Address", Address);
-    formData.append("ZIP", ZIP);
-    formData.append("PanNo", PanNo);
-    formData.append("GSTNo", GSTNo);
-    formData.append("CinNo", CinNo);
-    formData.append("Website", Website);
-    formData.append("Status", Status.toString());
-    formData.append("AdminName", AdminName);
-    formData.append("emailAdmin", emailAdmin);
-    formData.append("Mobile", Mobile);
+    if(logo){
+      const formData = new FormData();
+      formData.append("companyname", CompanyName);
+      formData.append("code", code);
+      formData.append("logo", logo as Blob); //
+      formData.append("country", Country);
+      formData.append("state", State);
+      formData.append("city", City);
+      formData.append("address", Address);
+      formData.append("zip", ZIP);
+      formData.append("panno", PanNo);
+      formData.append("gstno", GSTNo);
+      formData.append("cinno", CinNo);
+      formData.append("website", Website);
+      formData.append("isactive", Status.toString());
+      formData.append("adminname", AdminName);
+      formData.append("emailAdmin", emailAdmin);
+      formData.append("mobile", Mobile);
 
-    dispatch(registerCompany(formData));
+    
+
+  
+      dispatch(registerCompany(formData));
+    }
+    
   };
 
+  useEffect(() => {
+    if (lodingState === "failed" || lodingState === "succeeded") {
+      setOpen(true);
+    }
+  }, [lodingState]);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
     if (event.target.files && event.target.files[0]) {
+      console.log(event.target.files[0]);
+
       setLogo(event.target.files[0]);
     }
   };
@@ -309,17 +321,19 @@ const RegisterCompany = () => {
       </Box>
 
       {lodingState ? (
-        lodingState === "failed" ? (
+        lodingState !== "idle" && lodingState !== "loading" ? (
           <Toast
-            open={true}
+            open={open}
             handleClose={() => {}}
-            message="Invalid email or password"
+            setShowToast = {setOpen}
+            message={getMessage}
             severity="error"
           />
         ) : lodingState === "loading" ? (
           <Loader />
         ) : null
       ) : null}
+
     </>
   );
 };

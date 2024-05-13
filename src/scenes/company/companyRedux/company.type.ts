@@ -1,11 +1,16 @@
 export interface IRegisterCompanyResponce {
     statusCode: number;
-    data: ICompany;
+    status: "idle" | "loading" | "succeeded" | "failed";
+    data: ICompany | null;
     message: string;
     success: boolean;
+    error: string | null;
     }
 
+
+
 export interface ICompany{
+    _id : string;
     CompanyName : string;
     code : string;
     logo : string;
@@ -25,3 +30,22 @@ export interface ICompany{
     Description : string;
     Status : boolean;
 }
+
+export interface IGetCompany  {
+    _id: string;
+    companyname: string;
+    code: string;
+    logo: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    zip: string;
+    panno: string;
+    gstno: string;
+    cinno: string;
+    website: string;
+    isactive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };

@@ -17,6 +17,7 @@ import Calendar from "./scenes/calendar/calendar";
 import Login from "./scenes/login";
 import AdminHome from "./scenes/admin/adminhome/adminhome";
 import RegisterCompany  from "./scenes/company/register.company"
+import TableCompany from "./scenes/company/table.company"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -41,6 +42,7 @@ function App() {
             <Route path="line" element={<Line />} />
             <Route path="geography" element={<Geography />} />
             <Route path="addcmapany" element={<RegisterCompany />} />
+            <Route path="cmapanylist" element={<TableCompany/>} />
           </Route>
         </Routes>
       </ThemeProvider>
