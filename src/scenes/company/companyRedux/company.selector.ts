@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import { RootState } from "../../../app/store";
 
 export const company = (state: RootState) => state.company;
 
@@ -9,4 +9,8 @@ export const companyData = createSelector(company, (state) => {
 
 export const loading = createSelector(company, (state) => {
   return state.status;
+});
+
+export const message = createSelector(company, (state) => {
+  return state.message;
 });
