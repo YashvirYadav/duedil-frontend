@@ -42,6 +42,21 @@ export const updateCompanyStatus = createAsyncThunk<IRegisterCompanyResponce, IU
   }
 );
 
+// delete company
+export const deleteCompany = createAsyncThunk<IRegisterCompanyResponce, IUpdateCompany>(
+  "delete/company",
+  async (data, { rejectWithValue }) => {
+    try {
+      const id = data.id;
+      const response = await service.deleteCall("company/deletecompany/"+id);
+      return response.data;
+    } catch (error) {
+      const err = error as IRegisterCompanyResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
+
 export const getCompany = createAsyncThunk<IRegisterCompanyResponce>(
   "get/company",
   async (_, { rejectWithValue }) => {
@@ -89,12 +104,40 @@ const companyPostSlice = createSlice({
         state.status = "succeeded";
         state.error = "";
         state.data = action.payload.data;
-        state.message = action.payload.message;
+        
       })
       .addCase(getCompany.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload.response.data.message;
-      });
+      })
+      .addCase(updateCompanyStatus.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      } ).addCase(updateCompanyStatus.fulfilled, (state, action: PayloadAction<IRegisterCompanyResponce>) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.data = action.payload.data;
+        state.message = action.payload.message;
+      }
+      ).addCase(updateCompanyStatus.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = action.payload.response.data.message;
+      }
+      ).addCase(deleteCompany.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      } ).addCase(deleteCompany.fulfilled, (state, action: PayloadAction<IRegisterCompanyResponce>) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.data = action.payload.data;
+        state.message = action.payload.message;
+      }
+      ).addCase(deleteCompany.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = action.payload.response.data.message;
+      }
+      ) 
+
   },
 });
 

@@ -65,4 +65,12 @@ putCall : (
 ): AxiosPromise => {
   return axios.put(baseURL + url, body, makeHeader(header, defaultContentType, response));
 },
+// delete call
+deleteCall : (
+  url: string,
+  header: IKeyValue<string | number | boolean> = {},
+  response: "blob" | undefined = undefined
+): AxiosPromise => {
+  return axios.delete(baseURL + url, makeHeader(header, defaultContentType, response));
+},
 }

@@ -1,4 +1,4 @@
-import { Box, Switch } from "@mui/material";
+import { Box, Button, Switch, Icon, IconButton } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
@@ -12,9 +12,13 @@ import { useTheme } from "@mui/material";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getCompany, updateCompanyStatus } from "./companyRedux/companyslice";
-import { loading, companyData } from "./companyRedux/company.selector";
+import { deleteCompany, getCompany, updateCompanyStatus } from "./companyRedux/companyslice";
+import { loading, companyData, message } from "./companyRedux/company.selector";
 import { Loader } from "../../components/Lodar";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Toast } from "../../components/Toast";
 
 const Contacts = () => {
   const theme = useTheme();
@@ -22,13 +26,26 @@ const Contacts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
   const company = useSelector(companyData);
-  const [action, setAction] = useState<string>("");
+
+
+  const toastmessage = useSelector(message);
+  console.log("toastmessage => ", toastmessage);
+
+  const [open, setOpen] = useState<boolean>(false);
+
 
   console.log("company => ", company);
 
   useEffect(() => {
     dispatch(getCompany());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (lodingState === "failed" || lodingState === "succeeded") {
+      setOpen(true);
+    }
+  }, [lodingState]);
+
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
     { field: "companyname", headerName: "Company Name" },
@@ -103,13 +120,58 @@ const Contacts = () => {
             console.log("newStatus => ", newStatus);
             // Handle status change
             // You might want to dispatch an action here to update the status on the server
-            dispatch(updateCompanyStatus({ id:id })).then(()=>{
+            dispatch(updateCompanyStatus({ id: id })).then(() => {
               dispatch(getCompany());
-            
             });
           }}
         />
       ),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      headerAlign: "center",
+      align: "center",
+      width: 200,
+      // Remove the 'disableClickEventBubbling' property
+      // from the object literal
+      // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
+      renderCell: (params: GridRenderCellParams) => {
+        const onClickEdit = () => {
+          const id = params.id;
+          // handle edit operation here
+          console.log("id => ", id);
+        };
+
+        const onClickDelete = () => {
+          const id = params.id.toString();
+
+          // handle delete operation here
+          dispatch(deleteCompany({ id: id })).then(() => {
+            dispatch(getCompany());
+          })
+        };
+
+        const onClickView = () => {
+          const id = params.id;
+          // handle view operation here
+        };
+
+        return (
+          <div>
+            <IconButton color="primary" onClick={onClickEdit}>
+              <EditIcon />
+            </IconButton>
+            <IconButton color="secondary" onClick={onClickDelete}>
+              <DeleteIcon />
+            </IconButton>
+            <IconButton onClick={onClickView}>
+              <VisibilityIcon />
+            </IconButton>
+          </div>
+        );
+      },
     },
   ];
 
@@ -149,9 +211,22 @@ const Contacts = () => {
           },
         }}
       >
-        {lodingState && lodingState === "loading" ? <Loader /> : null}
+        {lodingState ? (
+        lodingState !== "idle" && lodingState !== "loading" ? (
+          <Toast
+            open={open}
+            handleClose={() => {}}
+            setShowToast = {setOpen}
+            message={toastmessage}
+            severity="error"
+          />
+        ) : lodingState === "loading" ? (
+          <Loader />
+        ) : null
+      ) : null}
+
         <DataGrid
-          checkboxSelection
+          // checkboxSelection
           rows={Array.isArray(company) ? company : []} // Ensure that company is an array
           columns={columns}
           components={{ Toolbar: GridToolbar }}

@@ -28,6 +28,8 @@ export const Toast: React.FC<ToastProps> = ({
   };
 
   return (
+    <>
+    {message && (
     <Snackbar open={open} autoHideDuration={3000} onClose={handleClick}>
       <div>
         <Alert onClose={handleClose} severity={severity}>
@@ -35,5 +37,7 @@ export const Toast: React.FC<ToastProps> = ({
         </Alert>
       </div>
     </Snackbar>
+    )}
+    </>
   );
 };
