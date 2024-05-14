@@ -63,8 +63,8 @@ console.log("role => ",role)
         case 'superadmin':
           navigate("/admin");
           break;
-        case 'user':
-          navigate("/user");
+        case 'cadmin':
+          navigate("/cadmin");
           break;
         default:
           navigate("/");

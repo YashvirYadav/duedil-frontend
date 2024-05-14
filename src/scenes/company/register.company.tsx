@@ -66,10 +66,6 @@ const RegisterCompany = () => {
       formData.append("adminname", AdminName);
       formData.append("emailAdmin", emailAdmin);
       formData.append("mobile", Mobile);
-
-    
-
-  
       dispatch(registerCompany(formData));
     }
     

@@ -18,6 +18,7 @@ import Login from "./scenes/login";
 import AdminHome from "./scenes/admin/adminhome/adminhome";
 import RegisterCompany  from "./scenes/company/register.company"
 import TableCompany from "./scenes/company/table.company"
+import CadminHome from "./scenes/admin/cadminhome/cadmin"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -44,7 +45,11 @@ function App() {
             <Route path="addcmapany" element={<RegisterCompany />} />
             <Route path="cmapanylist" element={<TableCompany/>} />
           </Route>
-        </Routes>
+         
+          <Route path="cadmin" element={<CadminHome />}> 
+
+          </Route>       
+           </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

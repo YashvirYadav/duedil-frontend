@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Topbar from "../../global/Topbar";
 import { useEffect, useState } from "react";
 
-const AdminHome = () => {
+const CadminHome = () => {
   const [isAuth,setIsAuth] = useState<boolean>(true)
  // const navigate = useNavigate();
  const authToken = sessionStorage.getItem("token");
@@ -32,4 +32,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default CadminHome;
