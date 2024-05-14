@@ -19,6 +19,9 @@ import AdminHome from "./scenes/admin/adminhome/adminhome";
 import RegisterCompany  from "./scenes/company/register.company"
 import TableCompany from "./scenes/company/table.company"
 import CadminHome from "./scenes/admin/cadminhome/cadmin"
+// import UserList from "./scenes/user/table.user"
+import Registeruser from "./scenes/user/register.user"
+import {Company} from "./scenes/company/company"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -42,9 +45,17 @@ function App() {
             <Route path="pie" element={<Pie />} />
             <Route path="line" element={<Line />} />
             <Route path="geography" element={<Geography />} />
-            <Route path="addcmapany" element={<RegisterCompany />} />
-            <Route path="cmapanylist" element={<TableCompany/>} />
+
+            <Route path="company" element={<Company/>} >
+             <Route path="" element={<TableCompany/>} />
+             <Route path="addcmapany" element={<RegisterCompany />} />
+           </Route>
+            
+           
           </Route>
+          
+            <Route path="addUser" element={<Registeruser/>} />
+         
          
           <Route path="cadmin" element={<CadminHome />}> 
 

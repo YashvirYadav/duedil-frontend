@@ -161,17 +161,29 @@ const Sidebar = () => {
             >
               Master
             </Typography>
-            <SubMenu title="Cmapany">
+          
             <Item
-              title="Cmapany List"
-              to="cmapanylist"
+              title="Cmapany"
+              to="company"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
+           
+             
+            
+            <SubMenu title="User">
             <Item
-              title="Add Cmapany"
-              to="addcmapany"
+              title="User List"
+              to="userlist"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Add User"
+              to="adduser"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

@@ -25,6 +25,15 @@ export interface IUser {
   watchHistory: any[]; // Replace 'any' with the actual type if you know it
 }
 
+export interface IRegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  userrole: string;
+  status: boolean;
+  mobile: string;
+}
+
 export interface ILoginRequest {
   email: string;
   password: string;

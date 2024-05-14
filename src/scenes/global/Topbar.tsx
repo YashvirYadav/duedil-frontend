@@ -10,7 +10,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { resetUser } from "../../redux/authSlice/authslice";
+import { resetUser } from "../user/authSlice/authslice";
 import { useDispatch } from "react-redux";
 
 

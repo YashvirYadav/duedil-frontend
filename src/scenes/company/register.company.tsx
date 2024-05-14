@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { loading,message } from "./companyRedux/company.selector";
 import { Toast } from "../../components/Toast";
+import { useNavigate } from 'react-router-dom';
+
 
 const RegisterCompany = () => {
   const theme = useTheme();
@@ -26,6 +28,7 @@ const RegisterCompany = () => {
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
   const getMessage  = useSelector(message)
+  const navigate = useNavigate();
 
   const [CompanyName, setCompanyName] = useState<string>("");
   const [code, setCode] = useState<string>("");
@@ -90,8 +93,13 @@ const RegisterCompany = () => {
       <Box m="20px">
         {/* HEADER */}
         <Header title="Register company" subtitle="Welcome to your dashboard" />
+        <Box display="flex" justifyContent="end" mt="20px">
+              <Button onClick={() => navigate(-1) }color="secondary" variant="contained">
+                Back to list
+              </Button>
+            </Box>
 
-        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap="20px">
+        <Box m="40px 0 0 0" display="grid" gridTemplateColumns="repeat(12, 1fr)" gap="20px">
           <Box
             flexDirection="column"
             gridColumn="span 6"

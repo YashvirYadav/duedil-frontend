@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-import { RootState } from "../../app/store";
+import { RootState } from "../../../app/store";
 
 export const user = (state: RootState) => state.user;
 
@@ -12,4 +12,8 @@ export const userrole = createSelector(user, (state) => {
 
 export const loading = createSelector(user, (state) => {
   return state.status;
+});
+
+export const message = createSelector(user, (state) => {
+  return state.message;
 });

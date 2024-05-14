@@ -1,4 +1,4 @@
-import { Box, Button, Switch, Icon, IconButton } from "@mui/material";
+import { Box, Button, Switch, IconButton } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
+import {Outlet, useNavigate } from "react-router-dom";
 
 const Contacts = () => {
   const theme = useTheme();
@@ -26,6 +27,7 @@ const Contacts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
   const company = useSelector(companyData);
+  const navigate = useNavigate();
 
 
   const toastmessage = useSelector(message);
@@ -176,9 +178,14 @@ const Contacts = () => {
   ];
 
   return (
+    <>
     <Box m="20px">
       <Header title="COMPANY" subtitle="List of company for Future Reference" />
-
+      <Box display="flex" justifyContent="end" mt="20px">
+              <Button onClick={() => {navigate("addcmapany")} }color="secondary" variant="contained">
+                Create New Company
+              </Button>
+            </Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -234,6 +241,8 @@ const Contacts = () => {
         />
       </Box>
     </Box>
+           
+</>
   );
 };
 

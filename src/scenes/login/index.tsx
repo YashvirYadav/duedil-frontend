@@ -15,11 +15,11 @@ import { tokens } from "../../theme";
 import { Toast } from "../../components/Toast";
 
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/authSlice/authslice";
-import { ILoginRequest } from "../../redux/authSlice/user.type";
+import { login } from "../user/authSlice/authslice";
+import { ILoginRequest } from "../user/authSlice/user.type";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
-import { loading,userrole } from "../../redux/authSlice/auth.selector";
+import { loading,userrole } from "../user/authSlice/auth.selector";
 import { useEffect, useState } from "react";
 import { Loader } from "../../components/Lodar";
 
