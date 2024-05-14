@@ -10,6 +10,11 @@ export const userrole = createSelector(user, (state) => {
   // Add null check using optional chaining operator
 });
 
+// all users
+export const users = createSelector(user, (state) => {
+  return state.data?.data;
+});
+
 export const loading = createSelector(user, (state) => {
   return state.status;
 });

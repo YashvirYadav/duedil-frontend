@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IGetCompany, IRegisterCompanyResponce } from "./company.type";
+import { IRegisterCompanyResponce } from "./company.type";
 import { service } from "../../../services/ApiServices";
 
 const initialState: IRegisterCompanyResponce = {

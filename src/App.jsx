@@ -19,9 +19,10 @@ import AdminHome from "./scenes/admin/adminhome/adminhome";
 import RegisterCompany  from "./scenes/company/register.company"
 import TableCompany from "./scenes/company/table.company"
 import CadminHome from "./scenes/admin/cadminhome/cadmin"
-// import UserList from "./scenes/user/table.user"
+ import Users from "./scenes/user/table.user"
 import Registeruser from "./scenes/user/register.user"
 import {Company} from "./scenes/company/company"
+import {UserContener} from "./scenes/user/user"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -51,10 +52,13 @@ function App() {
              <Route path="addcmapany" element={<RegisterCompany />} />
            </Route>
             
+            <Route path="user" element={<UserContener/>} >
+              <Route path="" element={<Users/>} />
+              <Route path="addUser" element={<Registeruser />} />
+            </Route>
            
           </Route>
           
-            <Route path="addUser" element={<Registeruser/>} />
          
          
           <Route path="cadmin" element={<CadminHome />}> 

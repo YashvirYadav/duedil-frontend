@@ -1,5 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ILoginRequest, ILoginSuccessResponce, IRegisterRequest } from "./user.type";
+import {
+  ILoginRequest,
+  ILoginSuccessResponce,
+  IRegisterRequest,
+} from "./user.type";
 import { service } from "../../../services/ApiServices";
 
 export const login = createAsyncThunk<ILoginSuccessResponce, ILoginRequest>(
@@ -19,15 +23,13 @@ export const login = createAsyncThunk<ILoginSuccessResponce, ILoginRequest>(
   }
 );
 
-// register user
-export const register = createAsyncThunk<ILoginSuccessResponce, IRegisterRequest>(
-  "auth/register",
-  async (loginRequest: IRegisterRequest, { rejectWithValue }) => {
+// get all users
+
+export const getAllUsers = createAsyncThunk<ILoginSuccessResponce>(
+  "auth/getAllUsers",
+  async (_, { rejectWithValue }) => {
     try {
-      const { email, username, password, userrole, status } = loginRequest;
-      const responce = await service.postCall("users/registerByAdmin", {
-        email, username, password, userrole, status
-      });
+      const responce = await service.getCall("users/getAllUsers");
       return responce.data;
     } catch (error) {
       const err = error as ILoginSuccessResponce;
@@ -36,6 +38,29 @@ export const register = createAsyncThunk<ILoginSuccessResponce, IRegisterRequest
   }
 );
 
+// register user
+export const register = createAsyncThunk<
+  ILoginSuccessResponce,
+  IRegisterRequest
+>(
+  "auth/register",
+  async (loginRequest: IRegisterRequest, { rejectWithValue }) => {
+    try {
+      const { email, username, password, userrole, status } = loginRequest;
+      const responce = await service.postCall("users/registerByAdmin", {
+        email,
+        username,
+        password,
+        userrole,
+        status,
+      });
+      return responce.data;
+    } catch (error) {
+      const err = error as ILoginSuccessResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
 
 interface InitialState {
   data: ILoginSuccessResponce | null;
@@ -57,7 +82,7 @@ const postSlice = createSlice({
   reducers: {
     resetUser: (state) => {
       state.data = null;
-      state.status  = "idle";
+      state.status = "idle";
     },
   },
   extraReducers: (builder) => {
@@ -83,12 +108,29 @@ const postSlice = createSlice({
       .addCase(register.pending, (state) => {
         state.status = "loading";
         state.error = "";
-      }).addCase(register.fulfilled, (state, action: PayloadAction<ILoginSuccessResponce>) => {
+      })
+      .addCase(
+        register.fulfilled,
+        (state, action: PayloadAction<ILoginSuccessResponce>) => {
+          state.status = "succeeded";
+          state.error = "";
+          state.data = action.payload;
+          sessionStorage.setItem("token", action.payload.data.accessToken);
+        }
+      )
+      .addCase(register.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = action.payload.response.data.message;
+      })
+      // get all users
+      .addCase(getAllUsers.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      }).addCase(getAllUsers.fulfilled, (state, action: PayloadAction<ILoginSuccessResponce>) => {
         state.status = "succeeded";
         state.error = "";
         state.data = action.payload;
-        sessionStorage.setItem("token", action.payload.data.accessToken);
-      }).addCase(register.rejected, (state, action: PayloadAction<any>) => {
+      }).addCase(getAllUsers.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload.response.data.message;
       });

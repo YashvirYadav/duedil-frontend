@@ -170,26 +170,24 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
            
-             
-            
-            <SubMenu title="User">
+           
             <Item
-              title="User List"
-              to="userlist"
+              title="User"
+              to="user"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
 
-            <Item
+            {/* <Item
               title="Add User"
               to="adduser"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
              
-            </SubMenu>
+         
 
             <Typography
               variant="h6"
