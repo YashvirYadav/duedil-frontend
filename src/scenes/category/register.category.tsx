@@ -15,29 +15,27 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Loader } from "../../components/Lodar";
-import { loading } from "./authSlice/auth.selector";
+import { loading, message } from "./categorySlice/category.selector";
 import { Toast } from "../../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { message } from "./authSlice/auth.selector";
-import { useNavigate } from 'react-router-dom';
-import { register } from "./userSlice/userslice";
+import { useNavigate } from "react-router-dom";
+import { registerCategory } from "./categorySlice/categorySlice";
 
-
-const RegisterCompany = () => {
+const RegisterCategory = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
-  const [UserName, setUserName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Role, setRole] = useState("");
+  const [CategoryName, setCategoryName] = useState("");
+  const [Code, setCode] = useState("");
+  const [BasicRate, setBasicRate] = useState("");
   const [Status, setStatus] = useState<boolean>(false);
-  const [Mobile, setMobile] = useState("");
+  const [Description, setDescription] = useState("");
+
   const lodingState = useSelector(loading);
-  const getMessage  = useSelector(message)
+  const getMessage = useSelector(message);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -46,26 +44,39 @@ const RegisterCompany = () => {
   }, [lodingState]);
 
   const ragisterUserSubmit = () => {
-
-    dispatch(register({ email: Email, username: UserName, password: "admin@123", userrole: Role, status: Status, mobile: Mobile }));
-   
+    dispatch(
+      registerCategory({
+        name: CategoryName,
+        code: Code,
+        description: Description,
+        basicRate: BasicRate,
+        status: Status.toString(),
+      })
+    );
   };
-
-
 
   return (
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Register User" subtitle="Welcome to your dashboard" />
+        <Header title="Category User" subtitle="Welcome to your dashboard" />
 
         <Box display="flex" justifyContent="end" mt="20px">
-              <Button onClick={() => navigate(-1) }color="secondary" variant="contained">
-                Back to list
-              </Button>
-            </Box>
+          <Button
+            onClick={() => navigate(-1)}
+            color="secondary"
+            variant="contained"
+          >
+            Back to list
+          </Button>
+        </Box>
 
-        <Box m="40px 0 0 0" display="grid" gridTemplateColumns="repeat(12, 1fr)" gap="20px">
+        <Box
+          m="40px 0 0 0"
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gap="20px"
+        >
           <Box
             flexDirection="column"
             gridColumn="span 6"
@@ -75,16 +86,16 @@ const RegisterCompany = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              User Detail
+              Category Detail
             </Typography>
             <TextField
               fullWidth
               variant="outlined"
               type="text"
-              label="User Name*"
-              name="User Name*"
-              value={UserName}
-              onChange={(e) => setUserName(e.target.value)}
+              label="Category Name*"
+              name="Category Name*"
+              value={CategoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -92,29 +103,41 @@ const RegisterCompany = () => {
               fullWidth
               variant="outlined"
               type="text"
-              label="Email (User ID)*"
-              name="Email (User ID)*"
-              value={Email}
-              onChange={(e) => setEmail(e.target.value)}
+              label="Code"
+              name="Code"
+              value={Code}
+              onChange={(e) => setCode(e.target.value)}
               sx={{ gridColumn: "span 12" }}
             />
 
-            <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
+            <InputLabel id="demo-simple-select-helper-label">
+              Basic Rate
+            </InputLabel>
             <Select
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              label="Role"
-              value={Role}
-              onChange={(e) => setRole(e.target.value)}
+              label="Basic Rate"
+              value={BasicRate}
+              onChange={(e) => setBasicRate(e.target.value)}
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="superadmin">Super Admin</MenuItem>
-              <MenuItem value="cadmin">C Admin</MenuItem>
-              <MenuItem value="projectmanager">Project Manager</MenuItem>
-              <MenuItem value="salesanager">Sales Manager</MenuItem>
+              <MenuItem value="0-100">Rs. 0-100</MenuItem>
+              <MenuItem value="101-500">Rs. 101-500</MenuItem>
+              <MenuItem value="501-1000">Rs. 501-1000</MenuItem>
+              <MenuItem value="salesanager">Rs. 1001+</MenuItem>
             </Select>
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="text"
+              label="Description"
+              name="Description"
+              value={Description}
+              onChange={(e) => setDescription(e.target.value)}
+              sx={{ gridColumn: "span 12" }}
+            />
 
             <FormControlLabel
               control={
@@ -135,16 +158,23 @@ const RegisterCompany = () => {
             p="10px"
             gap="10px"
           >
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="text"
-              label="Mobile"
-              name="Mobile"
-              value={Mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              sx={{ gridColumn: "span 12" }}
-            />
+            <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
+              Basic rate card
+            </Typography>
+
+            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
+              0-100 Rs. 500
+            </Typography>
+            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
+              101-500 Rs. 400
+            </Typography>
+            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
+              501-1000 Rs. 300
+            </Typography>
+            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
+              1001+  Rs. 250
+            </Typography>
+
           </Box>
         </Box>
         <Box
@@ -176,7 +206,7 @@ const RegisterCompany = () => {
           <Toast
             open={open}
             handleClose={() => {}}
-            setShowToast = {setOpen}
+            setShowToast={setOpen}
             message={getMessage}
             severity="error"
           />
@@ -188,4 +218,4 @@ const RegisterCompany = () => {
   );
 };
 
-export default RegisterCompany;
+export default RegisterCategory;

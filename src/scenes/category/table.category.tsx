@@ -12,36 +12,33 @@ import { useTheme } from "@mui/material";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  deleteCompany,
-  getCompany,
-  updateCompanyStatus,
-} from "./companyRedux/companyslice";
-import { loading, companyData, message } from "./companyRedux/company.selector";
+
+import { loading, categoryData, message } from "./categorySlice/category.selector";
 import { Loader } from "../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
+import { deleteCategory, getCategory } from "./categorySlice/categorySlice";
 
-const Contacts = () => {
+const TableCategory = () => {
+  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
-  const company = useSelector(companyData);
+  const category = useSelector(categoryData);
   const navigate = useNavigate();
 
   const toastmessage = useSelector(message);
   console.log("toastmessage => ", toastmessage);
+  console.log("category => ", category);
 
   const [open, setOpen] = useState<boolean>(false);
 
-  console.log("company => ", company);
-
   useEffect(() => {
-    dispatch(getCompany());
+    dispatch(getCategory());
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,7 +49,7 @@ const Contacts = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "companyname", headerName: "Company Name" },
+    { field: "name", headerName: "Category Name",  flex: 1 },
 
     {
       field: "code",
@@ -60,53 +57,18 @@ const Contacts = () => {
       type: "string",
       headerAlign: "left",
       align: "left",
-    },
-    {
-      field: "country",
-      headerName: "Country",
       flex: 1,
     },
     {
-      field: "state",
-      headerName: "State",
+      field: "basicRate",
+      headerName: "Basic Rate",
       flex: 1,
     },
     {
-      field: "city",
-      headerName: "City",
+      field: "description",
+      headerName: "Description",
       flex: 1,
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      flex: 1,
-    },
-
-    {
-      field: "zip",
-      headerName: "Zip Code",
-      flex: 1,
-    },
-    {
-      field: "panno",
-      headerName: "Pan No",
-      flex: 1,
-    },
-    {
-      field: "gstno",
-      headerName: "GST No",
-      flex: 1,
-    },
-    {
-      field: "cinno",
-      headerName: "CIN No",
-      flex: 1,
-    },
-    {
-      field: "website",
-      headerName: "Website",
-      flex: 1,
-    },
+    }, 
     {
       field: "isactive",
       headerName: "Status",
@@ -124,9 +86,10 @@ const Contacts = () => {
             console.log("newStatus => ", newStatus);
             // Handle status change
             // You might want to dispatch an action here to update the status on the server
-            dispatch(updateCompanyStatus({ id: id })).then(() => {
-              dispatch(getCompany());
-            });
+            // dispatch(updateCompanyStatus({ id: id })).then(() => {
+            //   dispatch(getCompany());
+            //    }
+            // );
           }}
         />
       ),
@@ -151,14 +114,13 @@ const Contacts = () => {
         const onClickDelete = () => {
           const id = params.id.toString();
 
-          // handle delete operation here
-          dispatch(deleteCompany({ id: id })).then(() => {
-            dispatch(getCompany());
-          });
+            dispatch(deleteCategory({ id: id })).then(() => {
+              dispatch(getCategory());
+            });
         };
 
         const onClickView = () => {
-         // const id = params.id;
+          // const id = params.id;
           // handle view operation here
         };
 
@@ -183,18 +145,18 @@ const Contacts = () => {
     <>
       <Box m="20px">
         <Header
-          title="COMPANY"
+          title="Category"
           subtitle="List of company for Future Reference"
         />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
-              navigate("addcmapany");
+              navigate("addCategory");
             }}
             color="secondary"
             variant="contained"
           >
-            Create New Company
+            Create New Category
           </Button>
         </Box>
         <Box
@@ -235,7 +197,7 @@ const Contacts = () => {
                 open={open}
                 handleClose={() => {}}
                 setShowToast={setOpen}
-                message={toastmessage}
+                message="test"
                 severity="error"
               />
             ) : lodingState === "loading" ? (
@@ -245,7 +207,7 @@ const Contacts = () => {
 
           <DataGrid
             // checkboxSelection
-            rows={Array.isArray(company) ? company : []} // Ensure that company is an array
+            rows={Array.isArray(category) ? category : []} // Ensure that company is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             getRowId={(row) => row._id} // Use the `_id` field as the unique id
@@ -256,4 +218,4 @@ const Contacts = () => {
   );
 };
 
-export default Contacts;
+export default TableCategory;

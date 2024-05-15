@@ -18,17 +18,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-
-import { getAllUsers } from "./authSlice/authslice";
-import { message, loading, users } from "./authSlice/auth.selector";
-
+import { loading, message, userData } from "./userSlice/user.selector";
+import { getAllUsers } from "./userSlice/userslice";
 
 const Users = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
-  const allUser = useSelector(users);
+  const allUser = useSelector(userData);
   const navigate = useNavigate();
 
   console.log("allUser => ", allUser);

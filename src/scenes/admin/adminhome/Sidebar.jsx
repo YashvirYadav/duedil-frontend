@@ -161,7 +161,7 @@ const Sidebar = () => {
             >
               Master
             </Typography>
-          
+
             <Item
               title="Cmapany"
               to="company"
@@ -169,8 +169,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-           
-           
+
             <Item
               title="User"
               to="user"
@@ -179,15 +178,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            {/* <Item
-              title="Add User"
-              to="adduser"
+            <Item
+              title="Category"
+              to="category"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
-             
-         
+            />
 
             <Typography
               variant="h6"
