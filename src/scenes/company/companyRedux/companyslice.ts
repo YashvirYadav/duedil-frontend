@@ -5,7 +5,7 @@ import { service } from "../../../services/ApiServices";
 const initialState: IRegisterCompanyResponce = {
   statusCode: 0,
   status: "idle",
-  data: null,
+  data: [],
   message: "",
   success: false,
   error: null
@@ -76,7 +76,7 @@ const companyPostSlice = createSlice({
   initialState,
   reducers: {
     resetUser: (state) => {
-      state.data = null;
+      state.data = [];
       state.status = "idle";
     },
   },

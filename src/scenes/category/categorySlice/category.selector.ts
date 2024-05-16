@@ -6,7 +6,7 @@ export const category = (state: RootState) => state.category;
 
 export const categoryData = createSelector(category, (state) => {
   console.log("state => ", state);
-  return state.data as ICategory[] | null;
+  return state.data as ICategory[] | [];
 });
 
 export const loading = createSelector(category, (state) => {

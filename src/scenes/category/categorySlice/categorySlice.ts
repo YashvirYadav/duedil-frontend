@@ -7,7 +7,7 @@ import { service } from "../../../services/ApiServices";
 const initialState: IRegisterCategoryResponce = {
   statusCode: 0,
   status: "idle",
-  data: null,
+  data: [],
   message: "",
   success: false,
   error: null,

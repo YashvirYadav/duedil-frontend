@@ -1,7 +1,9 @@
+import { ICategory } from "../../category/categorySlice/type.category";
+
 export interface IRegisterCompanyResponce {
     statusCode: number;
     status: "idle" | "loading" | "succeeded" | "failed";
-    data: ICompany | null;
+    data: IGetCompany[] | [];
     message: string;
     success: boolean;
     error: string | null;
@@ -48,4 +50,5 @@ export interface IGetCompany  {
     isactive: boolean;
     createdAt: string;
     updatedAt: string;
+    category: ICategory[];
   };

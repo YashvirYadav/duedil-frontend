@@ -14,7 +14,7 @@ export interface ICategory {
 export interface IRegisterCategoryResponce {
   statusCode: number;
   status: "idle" | "loading" | "succeeded" | "failed";
-  data: ICategory | null;
+  data: ICategory | [];
   message: string;
   success: boolean;
   error: string | null;

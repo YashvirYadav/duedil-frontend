@@ -3,7 +3,6 @@ import {
   useTheme,
   Typography,
   Button,
-  IconButton,
   InputLabel,
   Select,
   MenuItem,
@@ -22,7 +21,7 @@ import { AppDispatch } from "../../app/store";
 
 import { getCategory } from "../category/categorySlice/categorySlice";
 import { categoryData } from "../category/categorySlice/category.selector";
-import { companyData } from "../company/companyRedux/company.selector";
+import { companyData,getratecard } from "../company/companyRedux/company.selector";
 import { getCompany } from "../company/companyRedux/companyslice";
 import { ICategory } from "../category/categorySlice/type.category";
 import { updateCompanyRateCrd } from "./reduxRatecard/ratecardSlice";
@@ -36,26 +35,48 @@ const RegisterRatecard = () => {
   const company = useSelector(companyData);
   console.log("company => ", company);
   const [open, setOpen] = useState(false);
-  const category = useSelector(categoryData);
+ 
   const [companyName, setCompanyName] = useState("");
 
   const [allCategory, setAllCategory] = useState<ICategory[] | null>([]);
 
+  
   console.log("allCategory => ", allCategory);
-  console.log("categorynew  => ", category);
 
-  const ragisterUserSubmit = () => {};
+  const categouryBySelector = useSelector(getratecard(companyName))
+  const category = useSelector(categoryData);
+  
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (companyName) {
+
+     
+    
+
+      }
+  }, [companyName]); 
 
   useEffect(() => {
     dispatch(getCompany());
   }, [dispatch]);
 
   useEffect(() => {
-    setAllCategory(category);
-  }, [category]);
+    // If firstSelectorValue is not null, undefined, or an empty array, use it
+    if (categouryBySelector && categouryBySelector.length > 0) {
+      setAllCategory(categouryBySelector);
+    } else {
+      // Otherwise, use secondSelectorValue
+      setAllCategory(category);
+    }
+  }, [categouryBySelector, category]);
+  // useEffect(() => {
+    
+  //     setAllCategory(categouryBySelector);
+    
+  // }, [categouryBySelector]);
 
   const saveRateCard = () => { 
     dispatch(updateCompanyRateCrd({ _id: companyName, category: allCategory || [] }));
@@ -191,14 +212,6 @@ const RegisterRatecard = () => {
     },
   ];
 
-  //get name and id from company
-  const meneItmeArray =
-    Array.isArray(company) &&
-    company.map((option, index) => ({
-      _id: option._id,
-      name: option.companyname,
-    }));
-
   console.log("companyname => ", companyName);
 
   const menuItem =
@@ -206,7 +219,7 @@ const RegisterRatecard = () => {
     company.map((option, index) => {
       return (
         <MenuItem key={index} value={option._id}>
-          {option.companyname}
+          {option.companyname  }
         </MenuItem>
       );
     });

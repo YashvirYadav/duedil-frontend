@@ -7,7 +7,7 @@ import { ICategory } from "../../category/categorySlice/type.category";
 const initialState: IRegisterCompanyResponce = {
     statusCode: 0,
     status: "idle",
-    data: null,
+    data: [],
     message: "",
     success: false,
     error: null
