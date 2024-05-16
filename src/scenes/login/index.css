@@ -1,0 +1,41 @@
+.welcometxt{
+text-align: center;
+font-size: 20px;
+}
+
+.mainLeftPanel{
+    display: flex;
+    width: 60%;
+    float: left;
+    height: 500px;
+    background-image: url('../marquee/image/img1.jpeg')
+}
+.rightPanel{
+    display: flex;
+    width: 40%;
+    float: right;
+    margin-top: 0;
+}
+.marquee {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .marquee-content {
+    display: flex;
+    animation: marquee 10s linear infinite; /* Adjust animation duration as needed */
+  }
+  
+  .marquee-content img {
+    margin-left: 20px; /* Adjust spacing between images as needed */
+  }
+  
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
