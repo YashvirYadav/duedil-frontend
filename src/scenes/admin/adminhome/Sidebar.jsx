@@ -124,7 +124,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -153,7 +152,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -161,7 +159,6 @@ const Sidebar = () => {
             >
               Master
             </Typography>
-
             <Item
               title="Cmapany"
               to="company"
@@ -169,7 +166,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Item
               title="User"
               to="user"
@@ -177,7 +173,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Item
               title="Category"
               to="category"
@@ -185,7 +180,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
+            <Item
+              title="Rate Card"
+              to="ratecard"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            Rate Card
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -214,7 +216,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Typography
               variant="h6"
               color={colors.grey[300]}

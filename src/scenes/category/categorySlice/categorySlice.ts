@@ -110,6 +110,7 @@ export const categorySlice = createSlice({
       .addCase(registerCategory.fulfilled, (state, action: PayloadAction<IRegisterCategoryResponce>) => {
         state.status = "succeeded";
         state.data = action.payload.data;
+        state.message = action.payload.message;
       })
       .addCase(registerCategory.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";

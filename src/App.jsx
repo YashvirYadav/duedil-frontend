@@ -26,6 +26,7 @@ import { UserContener } from "./scenes/user/user";
 import { Category } from "./scenes/category/category";
 import TableCategory from "./scenes/category/table.category";
 import RegisterCategory from "./scenes/category/register.category";
+import RegisterRatecard from "./scenes/ratecard/register.ratecard";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -64,7 +65,15 @@ function App() {
               <Route path="" element={<TableCategory />} />
               <Route path="addCategory" element={<RegisterCategory />} />
             </Route>
+
+            <Route path="ratecard" element={<Category />}>
+              <Route path="" element={< RegisterRatecard/>} />
+              
+            </Route>
+
           </Route>
+
+          
 
           <Route path="cadmin" element={<CadminHome />}></Route>
         </Routes>

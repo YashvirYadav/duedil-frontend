@@ -23,7 +23,7 @@ export const Toast: React.FC<ToastProps> = ({
   setShowToast
 }) => {
   const handleClick = () => {
-    console.log("handleClick");
+
     setShowToast(false);
   };
 

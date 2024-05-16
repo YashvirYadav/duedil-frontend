@@ -54,21 +54,32 @@ const TableCategory = () => {
     {
       field: "code",
       headerName: "Code",
-      type: "string",
-      headerAlign: "left",
-      align: "left",
+     
       flex: 1,
     },
-    {
-      field: "basicRate",
-      headerName: "Basic Rate",
-      flex: 1,
-    },
+    
     {
       field: "description",
       headerName: "Description",
       flex: 1,
     }, 
+    {
+      field: "c0to100",
+      headerName: "0 to 100"
+    },
+    {
+      field: "c101to500",
+      headerName: "101 to 500"
+    },
+    {
+      field: "c501to1000",
+      headerName: "501 to 1000"
+    },
+    {
+      field: "c1001plus",
+      headerName: "1001+"
+    },
+
     {
       field: "isactive",
       headerName: "Status",
@@ -206,6 +217,7 @@ const TableCategory = () => {
           ) : null}
 
           <DataGrid
+         
             // checkboxSelection
             rows={Array.isArray(category) ? category : []} // Ensure that company is an array
             columns={columns}

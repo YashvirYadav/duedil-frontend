@@ -3,15 +3,14 @@ import {
   useTheme,
   FormControlLabel,
   Switch,
-  Select,
   Typography,
   Button,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../theme";
-import InputLabel from "@mui/material/InputLabel";
+
 import Header from "../../components/Header";
-import MenuItem from "@mui/material/MenuItem";
+
 import { useState } from "react";
 import { useEffect } from "react";
 import { Loader } from "../../components/Lodar";
@@ -28,12 +27,17 @@ const RegisterCategory = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [CategoryName, setCategoryName] = useState("");
   const [Code, setCode] = useState("");
-  const [BasicRate, setBasicRate] = useState("");
+ 
   const [Status, setStatus] = useState<boolean>(false);
   const [Description, setDescription] = useState("");
+  const [c0to100, setC0to100] = useState(0);
+  const [c101to500, setC101to500] = useState(0);
+  const [c501to1000, setC501to1000] = useState(0);
+  const [c1001plus, setC1001plus] = useState(0);
 
   const lodingState = useSelector(loading);
   const getMessage = useSelector(message);
+  console.log("getMessage => ", getMessage);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -49,8 +53,11 @@ const RegisterCategory = () => {
         name: CategoryName,
         code: Code,
         description: Description,
-        basicRate: BasicRate,
         status: Status.toString(),
+        c0to100: c0to100,
+        c101to500: c101to500,
+        c501to1000: c501to1000,
+        c1001plus: c1001plus,
       })
     );
   };
@@ -110,24 +117,8 @@ const RegisterCategory = () => {
               sx={{ gridColumn: "span 12" }}
             />
 
-            <InputLabel id="demo-simple-select-helper-label">
-              Basic Rate
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              label="Basic Rate"
-              value={BasicRate}
-              onChange={(e) => setBasicRate(e.target.value)}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="0-100">Rs. 0-100</MenuItem>
-              <MenuItem value="101-500">Rs. 101-500</MenuItem>
-              <MenuItem value="501-1000">Rs. 501-1000</MenuItem>
-              <MenuItem value="salesanager">Rs. 1001+</MenuItem>
-            </Select>
+          
+            
             <TextField
               fullWidth
               variant="outlined"
@@ -162,18 +153,52 @@ const RegisterCategory = () => {
               Basic rate card
             </Typography>
 
-            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
-              0-100 Rs. 500
-            </Typography>
-            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
-              101-500 Rs. 400
-            </Typography>
-            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
-              501-1000 Rs. 300
-            </Typography>
-            <Typography variant="h5" m="0 0 0 20px"  fontWeight="600" color={colors.grey[100]}>
-              1001+  Rs. 250
-            </Typography>
+          
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="text"
+              label="0-100"
+              name="0-100"
+              value={c0to100}
+              onChange={(e) => setC0to100(Number(e.target.value))}
+           
+              sx={{ gridColumn: "span 12" }}
+            />
+             <TextField
+              fullWidth
+              variant="outlined"
+              type="text"
+              label="101-500"
+              name="101-500"
+              value={c101to500}
+              onChange={(e) => setC101to500(Number(e.target.value))}
+           
+              sx={{ gridColumn: "span 12" }}
+            />
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="text"
+              label="501-1000"
+              name="501-1000"
+              value={c501to1000}
+              onChange={(e) => setC501to1000(Number(e.target.value))}
+           
+              sx={{ gridColumn: "span 12" }}
+            />
+           
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="text"
+              label="1001+"
+              name="1001+"
+              value={c1001plus}
+              onChange={(e) => setC1001plus(Number(e.target.value))}
+           
+              sx={{ gridColumn: "span 12" }}
+            />
 
           </Box>
         </Box>
