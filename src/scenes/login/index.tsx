@@ -109,6 +109,7 @@ export default function Login() {
         </div>
         <div className="rightPanel">
           <Container component="main" maxWidth="xs">
+         <div className="welcometxt"> Welcome to Tapsaya Group </div>
             <Box
               sx={{
                 backgroundColor: colors.primary[400],
