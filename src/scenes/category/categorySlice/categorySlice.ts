@@ -19,9 +19,10 @@ export const registerCategory = createAsyncThunk<
   ICategory
 >("register/category", async (category, { rejectWithValue }) => {
   try {
+    const { _id, ...rest } = category;
     const response = await service.postCall(
       "category/registercategory",
-      category
+      rest
     );
     return response.data;
   } catch (error) {

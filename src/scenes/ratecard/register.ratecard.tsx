@@ -1,8 +1,6 @@
 import {
   TextField,
   useTheme,
-  FormControlLabel,
-  Switch,
   Typography,
   Button,
   IconButton,
@@ -13,28 +11,20 @@ import {
 import Box from "@mui/material/Box";
 import { tokens } from "../../theme";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { mockDataInvoices } from "../../data/mockData";
 
 import Header from "../../components/Header";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { useState } from "react";
 import { useEffect } from "react";
-import { Loader } from "../../components/Lodar";
-import { Toast } from "../../components/Toast";
+
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { useNavigate } from "react-router-dom";
+
 import { getCategory } from "../category/categorySlice/categorySlice";
-import {
-  loading,
-  categoryData,
-  message,
-} from "../category/categorySlice/category.selector";
-import { company, companyData } from "../company/companyRedux/company.selector";
+import { categoryData } from "../category/categorySlice/category.selector";
+import { companyData } from "../company/companyRedux/company.selector";
 import { getCompany } from "../company/companyRedux/companyslice";
+import { ICategory } from "../category/categorySlice/type.category";
 
 const RegisterRatecard = () => {
   const theme = useTheme();
@@ -47,7 +37,10 @@ const RegisterRatecard = () => {
   const [open, setOpen] = useState(false);
   const category = useSelector(categoryData);
   const [companyName, setCompanyName] = useState("");
-  console.log("companyresult => ", companyName);
+  const [allCategory, setAllCategory] = useState<ICategory[] | null>([]);
+
+  console.log("allCategory => ", allCategory);
+  console.log("categorynew  => ", category);
 
   const ragisterUserSubmit = () => {};
   useEffect(() => {
@@ -57,6 +50,10 @@ const RegisterRatecard = () => {
   useEffect(() => {
     dispatch(getCompany());
   }, [dispatch]);
+
+  useEffect(() => {
+    setAllCategory(category);
+  }, [category]);
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -79,91 +76,134 @@ const RegisterRatecard = () => {
       headerName: "0 to 100",
       editable: true,
       type: "number",
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <TextField
+            type="number"
+            value={params.value}
+            onChange={(e) => {
+              const id = params.id.toString();
+              console.log("e => ", e.target.value + " id => " + id);
+              if (allCategory) {
+                setAllCategory(
+                  allCategory.map((item) =>
+                    item._id === id
+                      ? { ...item, c0to100: Number(e.target.value) } // Parse e.target.value to a number
+                      : item
+                  )
+                );
+              }
+            }}
+          />
+        );
+      },
     },
     {
       field: "c101to500",
       headerName: "101 to 500",
       editable: true,
       type: "number",
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <TextField
+            type="number"
+            value={params.value}
+            onChange={(e) => {
+              const id = params.id.toString();
+              console.log("e => ", e.target.value + " id => " + id);
+              if (allCategory) {
+                setAllCategory(
+                  allCategory.map((item) =>
+                    item._id === id
+                      ? { ...item, c101to500: Number(e.target.value) } // Parse e.target.value to a number
+                      : item
+                  )
+                );
+              }
+            }}
+          />
+        );
+      },
     },
     {
       field: "c501to1000",
       headerName: "501 to 1000",
       editable: true,
       type: "number",
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => {
+        return (
+          <TextField
+            type="number"
+            value={params.value}
+            onChange={(e) => {
+              const id = params.id.toString();
+              console.log("e => ", e.target.value + " id => " + id);
+              if (allCategory) {
+                setAllCategory(
+                  allCategory.map((item) =>
+                    item._id === id
+                      ? { ...item, c501to1000: Number(e.target.value) } // Parse e.target.value to a number
+                      : item
+                  )
+                );
+              }
+            }}
+          />
+        );
+      },
     },
     {
       field: "c1001plus",
       headerName: "1001+",
       editable: true,
       type: "number",
-    },
-
-    {
-      field: "actions",
-      headerName: "Actions",
-      sortable: false,
-      headerAlign: "center",
-      align: "center",
-      width: 200,
-      // Remove the 'disableClickEventBubbling' property
-      // from the object literal
-      // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
+      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
-        const onClickEdit = () => {
-          const id = params.id;
-          // handle edit operation here
-          console.log("id => ", id);
-        };
-
-        const onClickDelete = () => {
-          const id = params.id.toString();
-        };
-
-        const onClickView = () => {
-          // const id = params.id;
-          // handle view operation here
-        };
-
         return (
-          <div>
-            <IconButton color="primary" onClick={onClickEdit}>
-              <EditIcon />
-            </IconButton>
-            <IconButton color="secondary" onClick={onClickDelete}>
-              <DeleteIcon />
-            </IconButton>
-            <IconButton onClick={onClickView}>
-              <VisibilityIcon />
-            </IconButton>
-          </div>
+          <TextField
+            type="number"
+            value={params.value}
+            onChange={(e) => {
+              const id = params.id.toString();
+              console.log("e => ", e.target.value + " id => " + id);
+              if (allCategory) {
+                setAllCategory(
+                  allCategory.map((item) =>
+                    item._id === id
+                      ? { ...item, c1001plus: Number(e.target.value) } // Parse e.target.value to a number
+                      : item
+                  )
+                );
+              }
+            }}
+          />
         );
       },
     },
   ];
 
+  //get name and id from company
+  const meneItmeArray =
+    Array.isArray(company) &&
+    company.map((option, index) => ({
+      _id: option._id,
+      name: option.companyname,
+    }));
 
-//get name and id from company
-const meneItmeArray = Array.isArray(company) &&
-company.map((option,index) =>  ({ _id: option._id, name: option.companyname }));
-
-console.log("meneItmeArray => ", meneItmeArray);
+  console.log("meneItmeArray => ", meneItmeArray);
 
   const menuItem =
-  Array.isArray(company) &&
-  company.map((option,index) => {
+    Array.isArray(company) &&
+    company.map((option, index) => {
       return (
-        <MenuItem
-          
-       
-          key={index}
-          value={option._id}
-        >
+        <MenuItem key={index} value={option._id}>
           {option.companyname}
         </MenuItem>
       );
     });
-
 
   return (
     <>
@@ -233,7 +273,7 @@ console.log("meneItmeArray => ", meneItmeArray);
             >
               <DataGrid
                 editMode="row"
-                rows={Array.isArray(category) ? category : []}
+                rows={allCategory ? allCategory : []}
                 columns={columns}
                 getRowId={(row) => row._id}
               />

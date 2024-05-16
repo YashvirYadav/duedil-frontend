@@ -1,5 +1,6 @@
 //Category Name, Code, Description, Basic Rate(Drop Down-- Rs. 0-100, Rs. 101-500, Rs. 501-1000, Rs. 1001+ ) , Status
 export interface ICategory {
+  _id?: string;
   name: string;
   code: string;
   description: string;
