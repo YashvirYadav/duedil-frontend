@@ -25,6 +25,7 @@ import { categoryData } from "../category/categorySlice/category.selector";
 import { companyData } from "../company/companyRedux/company.selector";
 import { getCompany } from "../company/companyRedux/companyslice";
 import { ICategory } from "../category/categorySlice/type.category";
+import { updateCompanyRateCrd } from "./reduxRatecard/ratecardSlice";
 
 const RegisterRatecard = () => {
   const theme = useTheme();
@@ -37,6 +38,7 @@ const RegisterRatecard = () => {
   const [open, setOpen] = useState(false);
   const category = useSelector(categoryData);
   const [companyName, setCompanyName] = useState("");
+
   const [allCategory, setAllCategory] = useState<ICategory[] | null>([]);
 
   console.log("allCategory => ", allCategory);
@@ -54,6 +56,10 @@ const RegisterRatecard = () => {
   useEffect(() => {
     setAllCategory(category);
   }, [category]);
+
+  const saveRateCard = () => { 
+    dispatch(updateCompanyRateCrd({ _id: companyName, category: allCategory || [] }));
+  }
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -193,7 +199,7 @@ const RegisterRatecard = () => {
       name: option.companyname,
     }));
 
-  console.log("meneItmeArray => ", meneItmeArray);
+  console.log("companyname => ", companyName);
 
   const menuItem =
     Array.isArray(company) &&
@@ -210,7 +216,17 @@ const RegisterRatecard = () => {
       <Box m="20px">
         {/* HEADER */}
         <Header title="Category User" subtitle="Welcome to your dashboard" />
-
+        <Box display="flex" justifyContent="end" mt="20px">
+          <Button
+            onClick={() => {
+             // for reload defalt data
+            }}
+            color="secondary"
+            variant="contained"
+          >
+            Reload default
+          </Button>
+        </Box>
         <Box
           m="40px 0 0 0"
           display="grid"
@@ -297,7 +313,7 @@ const RegisterRatecard = () => {
           <Button
             variant="contained"
             onClick={() => {
-              ragisterUserSubmit();
+              saveRateCard();
             }}
           >
             Save
