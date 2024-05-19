@@ -11,6 +11,22 @@ const initialState: IRegisterCompanyResponce = {
   error: null
 };
 
+
+// get Company by id
+export const getCompanyById = createAsyncThunk<IRegisterCompanyResponce, string>(
+  "get/companyById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await service.getCall("company/getcompanybyid/"+id);
+      return response.data;
+    } catch (error) {
+      const err = error as IRegisterCompanyResponce;
+      return rejectWithValue(err);
+    }
+  }
+
+);
+
 export const registerCompany = createAsyncThunk<IRegisterCompanyResponce, FormData>(
   "register/company",
   async (formdata, { rejectWithValue }) => {
@@ -136,7 +152,18 @@ const companyPostSlice = createSlice({
         state.status = "failed";
         state.error = action.payload.response.data.message;
       }
-      ) 
+      ).addCase(getCompanyById.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      }).addCase(getCompanyById.fulfilled, (state, action: PayloadAction<IRegisterCompanyResponce>) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.data = action.payload.data;
+        state.message = action.payload.message; 
+      }).addCase(getCompanyById.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = "error";
+      });  
 
   },
 });

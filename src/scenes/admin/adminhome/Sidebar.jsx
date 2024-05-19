@@ -160,7 +160,7 @@ const Sidebar = () => {
               Master
             </Typography>
             <Item
-              title="Cmapany"
+              title="Company"
               to="company"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
