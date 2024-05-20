@@ -146,7 +146,9 @@ const Contacts = () => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
-        };
+          navigate(`addcmapany/${id || ''}`);
+
+         };
 
         const onClickDelete = () => {
           const id = params.id.toString();

@@ -53,7 +53,7 @@ function App() {
 
             <Route path="company" element={<Company />}>
               <Route path="" element={<TableCompany />} />
-              <Route path="addcmapany" element={<RegisterCompany />} />
+              <Route path="addcmapany/:id?" element={<RegisterCompany />} />
             </Route>
 
             <Route path="user" element={<UserContener />}>

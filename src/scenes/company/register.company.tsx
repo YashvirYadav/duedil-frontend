@@ -13,13 +13,13 @@ import InputLabel from "@mui/material/InputLabel";
 import Header from "../../components/Header";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
-import { registerCompany } from "./companyRedux/companyslice";
+import { editCompany, getCompanyById, registerCompany } from "./companyRedux/companyslice";
 import { Loader } from "../../components/Lodar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { loading,message } from "./companyRedux/company.selector";
+import { companyData, loading,message } from "./companyRedux/company.selector";
 import { Toast } from "../../components/Toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const RegisterCompany = () => {
@@ -31,27 +31,114 @@ const RegisterCompany = () => {
   const navigate = useNavigate();
 
   const [CompanyName, setCompanyName] = useState<string>("");
+  const [errorCompanyName, setErrorCompanyName] = useState<boolean>(false);
+
   const [code, setCode] = useState<string>("");
+  const [errorcode, setErrorcode] = useState<boolean>(false);
+
   const [logo, setLogo] = useState<File>();
+
   const [Country, setCountry] = useState<string>("");
+  const [errorCountry, setErrorCountry] = useState<boolean>(false);
 
   const [State, setState] = useState<string>("");
+  const [errorState, setErrorState] = useState<boolean>(false);
+
+
   const [City, setCity] = useState<string>("");
+  const [errorCity, setErrorCity] = useState<boolean>(false);
+
   const [Address, setAddress] = useState<string>("");
+  const [errorAddress, setErrorAddress] = useState<boolean>(false);
+
   const [ZIP, setZIP] = useState<string>("");
+  const [errorZIP, setErrorZIP] = useState<boolean>(false);
+
   const [PanNo, setPanNo] = useState<string>("");
+  const [errorPanNo, setErrorPanNo] = useState<boolean>(false);
+
   const [GSTNo, setGSTNo] = useState<string>("");
+  const [errorGSTNo, setErrorGSTNo] = useState<boolean>(false);
+
   const [CinNo, setCinNo] = useState<string>("");
+  const [errorCinNo, setErrorCinNo] = useState<boolean>(false);
+
   const [Website, setWebsite] = useState<string>("");
+  const [errorWebsite, setErrorWebsite] = useState<boolean>(false);
+
   const [Status, setStatus] = useState<boolean>(false);
+
   const [AdminName, setAdminName] = useState<string>("");
+  const [errorAdminName, setErrorAdminName] = useState<boolean>(false);
+
   const [emailAdmin, setemailAdmin] = useState<string>("");
+  const [erroremailAdmin, setErroremailAdmin] = useState<boolean>(false);
+
   const [Mobile, setMobile] = useState<string>("");
+  const [errorMobile, setErrorMobile] = useState<boolean>(false);
+
   const [open, setOpen] = useState<boolean>(false);
+
+  const company = useSelector(companyData)[0];
 
 
   const ragisterCompanySubmit = () => {
-    if(logo){
+     if (!CompanyName || CompanyName.length < 3) {
+      setErrorCompanyName(true);
+      return;
+     }
+      if (!code || code.length < 3) {
+        setErrorcode(true);
+        return;
+      }
+      // if ( !id && !logo) {
+      //   setErrorlogo(true);
+      //   return;
+      // }
+      if (!Country) {
+        setErrorCountry(true);
+        return;
+      }
+      if (!State) {
+        setErrorState(true);
+        return;
+      }
+      if (!City) {
+        setErrorCity(true);
+        return;
+      }
+      if (!Address) {
+        setErrorAddress(true);
+        return;
+      }
+      if (!ZIP || ZIP.length < 3) {
+        setErrorZIP(true);
+        return;
+      }
+      if (!PanNo || PanNo.length < 3) {
+        setErrorPanNo(true);
+        return;
+      }
+      if (!GSTNo || GSTNo.length < 3) {
+        setErrorGSTNo(true);
+        return;
+      }
+      if (!CinNo || CinNo.length < 3) {
+        setErrorCinNo(true);
+        return;
+      }
+      if (!Website || Website.length < 3)  {
+        setErrorWebsite(true);
+        return;
+      }
+      if (!AdminName || AdminName.length < 3) {
+        setErrorAdminName(true);
+        return;
+      }
+      if (!emailAdmin || !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(emailAdmin)) {
+        setErroremailAdmin(true);
+        return;
+      }
       const formData = new FormData();
       formData.append("companyname", CompanyName);
       formData.append("code", code);
@@ -69,10 +156,52 @@ const RegisterCompany = () => {
       formData.append("adminname", AdminName);
       formData.append("emailAdmin", emailAdmin);
       formData.append("mobile", Mobile);
-      dispatch(registerCompany(formData));
-    }
+     // dispatch(registerCompany(formData));
+
+      // add edialbe mode 
+      if(id && company){
+        dispatch(editCompany({id: company._id?.toString() || id, formData: formData}));
+      }else
+      {
+        dispatch(registerCompany(formData));
+      }
+    
     
   };
+
+
+  const { id } = useParams<{ id?: string }>();
+  useEffect(() => {
+    if (id) {
+      // If an ID was passed, fetch the company data and set it in the state
+      dispatch(getCompanyById(id));
+    } else {
+      // If no ID was passed, initialize the state with default values
+     // initializeState();
+    }
+  }, [id]);
+
+
+  useEffect(() => {
+    if (company && id) {
+      setCompanyName(company.companyname);
+      setCode(company.code);
+      setCountry(company.country);
+      setState(company.state);
+      setCity(company.city);
+      setAddress(company.address);
+      setZIP(company.zip);
+      setPanNo(company.panno);
+      setGSTNo(company.gstno);
+      setCinNo(company.cinno);
+      setWebsite(company.website);
+      setStatus(company.isactive);
+      setAdminName(company.adminname);
+      setemailAdmin(company.email);
+      setMobile(company.mobile);
+    
+    }
+  }, [company]);
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -118,8 +247,14 @@ const RegisterCompany = () => {
               label="Company Name*"
               name="Company Name*"
               value={CompanyName}
-              onChange={(e) => setCompanyName(e.target.value)}
+              onChange={(e) => 
+                {
+                  setErrorCompanyName(false)
+                  setCompanyName(e.target.value)
+                }}
               sx={{ gridColumn: "span 12" }}
+              error={errorCompanyName}
+              helperText={errorCompanyName ? "Company Name is required" : ""}
             />
 
             <TextField
@@ -129,8 +264,12 @@ const RegisterCompany = () => {
               label="Code*"
               name="Code"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                setErrorcode(false)
+                setCode(e.target.value)}}
               sx={{ gridColumn: "span 12" }}
+              error={errorcode}
+              helperText={errorcode ? "Code is required" : ""}
             />
 
             <input
@@ -147,7 +286,11 @@ const RegisterCompany = () => {
               id="demo-simple-select-helper"
               label="Country"
               value={Country}
-              onChange={(e) => setCountry(e.target.value)}
+              onChange={(e) => {
+                setErrorCountry(false)
+                setCountry(e.target.value)
+              }}
+              error={errorCountry}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -163,7 +306,12 @@ const RegisterCompany = () => {
               id="demo-simple-select-helper"
               label="State"
               value={State}
-              onChange={(e) => setState(e.target.value)}
+              onChange={(e) => {
+                setErrorState(false)
+                setState(e.target.value)
+              
+              }}
+              error={errorState}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -179,9 +327,15 @@ const RegisterCompany = () => {
               type="text"
               label="City"
               value={City}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) => {
+                setErrorCity(false)
+                setCity(e.target.value)
+              
+              }}
               name="City"
               sx={{ gridColumn: "span 12" }}
+              error={errorCity}
+              helperText={errorCity ? "City is required" : ""}
             />
             <TextField
               fullWidth
@@ -189,9 +343,15 @@ const RegisterCompany = () => {
               type="text"
               label="Address"
               value={Address}
-              onChange={(e) => setAddress(e.target.value)}
+              onChange={(e) => {
+                setErrorAddress(false)
+                setAddress(e.target.value)
+              
+              }}
               name="Address"
               sx={{ gridColumn: "span 12" }}
+              error={errorAddress}
+              helperText={errorAddress ? "Address is required" : ""}
             />
             <TextField
               fullWidth
@@ -199,9 +359,14 @@ const RegisterCompany = () => {
               type="text"
               label="ZIP"
               value={ZIP}
-              onChange={(e) => setZIP(e.target.value)}
+              onChange={(e) => {
+                setErrorZIP(false)
+                setZIP(e.target.value)
+              }}
               name="ZIP"
               sx={{ gridColumn: "span 12" }}
+              error={errorZIP}
+              helperText={errorZIP ? "ZIP is required" : ""}
             />
 
             <FormControlLabel
@@ -209,6 +374,9 @@ const RegisterCompany = () => {
                 <Switch
                   defaultChecked
                   onChange={(e) => setStatus(e.target.checked)}
+                  name="Status"
+                  color="primary"
+              
                 />
               }
               label="Status"
@@ -229,9 +397,15 @@ const RegisterCompany = () => {
               type="text"
               label="Pan No*"
               value={PanNo}
-              onChange={(e) => setPanNo(e.target.value)}
+              onChange={(e) => {
+                setErrorPanNo(false)
+                setPanNo(e.target.value)
+              
+              }}
               name="Pan No*"
               sx={{ gridColumn: "span 12" }}
+              error={errorPanNo}
+              helperText={errorPanNo ? "Pan No is required" : ""}
             />
             <TextField
               fullWidth
@@ -239,9 +413,16 @@ const RegisterCompany = () => {
               type="text"
               label="GST No*"
               value={GSTNo}
-              onChange={(e) => setGSTNo(e.target.value)}
+              onChange={(e) => {
+                setErrorGSTNo(false)
+                setGSTNo(e.target.value)
+              
+              
+              }}
               name="GST No*"
               sx={{ gridColumn: "span 12" }}
+              error={errorGSTNo}
+              helperText={errorGSTNo ? "GST No is required" : ""}
             />
             <TextField
               fullWidth
@@ -249,9 +430,16 @@ const RegisterCompany = () => {
               type="text"
               label="Cin No*"
               value={CinNo}
-              onChange={(e) => setCinNo(e.target.value)}
+              onChange={(e) => {
+                setErrorCinNo(false)
+                setCinNo(e.target.value)
+              
+              
+              }}
               name="Cin No*"
               sx={{ gridColumn: "span 12" }}
+              error={errorCinNo}
+              helperText={errorCinNo ? "Cin No is required" : ""}
             />
             <TextField
               fullWidth
@@ -259,9 +447,16 @@ const RegisterCompany = () => {
               type="text"
               label="Website"
               value={Website}
-              onChange={(e) => setWebsite(e.target.value)}
+              onChange={(e) => {
+                setErrorWebsite(false)
+                setWebsite(e.target.value)
+              
+              
+              }}
               name="Website"
               sx={{ gridColumn: "span 12" }}
+              error={errorWebsite}
+              helperText={errorWebsite ? "Website is required" : ""}
             />
 
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
@@ -273,9 +468,16 @@ const RegisterCompany = () => {
               type="text"
               label="Admin Name"
               value={AdminName}
-              onChange={(e) => setAdminName(e.target.value)}
+              onChange={(e) => {
+                setErrorAdminName(false)
+                setAdminName(e.target.value)
+              
+              
+              }}
               name="Admin Name"
               sx={{ gridColumn: "span 12" }}
+              error={errorAdminName}
+              helperText={errorAdminName ? "Admin Name is required" : ""}
             />
             <TextField
               fullWidth
@@ -284,8 +486,15 @@ const RegisterCompany = () => {
               label="Email (User ID)*"
               name="Email (User ID)*"
               value={emailAdmin}
-              onChange={(e) => setemailAdmin(e.target.value)}
+              onChange={(e) => {
+                setErroremailAdmin(false)
+                setemailAdmin(e.target.value)
+              
+              
+              }}
               sx={{ gridColumn: "span 12" }}
+              error={erroremailAdmin}
+              helperText={erroremailAdmin ? "Email is required" : ""}
             />
             <TextField
               fullWidth
@@ -294,8 +503,16 @@ const RegisterCompany = () => {
               label="Mobile"
               name="Mobile"
               value={Mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              onChange={(e) => {
+                setErrorMobile(false)
+                setMobile(e.target.value)
+              
+              
+              
+              }}
               sx={{ gridColumn: "span 12" }}
+              error={errorMobile}
+              helperText={errorMobile ? "Mobile is required" : ""}
             />
           </Box>
         </Box>

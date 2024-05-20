@@ -12,7 +12,7 @@ export interface IRegisterCompanyResponce {
 
 
 export interface ICompany{
-    _id : string;
+    _id? : string;
     CompanyName : string;
     code : string;
     logo : string;
@@ -34,7 +34,7 @@ export interface ICompany{
 }
 
 export interface IGetCompany  {
-    _id: string;
+    _id?: string;
     companyname: string;
     code: string;
     logo: string;
@@ -51,4 +51,7 @@ export interface IGetCompany  {
     createdAt: string;
     updatedAt: string;
     category: ICategory[];
+    adminname: string;
+    email: string;
+    mobile: string;
   };
