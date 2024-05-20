@@ -44,7 +44,6 @@ const RegisterCompany = () => {
   const [State, setState] = useState<string>("");
   const [errorState, setErrorState] = useState<boolean>(false);
 
-
   const [City, setCity] = useState<string>("");
   const [errorCity, setErrorCity] = useState<boolean>(false);
 

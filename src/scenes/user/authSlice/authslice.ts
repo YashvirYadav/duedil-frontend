@@ -22,6 +22,19 @@ export const login = createAsyncThunk<ILoginSuccessResponce, ILoginRequest>(
   }
 );
 
+export const changePassword = createAsyncThunk<ILoginSuccessResponce, { oldPassword: string, newPassword: string }>(
+  "auth/changePassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const responce = await service.postCall("users/changepassword", data);
+      return responce.data;
+    } catch (error) {
+      const err = error as ILoginSuccessResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
+
 
 
 interface InitialState {
@@ -63,6 +76,16 @@ const postSlice = createSlice({
         }
       )
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = action.payload.response.data.message;
+      }).addCase(changePassword.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      }).addCase(changePassword.fulfilled, (state, action: PayloadAction<ILoginSuccessResponce>) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.message = action.payload.message;
+      }).addCase(changePassword.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload.response.data.message;
       });

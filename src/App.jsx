@@ -27,6 +27,7 @@ import { Category } from "./scenes/category/category";
 import TableCategory from "./scenes/category/table.category";
 import RegisterCategory from "./scenes/category/register.category";
 import RegisterRatecard from "./scenes/ratecard/register.ratecard";
+import ChangePassword from "./scenes/changepassword/changepassword";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -50,6 +51,7 @@ function App() {
             <Route path="pie" element={<Pie />} />
             <Route path="line" element={<Line />} />
             <Route path="geography" element={<Geography />} />
+            <Route path="changepassword" element={<ChangePassword />} />
 
             <Route path="company" element={<Company />}>
               <Route path="" element={<TableCompany />} />
