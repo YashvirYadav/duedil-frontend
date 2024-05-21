@@ -15,11 +15,11 @@ import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Loader } from "../../components/Lodar";
-import { loading } from "./authSlice/auth.selector";
+
 import { Toast } from "../../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { message } from "./authSlice/auth.selector";
+import { message,loading } from "./userSlice/user.selector";
 import { useNavigate } from 'react-router-dom';
 import { register } from "./userSlice/userslice";
 
@@ -42,6 +42,9 @@ const RegisterCompany = () => {
   const [errorMobile, setErroeMobile] = useState<boolean>(false);
   const [errorStatus, setErrorStatus] = useState<boolean>(false);
 
+  const authToken = () => sessionStorage.getItem("role");
+
+
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -50,12 +53,12 @@ const RegisterCompany = () => {
   }, [lodingState]);
 
   const ragisterUserSubmit = () => {
-    debugger;
     if(UserName.length<1){
       setErrorUserName(true)
       return;
     }
-    if(Email.length<1){
+    if(Email.length<1 || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(Email)){
+      
       setErrorEmail(true)
       return;
     }
@@ -144,7 +147,8 @@ const RegisterCompany = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="superadmin">Super Admin</MenuItem>
+              {authToken() === "superadmin" ? <MenuItem value="superadmin">Super Admin</MenuItem> : null}
+             
               <MenuItem value="cadmin">C Admin</MenuItem>
               <MenuItem value="projectmanager">Project Manager</MenuItem>
               <MenuItem value="salesanager">Sales Manager</MenuItem>
@@ -210,7 +214,7 @@ const RegisterCompany = () => {
         </Box>
       </Box>
       {lodingState ? (
-        lodingState !== "idle" && lodingState !== "loading" ? (
+        lodingState === "succeeded" ? (
           <Toast
             open={open}
             handleClose={() => {}}

@@ -73,6 +73,8 @@ const postSlice = createSlice({
           state.error = "";
           state.data = action.payload;
           sessionStorage.setItem("token", action.payload.data.accessToken);
+          sessionStorage.setItem("user", JSON.stringify(action.payload.data.user));
+          sessionStorage.setItem("role", action.payload.data.user.userrole);
         }
       )
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {
@@ -87,6 +89,7 @@ const postSlice = createSlice({
         state.message = action.payload.message;
       }).addCase(changePassword.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
+        state.error = action.payload.message;
         state.error = action.payload.response.data.message;
       });
   },

@@ -161,23 +161,17 @@ const Sidebar = () => {
             >
               Master
             </Typography>
-            <SubMenu title="User">
+           
+         
             <Item
-              title="User List"
-              to="userlist"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Add User"
-              to="addUser"
+              title="User"
+              to="user"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
              
-            </SubMenu>
+         
 
             <Typography
               variant="h6"
@@ -193,8 +187,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            
-           
+
+            <Item
+              title="Change Password"
+              to="changepassword"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           
           </Box>
         </Menu>

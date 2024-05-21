@@ -77,7 +77,16 @@ function App() {
 
           
 
-          <Route path="cadmin" element={<CadminHome />}></Route>
+          <Route path="cadmin" element={<CadminHome />}>
+            <Route path="" element={<Dashboard />} />
+
+            <Route path="user" element={<UserContener />}>
+              <Route path="" element={<Users />} />
+              <Route path="addUser" element={<Registeruser />} />
+            </Route>
+
+            <Route path="changepassword" element={<ChangePassword />} />
+          </Route>
         </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>

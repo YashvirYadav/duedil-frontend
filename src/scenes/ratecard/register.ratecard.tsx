@@ -21,7 +21,10 @@ import { AppDispatch } from "../../app/store";
 
 import { getCategory } from "../category/categorySlice/categorySlice";
 import { categoryData } from "../category/categorySlice/category.selector";
-import { companyData,getratecard } from "../company/companyRedux/company.selector";
+import {
+  companyData,
+  getratecard,
+} from "../company/companyRedux/company.selector";
 import { getCompany } from "../company/companyRedux/companyslice";
 import { ICategory } from "../category/categorySlice/type.category";
 import { updateCompanyRateCrd } from "./reduxRatecard/ratecardSlice";
@@ -35,29 +38,22 @@ const RegisterRatecard = () => {
   const company = useSelector(companyData);
   console.log("company => ", company);
   const [open, setOpen] = useState(false);
- 
+
   const [companyName, setCompanyName] = useState("");
 
   const [allCategory, setAllCategory] = useState<ICategory[] | null>([]);
 
-  
   console.log("allCategory => ", allCategory);
 
-  const categouryBySelector = useSelector(getratecard(companyName))
+  const categouryBySelector = useSelector(getratecard(companyName));
   const category = useSelector(categoryData);
-  
+
+  const valueAll =
+    categouryBySelector.length > 0 ? categouryBySelector : category;
+
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (companyName) {
-
-     
-    
-
-      }
-  }, [companyName]); 
 
   useEffect(() => {
     dispatch(getCompany());
@@ -65,22 +61,26 @@ const RegisterRatecard = () => {
 
   useEffect(() => {
     // If firstSelectorValue is not null, undefined, or an empty array, use it
-    if (categouryBySelector && categouryBySelector.length > 0) {
-      setAllCategory(categouryBySelector);
-    } else {
-      // Otherwise, use secondSelectorValue
-      setAllCategory(category);
-    }
-  }, [categouryBySelector, category]);
+    // if (categouryBySelector && categouryBySelector.length > 0) {
+    //   setAllCategory(categouryBySelector);
+    // } else {
+    //   // Otherwise, use secondSelectorValue
+    //   setAllCategory(category);
+    // }
+    console.log("valueAll => 1");
+    setAllCategory(valueAll);
+  }, [valueAll]);
   // useEffect(() => {
-    
+
   //     setAllCategory(categouryBySelector);
-    
+
   // }, [categouryBySelector]);
 
-  const saveRateCard = () => { 
-    dispatch(updateCompanyRateCrd({ _id: companyName, category: allCategory || [] }));
-  }
+  const saveRateCard = () => {
+    dispatch(
+      updateCompanyRateCrd({ _id: companyName, category: allCategory || [] })
+    );
+  };
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -101,25 +101,27 @@ const RegisterRatecard = () => {
     {
       field: "c0to100",
       headerName: "0 to 100",
-      editable: true,
-      type: "number",
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
         return (
           <TextField
             type="number"
-            value={params.value}
+            name={`c0to100-${params.id}`}
+            value={params.value || params.row.c0to100}
             onChange={(e) => {
               const id = params.id.toString();
-              console.log("e => ", e.target.value + " id => " + id);
-              if (allCategory) {
-                setAllCategory(
-                  allCategory.map((item) =>
-                    item._id === id
-                      ? { ...item, c0to100: Number(e.target.value) } // Parse e.target.value to a number
-                      : item
-                  )
-                );
+              const value = e.target.value;
+              if (!isNaN(Number(value))) {
+                console.log("e => ", e.target.value + " id => " + id);
+                if (allCategory) {
+                  setAllCategory(
+                    allCategory.map((item) =>
+                      item._id === id
+                        ? { ...item, c0to100: Number(e.target.value) } // Parse e.target.value to a number
+                        : item
+                    )
+                  );
+                }
               }
             }}
           />
@@ -129,9 +131,7 @@ const RegisterRatecard = () => {
     {
       field: "c101to500",
       headerName: "101 to 500",
-      editable: true,
-      type: "number",
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
         return (
           <TextField
@@ -139,7 +139,9 @@ const RegisterRatecard = () => {
             value={params.value}
             onChange={(e) => {
               const id = params.id.toString();
+              const value = e.target.value;
               console.log("e => ", e.target.value + " id => " + id);
+              if (!isNaN(Number(value))) {
               if (allCategory) {
                 setAllCategory(
                   allCategory.map((item) =>
@@ -149,6 +151,7 @@ const RegisterRatecard = () => {
                   )
                 );
               }
+            }
             }}
           />
         );
@@ -157,9 +160,7 @@ const RegisterRatecard = () => {
     {
       field: "c501to1000",
       headerName: "501 to 1000",
-      editable: true,
-      type: "number",
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
         return (
           <TextField
@@ -167,7 +168,10 @@ const RegisterRatecard = () => {
             value={params.value}
             onChange={(e) => {
               const id = params.id.toString();
+              const value = e.target.value;
+
               console.log("e => ", e.target.value + " id => " + id);
+              if (!isNaN(Number(value))) {
               if (allCategory) {
                 setAllCategory(
                   allCategory.map((item) =>
@@ -177,6 +181,7 @@ const RegisterRatecard = () => {
                   )
                 );
               }
+            }
             }}
           />
         );
@@ -185,9 +190,7 @@ const RegisterRatecard = () => {
     {
       field: "c1001plus",
       headerName: "1001+",
-      editable: true,
-      type: "number",
-      headerAlign: 'center',
+      headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
         return (
           <TextField
@@ -195,7 +198,10 @@ const RegisterRatecard = () => {
             value={params.value}
             onChange={(e) => {
               const id = params.id.toString();
+              const value = e.target.value;
+
               console.log("e => ", e.target.value + " id => " + id);
+              if (!isNaN(Number(value))) {
               if (allCategory) {
                 setAllCategory(
                   allCategory.map((item) =>
@@ -205,6 +211,7 @@ const RegisterRatecard = () => {
                   )
                 );
               }
+            }
             }}
           />
         );
@@ -219,7 +226,7 @@ const RegisterRatecard = () => {
     company.map((option, index) => {
       return (
         <MenuItem key={index} value={option._id}>
-          {option.companyname  }
+          {option.companyname}
         </MenuItem>
       );
     });
@@ -232,7 +239,7 @@ const RegisterRatecard = () => {
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
-             // for reload defalt data
+              // for reload defalt data
             }}
             color="secondary"
             variant="contained"

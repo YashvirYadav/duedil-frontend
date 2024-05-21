@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { service } from "../../../services/ApiServices";
 import { ILoginSuccessResponce, IRegisterRequest } from "../authSlice/user.type";
 
@@ -88,10 +88,11 @@ extraReducers: (builder) => {
     .addCase(register.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
-      state.message = "User registered successfully";
+      state.message = action.payload.message;
     })
-    .addCase(register.rejected, (state, action) => {
+    .addCase(register.rejected, (state, action: PayloadAction<any>) => {
       state.status = "failed";
+      state.message = action.payload.message;
       state.error = action.payload as string;
     });
 },

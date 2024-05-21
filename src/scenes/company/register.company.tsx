@@ -20,6 +20,7 @@ import { AppDispatch } from "../../app/store";
 import { companyData, loading,message } from "./companyRedux/company.selector";
 import { Toast } from "../../components/Toast";
 import { useNavigate, useParams } from 'react-router-dom';
+import { validateEmail } from "../uttle";
 
 
 const RegisterCompany = () => {
@@ -134,7 +135,7 @@ const RegisterCompany = () => {
         setErrorAdminName(true);
         return;
       }
-      if (!emailAdmin || !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(emailAdmin)) {
+      if (!emailAdmin  || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailAdmin)) {
         setErroremailAdmin(true);
         return;
       }
@@ -541,7 +542,7 @@ const RegisterCompany = () => {
       </Box>
 
       {lodingState ? (
-        lodingState !== "idle" && lodingState !== "loading" ? (
+        lodingState === "succeeded" ? (
           <Toast
             open={open}
             handleClose={() => {}}
