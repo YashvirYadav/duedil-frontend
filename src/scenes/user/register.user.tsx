@@ -37,6 +37,10 @@ const RegisterCompany = () => {
   const getMessage  = useSelector(message)
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const [errorUserName, setErrorUserName] = useState<boolean>(false);
+  const [errorEmail, setErrorEmail] = useState<boolean>(false);
+  const [errorMobile, setErroeMobile] = useState<boolean>(false);
+  const [errorStatus, setErrorStatus] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -46,6 +50,23 @@ const RegisterCompany = () => {
   }, [lodingState]);
 
   const ragisterUserSubmit = () => {
+    debugger;
+    if(UserName.length<1){
+      setErrorUserName(true)
+      return;
+    }
+    if(Email.length<1){
+      setErrorEmail(true)
+      return;
+    }
+    if(Mobile.length<10){
+      setErroeMobile(true)
+      return
+    }
+    if(Role.length<1){
+      setErrorStatus(true)
+      return
+    }
 
     dispatch(register({ email: Email, username: UserName, password: "admin@123", userrole: Role, status: Status, mobile: Mobile }));
    
@@ -78,14 +99,21 @@ const RegisterCompany = () => {
               User Detail
             </Typography>
             <TextField
+              required
               fullWidth
               variant="outlined"
               type="text"
-              label="User Name*"
+              label="User Name"
               name="User Name*"
               value={UserName}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={
+                (e) =>{ 
+                  setErrorUserName(false)
+                  setUserName(e.target.value)}
+                }
               sx={{ gridColumn: "span 12" }}
+              error={errorUserName}
+              helperText={errorUserName ? "User name is required" : ""}
             />
 
             <TextField
@@ -95,8 +123,12 @@ const RegisterCompany = () => {
               label="Email (User ID)*"
               name="Email (User ID)*"
               value={Email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setErrorEmail(false);
+                setEmail(e.target.value)}}
               sx={{ gridColumn: "span 12" }}
+              error={errorEmail}
+              helperText={errorEmail ? "User email address is required" : ""}
             />
 
             <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
@@ -105,7 +137,9 @@ const RegisterCompany = () => {
               id="demo-simple-select-helper"
               label="Role"
               value={Role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(e) =>{
+                setErrorStatus(false)
+               setRole(e.target.value)}}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -115,7 +149,7 @@ const RegisterCompany = () => {
               <MenuItem value="projectmanager">Project Manager</MenuItem>
               <MenuItem value="salesanager">Sales Manager</MenuItem>
             </Select>
-
+            <div style={{marginLeft:"15px", color:'red'}}>{errorStatus ? "User role is required" : ""}</div>
             <FormControlLabel
               control={
                 <Switch
@@ -142,8 +176,12 @@ const RegisterCompany = () => {
               label="Mobile"
               name="Mobile"
               value={Mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              onChange={(e) => {
+                setErroeMobile(false)
+                setMobile(e.target.value)}}
               sx={{ gridColumn: "span 12" }}
+              error={errorMobile}
+              helperText={errorMobile ? "User mobile number is required" : ""}
             />
           </Box>
         </Box>
