@@ -149,7 +149,7 @@ const RegisterCompany = () => {
               </MenuItem>
               {authToken() === "superadmin" ? <MenuItem value="superadmin">Super Admin</MenuItem> : null}
              
-              <MenuItem value="cadmin">C Admin</MenuItem>
+              <MenuItem value="clientadmin">C Admin</MenuItem>
               <MenuItem value="projectmanager">Project Manager</MenuItem>
               <MenuItem value="salesanager">Sales Manager</MenuItem>
             </Select>

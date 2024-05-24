@@ -16,7 +16,7 @@ const Invoices = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "phone",
+      field: "mobile",
       headerName: "Phone Number",
       flex: 1,
     },

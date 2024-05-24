@@ -65,8 +65,8 @@ export default function Login() {
         case 'superadmin':
           navigate("/admin");
           break;
-        case 'cadmin':
-          navigate("/cadmin");
+        case 'clientadmin':
+          navigate("/clientadmin");
           break;
         default:
           navigate("/");

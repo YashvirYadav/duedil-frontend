@@ -161,8 +161,7 @@ const Sidebar = () => {
             >
               Master
             </Typography>
-           
-         
+
             <Item
               title="User"
               to="user"
@@ -170,8 +169,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-             
-         
+
+            <Item
+              title="Vendor"
+              to="vendor"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
             <Typography
               variant="h6"
@@ -195,7 +200,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-          
           </Box>
         </Menu>
       </ProSidebar>

@@ -12,31 +12,33 @@ import { useTheme } from "@mui/material";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+
+import { loading, vendorData, message } from "./venderSlice/vendor.selector";
 import { Loader } from "../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { loading, message, userData } from "./userSlice/user.selector";
-import { getAllUsers } from "./userSlice/userslice";
+import { getVandor } from "./venderSlice/vendor.slice";
 
-const Users = () => {
+const Vendor = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
-  const allUser = useSelector(userData);
+  const vendor = useSelector(vendorData);
   const navigate = useNavigate();
 
-  console.log("allUser => ", allUser);
-
   const toastmessage = useSelector(message);
+  console.log("toastmessage => ", toastmessage);
 
   const [open, setOpen] = useState<boolean>(false);
 
+  console.log("vendor => ", vendor);
+
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(getVandor());
   }, [dispatch]);
 
   useEffect(() => {
@@ -47,26 +49,63 @@ const Users = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "fullName", headerName: "Full Name", flex: 1 },
+    { field: "vendorname", headerName: "Vonder Name" },
 
     {
-      field: "email",
-      headerName: "Email",
+      field: "code",
+      headerName: "Code",
+      type: "string",
+      headerAlign: "left",
+      align: "left",
+    },
+    {
+      field: "country",
+      headerName: "Country",
       flex: 1,
     },
     {
-      field: "userrole",
-      headerName: "User Role",
+      field: "state",
+      headerName: "State",
       flex: 1,
     },
     {
-      field: "mobile",
-      headerName: "Phone",
+      field: "city",
+      headerName: "City",
+      flex: 1,
+    },
+    {
+      field: "address",
+      headerName: "Address",
       flex: 1,
     },
 
     {
-      field: "status",
+      field: "zip",
+      headerName: "Zip Code",
+      flex: 1,
+    },
+    {
+      field: "panno",
+      headerName: "Pan No",
+      flex: 1,
+    },
+    {
+      field: "gstno",
+      headerName: "GST No",
+      flex: 1,
+    },
+    {
+      field: "cinno",
+      headerName: "CIN No",
+      flex: 1,
+    },
+    {
+      field: "website",
+      headerName: "Website",
+      flex: 1,
+    },
+    {
+      field: "isactive",
       headerName: "Status",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
@@ -82,9 +121,7 @@ const Users = () => {
             console.log("newStatus => ", newStatus);
             // Handle status change
             // You might want to dispatch an action here to update the status on the server
-            // dispatch(updateCompanyStatus({ id: id })).then(() => {
-            //   dispatch(getCompany());
-            // });
+            
           }}
         />
       ),
@@ -104,19 +141,19 @@ const Users = () => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
-        };
+          navigate(`addcmapany/${id || ''}`);
+
+         };
 
         const onClickDelete = () => {
           const id = params.id.toString();
 
           // handle delete operation here
-          //   dispatch(deleteCompany({ id: id })).then(() => {
-          //     dispatch(getCompany());
-          //   })
+          
         };
 
         const onClickView = () => {
-          const id = params.id;
+         // const id = params.id;
           // handle view operation here
         };
 
@@ -141,18 +178,18 @@ const Users = () => {
     <>
       <Box m="20px">
         <Header
-          title="User"
-          subtitle="List of user for Future Reference"
+          title="VENDOR"
+          subtitle="List of vendor for Future Reference"
         />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
-              navigate("addUser");
+              navigate("addVendor");
             }}
             color="secondary"
             variant="contained"
           >
-            Create New User
+            Create New vendor
           </Button>
         </Box>
         <Box
@@ -187,30 +224,31 @@ const Users = () => {
             },
           }}
         >
+          {lodingState ? (
+            lodingState !== "idle" && lodingState !== "loading" ? (
+              <Toast
+                open={open}
+                handleClose={() => {}}
+                setShowToast={setOpen}
+                 message={toastmessage}
+                severity="error"
+              />
+            ) : lodingState === "loading" ? (
+              <Loader />
+            ) : null
+          ) : null}
+
           <DataGrid
             // checkboxSelection
-            rows={Array.isArray(allUser) ? allUser : []} // Ensure that company is an array
+            rows={Array.isArray(vendor) ? vendor : []} // Ensure that vendor is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             getRowId={(row) => row._id} // Use the `_id` field as the unique id
           />
         </Box>
       </Box>
-      {lodingState ? (
-        lodingState !== "idle" && lodingState !== "loading" ? (
-          <Toast
-            open={open}
-            handleClose={() => {}}
-            setShowToast = {setOpen}
-            message={toastmessage}
-            severity="error"
-          />
-        ) : lodingState === "loading" ? (
-          <Loader />
-        ) : null
-      ) : null}
     </>
   );
 };
 
-export default Users;
+export default Vendor;

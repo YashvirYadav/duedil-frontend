@@ -24,10 +24,13 @@ import Registeruser from "./scenes/user/register.user";
 import { Company } from "./scenes/company/company";
 import { UserContener } from "./scenes/user/user";
 import { Category } from "./scenes/category/category";
+import { VendorContainer  } from "./scenes/vendor/vendor";
 import TableCategory from "./scenes/category/table.category";
 import RegisterCategory from "./scenes/category/register.category";
 import RegisterRatecard from "./scenes/ratecard/register.ratecard";
 import ChangePassword from "./scenes/changepassword/changepassword";
+import Vendor from "./scenes/vendor/table.vendor";
+import  RegisterVendor  from "./scenes/vendor/register.vendor";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -77,13 +80,20 @@ function App() {
 
           
 
-          <Route path="cadmin" element={<CadminHome />}>
+          <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<Dashboard />} />
 
             <Route path="user" element={<UserContener />}>
               <Route path="" element={<Users />} />
               <Route path="addUser" element={<Registeruser />} />
             </Route>
+
+            <Route path="vendor" element={<VendorContainer />}>
+              <Route path="" element={<Vendor />} />
+              <Route path="addVendor" element={<RegisterVendor />} />
+            </Route>
+
+            
 
             <Route path="changepassword" element={<ChangePassword />} />
           </Route>
