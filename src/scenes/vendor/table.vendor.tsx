@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { getVandor } from "./venderSlice/vendor.slice";
+import { deleteVendor, getVandor, updateVendorStatus } from "./venderSlice/vendor.slice";
 
 const Vendor = () => {
   const theme = useTheme();
@@ -119,6 +119,9 @@ const Vendor = () => {
             const id = params.id.toString();
             console.log("id => ", id);
             console.log("newStatus => ", newStatus);
+            dispatch(updateVendorStatus(id)).then(() => {
+              dispatch(getVandor());
+            });
             // Handle status change
             // You might want to dispatch an action here to update the status on the server
             
@@ -148,6 +151,9 @@ const Vendor = () => {
         const onClickDelete = () => {
           const id = params.id.toString();
 
+          dispatch(deleteVendor(id)).then(() => {
+            dispatch(getVandor());
+          });
           // handle delete operation here
           
         };

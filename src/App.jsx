@@ -25,12 +25,15 @@ import { Company } from "./scenes/company/company";
 import { UserContener } from "./scenes/user/user";
 import { Category } from "./scenes/category/category";
 import { VendorContainer  } from "./scenes/vendor/vendor";
+import { DepartmentContainer  } from "./scenes/department/depatment";
 import TableCategory from "./scenes/category/table.category";
 import RegisterCategory from "./scenes/category/register.category";
 import RegisterRatecard from "./scenes/ratecard/register.ratecard";
 import ChangePassword from "./scenes/changepassword/changepassword";
 import Vendor from "./scenes/vendor/table.vendor";
 import  RegisterVendor  from "./scenes/vendor/register.vendor";
+import Department from "./scenes/department/table.department";
+import RegisterDepatrment from "./scenes/department/register.department";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -93,6 +96,10 @@ function App() {
               <Route path="addVendor" element={<RegisterVendor />} />
             </Route>
 
+            <Route path="department" element={<DepartmentContainer />}>
+              <Route path="" element={<Department />} />
+              <Route path="adddepatrment" element={<RegisterDepatrment />} />
+            </Route>
             
 
             <Route path="changepassword" element={<ChangePassword />} />

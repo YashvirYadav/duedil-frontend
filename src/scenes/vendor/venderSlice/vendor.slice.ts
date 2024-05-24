@@ -19,7 +19,7 @@ const initialState: IRegisterVendorResponce = {
     async (data,{rejectWithValue}) => {
 
         try {
-            const responce = await service.postCallBlob(
+            const responce = await service.postCall(
               "vendor/registerVendor",
               data
             );
@@ -28,7 +28,6 @@ const initialState: IRegisterVendorResponce = {
             const err = error as IRegisterVendorResponce;
             return rejectWithValue(err);
           }
-      
     }
   );
 
@@ -43,6 +42,35 @@ const initialState: IRegisterVendorResponce = {
         return rejectWithValue(err);
       }
     }
+    );
+
+    // deleteVendor
+
+    export const deleteVendor = createAsyncThunk<IRegisterVendorResponce,string>(
+      "vendor/deleteVendor",
+      async (id: string, { rejectWithValue }) => {
+        try {
+          const responce = await service.deleteCall(`vendor/deleteVendor/${id}`);
+          return responce.data;
+        } catch (error) {
+          const err = error as IRegisterVendorResponce;
+          return rejectWithValue(err);
+        }
+      }
+    );
+
+    //updateVendor
+    export const updateVendorStatus = createAsyncThunk<IRegisterVendorResponce,string>(
+      "vendor/updateVendor",
+      async (id:string, { rejectWithValue }) => {
+        try {
+          const responce = await service.putCall(`vendor/updateVendor/${id}`);
+          return responce.data;
+        } catch (error) {
+          const err = error as IRegisterVendorResponce;
+          return rejectWithValue(err);
+        }
+      }
     );
 
   const vendorSlice = createSlice({
@@ -68,6 +96,32 @@ const initialState: IRegisterVendorResponce = {
           state.error = null;
         })
         .addCase(registerVendor.rejected, (state, action: PayloadAction<any>) => {
+          state.status = "failed";
+          state.message = action.payload?.message || "Something went wrong";
+          state.error = action.payload?.error || null;
+        }).addCase(getVandor.pending, (state) => { 
+          state.status = "loading";
+         })
+        .addCase(getVandor.fulfilled, (state, action: PayloadAction<IRegisterVendorResponce>) => {
+          state.status = "succeeded";
+          state.data = action.payload.data;
+          state.success = action.payload.success;
+          state.error = null;
+        }).addCase(getVandor.rejected, (state, action: PayloadAction<any>) => {
+          state.status = "failed";
+          state.message = action.payload?.message || "Something went wrong";
+          state.error = action.payload?.error || null;
+        }).addCase(deleteVendor.pending, (state) => {
+          state.status = "loading";
+        })
+        .addCase(deleteVendor.fulfilled, (state, action: PayloadAction<IRegisterVendorResponce>) => {
+          state.status = "succeeded";
+          state.data = action.payload.data;
+          state.message = action.payload.message;
+          state.success = action.payload.success;
+          state.error = null;
+        })
+        .addCase(deleteVendor.rejected, (state, action: PayloadAction<any>) => {
           state.status = "failed";
           state.message = action.payload?.message || "Something went wrong";
           state.error = action.payload?.error || null;
