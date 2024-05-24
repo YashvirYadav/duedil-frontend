@@ -34,6 +34,7 @@ import Vendor from "./scenes/vendor/table.vendor";
 import  RegisterVendor  from "./scenes/vendor/register.vendor";
 import Department from "./scenes/department/table.department";
 import RegisterDepatrment from "./scenes/department/register.department";
+import VendorHome from "./scenes/admin/vendoradmin/vendoradmin";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -103,7 +104,13 @@ function App() {
             
 
             <Route path="changepassword" element={<ChangePassword />} />
+
+            
+
           </Route>
+          <Route path="vendor" element={<VendorHome />}>
+              <Route path="" element={<Dashboard />} />
+            </Route>
         </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>

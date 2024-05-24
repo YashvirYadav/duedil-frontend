@@ -21,6 +21,8 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
   userrole: string;
+  comapanyId: string;
+  vendorId?: string | undefined;
   __v: number;
   watchHistory: any[]; // Replace 'any' with the actual type if you know it
 }

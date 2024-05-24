@@ -45,7 +45,7 @@ const RegisterDepatrment = () => {
   }, [lodingState]);
 
   const ragisterUserSubmit = () => {
-  dispatch(  registerDepartment({
+  dispatch(registerDepartment({
       departmentname: depatrmentName,
       code: Code,
       description: Description,

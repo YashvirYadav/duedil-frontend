@@ -75,6 +75,10 @@ const postSlice = createSlice({
           sessionStorage.setItem("token", action.payload.data.accessToken);
           sessionStorage.setItem("user", JSON.stringify(action.payload.data.user));
           sessionStorage.setItem("role", action.payload.data.user.userrole);
+          sessionStorage.setItem("email", action.payload.data.user.email);  
+          sessionStorage.setItem("name", action.payload.data.user.username);
+          sessionStorage.setItem("comapanyId", action.payload.data.user.comapanyId);
+          sessionStorage.setItem("userId", action.payload.data.user._id);
         }
       )
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {

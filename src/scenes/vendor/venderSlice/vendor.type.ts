@@ -28,4 +28,5 @@ export interface IRegisterVendorResponce {
         mobile?: string;
         paymentterms? : string;
         creditlimit? : string;
+        companyId?: string;
       };

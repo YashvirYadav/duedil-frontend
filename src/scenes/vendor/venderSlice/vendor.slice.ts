@@ -21,7 +21,7 @@ const initialState: IRegisterVendorResponce = {
         try {
             const responce = await service.postCall(
               "vendor/registerVendor",
-              data
+              addComapnyID(data)
             );
             return responce.data;
           } catch (error) {
@@ -72,6 +72,11 @@ const initialState: IRegisterVendorResponce = {
         }
       }
     );
+    const companyid = () => sessionStorage.getItem("comapanyId");
+
+    const addComapnyID=(obj:any)=>{
+      return {...obj,companyid:companyid()}
+    }
 
   const vendorSlice = createSlice({
     name: "vendor",
