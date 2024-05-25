@@ -31,23 +31,18 @@ const RegisterInvoice = () => {
   const getMessage = useSelector(message);
   const navigate = useNavigate();
 
-  // invoicenumber: string;
-  // invoicedate?: Date;
-  // duedate?: Date;
-  // vendorname: string;
-  // vendorcontactinfo?: string;
-  // amount: number;
-  // currency: string;
-  // description: string;
-  // purchaseordernumber?: string;
-  // gstnumber?: string;
-  // notes?: string;
-  // attachments?: string;
-  // vendorId?: string;
+  const currentDate = new Date();
+  const formattedDate = `${String(currentDate.getDate()).padStart(
+    2,
+    "0"
+  )}-${String(currentDate.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${currentDate.getFullYear()}`;
 
   const [invoicenumber, setinvoicenumber] = useState<string>("");
-  const [invoicedate, setinvoicedate] = useState<string>();
-  const [duedate, setduedate] = useState<string>();
+  const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
+  const [duedate, setduedate] = useState<string>(formattedDate);
   const [vendorname, setvendorname] = useState<string>("");
   const [vendorcontactinfo, setvendorcontactinfo] = useState<string>("");
   const [amount, setamount] = useState<number>();
@@ -89,7 +84,7 @@ const RegisterInvoice = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Register Vendor" subtitle="Welcome to your dashboard" />
+        <Header title="Post Invoice" subtitle="Welcome to your Post Invoice" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => navigate(-1)}
@@ -115,14 +110,14 @@ const RegisterInvoice = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Vendor Detail
+              Invoice Detail
             </Typography>
 
             <TextField
               id="invoicenumber"
               variant="outlined"
               type="text"
-              label="invoice Number"
+              label="Invoice Number"
               name="invoicenumber"
               value={invoicenumber}
               onChange={(e) => setinvoicenumber(e.target.value)}
@@ -150,21 +145,11 @@ const RegisterInvoice = () => {
             <TextField
               fullWidth
               variant="outlined"
-              type="number"
-              label="Amount"
-              name="amount"
-              value={amount}
-              onChange={(e) => setamount(Number(e.target.value))}
-              sx={{ gridColumn: "span 12" }}
-            />
-            <TextField
-              fullWidth
-              variant="outlined"
               type="text"
-              label="Currency"
-              value={currency}
-              onChange={(e) => setcurrency(e.target.value)}
-              name="currency"
+              label="Purchase Order Number"
+              name="purchaseordernumber"
+              value={purchaseordernumber}
+              onChange={(e) => setpurchaseordernumber(e.target.value)}
               sx={{ gridColumn: "span 12" }}
             />
           </Box>
@@ -178,65 +163,46 @@ const RegisterInvoice = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Vendor User Detail
+              Other invoice Detail
             </Typography>
+
             <TextField
               fullWidth
               variant="outlined"
-              type="text"
-              value={vendorname}
-              onChange={(e) => setvendorname(e.target.value)}
-              label="Vendor Name"
-              name="vendorname"
+              type="number"
+              label="Amount"
+              name="amount"
+              value={amount}
+              onChange={(e) => setamount(Number(e.target.value))}
               sx={{ gridColumn: "span 12" }}
             />
+
             <TextField
               fullWidth
               variant="outlined"
               type="text"
-              label="Purchase Order Number"
-              name="purchaseordernumber"
-              value={purchaseordernumber}
-              onChange={(e) => setpurchaseordernumber(e.target.value)}
-              sx={{ gridColumn: "span 12" }}
-            />
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="text"
-              label="GST Number"
+              label="GST Amount"
               name="gstnumber"
               value={gstnumber}
               onChange={(e) => setgstnumber(e.target.value)}
               sx={{ gridColumn: "span 12" }}
             />
 
-            <input
-              type="file"
-              accept="pdf/*"
-              onChange={handleFileChange}
-            />
-
             <TextField
               fullWidth
               variant="outlined"
-              type="text"
-              label="Description"
-              name="description"
-              value={description}
-              onChange={(e) => setdescription(e.target.value)}
+              type="number"
+              label="Total Amount"
+              name="amount"
+              disabled
+              value={amount}
+              onChange={(e) => setamount(Number(e.target.value))}
               sx={{ gridColumn: "span 12" }}
             />
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="text"
-              label="Vendor Contact Info"
-              name="vendorcontactinfo"
-              value={vendorcontactinfo}
-              onChange={(e) => setvendorcontactinfo(e.target.value)}
-              sx={{ gridColumn: "span 12" }}
-            />
+            <Typography variant="h6" fontWeight="200" color={colors.grey[100]}>
+              Attachment
+            </Typography>
+            <input type="file" accept="pdf/*" onChange={handleFileChange} />
           </Box>
         </Box>
         <Box
