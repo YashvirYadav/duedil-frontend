@@ -6,6 +6,7 @@ import categorySlice from '../scenes/category/categorySlice/categorySlice';
 import ratecardSlice from '../scenes/ratecard/reduxRatecard/ratecardSlice';
 import vendorSlice from '../scenes/vendor/venderSlice/vendor.slice';
 import  departmentSlice  from '../scenes/department/departmentSlics/departmentslice';
+import invoiceSlice from '../scenes/invoices/invoiceSlice/invoice.slice';
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     category : categorySlice,
     ratecard: ratecardSlice,
     vendor: vendorSlice,
-    depatment :departmentSlice
+    depatment :departmentSlice,
+    invoice: invoiceSlice,
   },
 });
 

@@ -24,17 +24,20 @@ import Registeruser from "./scenes/user/register.user";
 import { Company } from "./scenes/company/company";
 import { UserContener } from "./scenes/user/user";
 import { Category } from "./scenes/category/category";
-import { VendorContainer  } from "./scenes/vendor/vendor";
-import { DepartmentContainer  } from "./scenes/department/depatment";
+import { VendorContainer } from "./scenes/vendor/vendor";
+import { DepartmentContainer } from "./scenes/department/depatment";
 import TableCategory from "./scenes/category/table.category";
 import RegisterCategory from "./scenes/category/register.category";
 import RegisterRatecard from "./scenes/ratecard/register.ratecard";
 import ChangePassword from "./scenes/changepassword/changepassword";
 import Vendor from "./scenes/vendor/table.vendor";
-import  RegisterVendor  from "./scenes/vendor/register.vendor";
+import RegisterVendor from "./scenes/vendor/register.vendor";
 import Department from "./scenes/department/table.department";
 import RegisterDepatrment from "./scenes/department/register.department";
 import VendorHome from "./scenes/admin/vendoradmin/vendoradmin";
+import { InvoiceContainer } from "./scenes/invoices/invoive";
+import InvoiceTable from "./scenes/invoices/table.invoice";
+import RegisterInvoice from "./scenes/invoices/register.invoice";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -76,13 +79,9 @@ function App() {
             </Route>
 
             <Route path="ratecard" element={<Category />}>
-              <Route path="" element={< RegisterRatecard/>} />
-              
+              <Route path="" element={<RegisterRatecard />} />
             </Route>
-
           </Route>
-
-          
 
           <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<Dashboard />} />
@@ -101,16 +100,17 @@ function App() {
               <Route path="" element={<Department />} />
               <Route path="adddepatrment" element={<RegisterDepatrment />} />
             </Route>
-            
 
             <Route path="changepassword" element={<ChangePassword />} />
-
-            
-
           </Route>
           <Route path="vendor" element={<VendorHome />}>
-              <Route path="" element={<Dashboard />} />
+            <Route path="" element={<Dashboard />} />
+
+            <Route path="invoice" element={<InvoiceContainer />}>
+              <Route path="" element={<InvoiceTable />} />
+              <Route path="addinvoice" element={<RegisterInvoice />} />
             </Route>
+          </Route>
         </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>
