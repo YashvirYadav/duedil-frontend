@@ -11,7 +11,6 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
-
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -75,7 +74,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                {sessionStorage.getItem("role")}
+                  {sessionStorage.getItem("role")}
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -120,8 +119,6 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-         
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -131,16 +128,20 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Invoice"
+              title="Post Invoice"
               to="invoice"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
 
-           
-
-            
+            <Item
+              title="Generate invoice"
+              to="generateinvoice"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
             <Typography
               variant="h6"

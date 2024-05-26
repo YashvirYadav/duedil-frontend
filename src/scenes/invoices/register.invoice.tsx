@@ -22,6 +22,8 @@ import { Toast } from "../../components/Toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { registerInvoice } from "./invoiceSlice/invoice.slice";
 import { IInvoice } from "./invoiceSlice/invoice.type";
+import { user } from "../user/authSlice/auth.selector";
+import { userID } from "../../utils/utils";
 
 const RegisterInvoice = () => {
   const theme = useTheme();
@@ -41,22 +43,38 @@ const RegisterInvoice = () => {
   )}-${currentDate.getFullYear()}`;
 
   const [invoicenumber, setinvoicenumber] = useState<string>("");
+  const [errorInvoiceNumber, setErrorInviceNumber] = useState<boolean>(false);
+
   const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
+  const [errorInvoiceDate, setErrorInvoiceDate] = useState<boolean>(false);
+
   const [duedate, setduedate] = useState<string>(formattedDate);
-  const [vendorname, setvendorname] = useState<string>("");
-  const [vendorcontactinfo, setvendorcontactinfo] = useState<string>("");
-  const [amount, setamount] = useState<number>();
-  const [currency, setcurrency] = useState<string>("");
-  const [description, setdescription] = useState<string>("");
+  const [errorDueDate, setErrorDueDate] = useState<boolean>(false);
+ 
+  const [amount, setamount] = useState<number>(0);
+  const [errorAmount, setErrorAmount] = useState<boolean>(false);
+
+
   const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-  const [gstnumber, setgstnumber] = useState<string>("");
+  const [errorPurchaseOrderNumber, setErrorPurchaseOrderNumber] = useState<
+    boolean
+  >(false);
+  const [gstamount, setgstamount] = useState<number>(0);
+  const [errorGstAmount, setErrorGstAmount] = useState<boolean>(false);
   const [attachments, setattachments] = useState<File>();
+
+  const [totalamount, settotalamount] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
 
   const ragisterVendorSubmit = () => {};
 
   const { id } = useParams<{ id?: string }>();
+
+useEffect(() => {
+    settotalamount(amount + gstamount);
+}, [gstamount, amount]);
+
   useEffect(() => {
     if (id) {
       // If an ID was passed, fetch the Vendor data and set it in the state
@@ -79,6 +97,52 @@ const RegisterInvoice = () => {
       setattachments(event.target.files[0]);
     }
   };
+
+  const submitInvoice = () => {
+    if (!invoicenumber) {
+      setErrorInviceNumber(true);
+      return;
+    }
+    if (!invoicedate) {
+      setErrorInvoiceDate(true);
+      return;
+    }
+    if (!duedate) {
+      setErrorDueDate(true);
+      return;
+    }
+    if (!amount) {
+      setErrorAmount(true);
+      return;
+    }
+    if (!gstamount) {
+      setErrorGstAmount(true);
+      return;
+    }
+if(!purchaseordernumber){
+  setErrorPurchaseOrderNumber(true);
+  return;
+}
+if(!attachments)
+  {
+    setOpen(true);
+    return;
+  }
+
+    const formData = new FormData();
+    formData.append("attachments", attachments as Blob);
+    formData.append("invoicenumber", invoicenumber);
+    formData.append("invoicedate", invoicedate);
+    formData.append("duedate", duedate);
+    formData.append("amount", amount.toString());
+    formData.append("purchaseordernumber", purchaseordernumber);
+    formData.append("gstamount", gstamount.toString());
+    formData.append("totalamount", totalamount.toString());
+    formData.append("vendorId", userID() as string);
+
+
+    dispatch(registerInvoice(formData));
+  }
 
   return (
     <>
@@ -120,7 +184,11 @@ const RegisterInvoice = () => {
               label="Invoice Number"
               name="invoicenumber"
               value={invoicenumber}
-              onChange={(e) => setinvoicenumber(e.target.value)}
+              onChange={(e) => {
+                setErrorInviceNumber(false);
+                setinvoicenumber(e.target.value)
+              }}
+              helperText={errorInvoiceNumber ? "Please enter invoice number" : ""}
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
@@ -129,7 +197,11 @@ const RegisterInvoice = () => {
               type="date"
               variant="outlined"
               value={invoicedate}
-              onChange={(e) => setinvoicedate(e.target.value)}
+              onChange={(e) => {
+                setErrorInvoiceDate(false);
+                setinvoicedate(e.target.value)
+              }}
+
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
@@ -138,7 +210,10 @@ const RegisterInvoice = () => {
               type="date"
               variant="outlined"
               value={duedate}
-              onChange={(e) => setduedate(e.target.value)}
+              onChange={(e) => {
+                setErrorDueDate(false);
+                setduedate(e.target.value)
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -149,7 +224,9 @@ const RegisterInvoice = () => {
               label="Purchase Order Number"
               name="purchaseordernumber"
               value={purchaseordernumber}
-              onChange={(e) => setpurchaseordernumber(e.target.value)}
+              onChange={(e) => {
+                setErrorPurchaseOrderNumber(false);
+                setpurchaseordernumber(e.target.value)}}
               sx={{ gridColumn: "span 12" }}
             />
           </Box>
@@ -173,18 +250,22 @@ const RegisterInvoice = () => {
               label="Amount"
               name="amount"
               value={amount}
-              onChange={(e) => setamount(Number(e.target.value))}
+              onChange={(e) => {
+                setErrorAmount(false);
+                setamount(parseInt(e.target.value))}}
               sx={{ gridColumn: "span 12" }}
             />
 
             <TextField
               fullWidth
               variant="outlined"
-              type="text"
+              type="number"
               label="GST Amount"
               name="gstnumber"
-              value={gstnumber}
-              onChange={(e) => setgstnumber(e.target.value)}
+              value={gstamount}
+              onChange={(e) => {
+                setErrorGstAmount(false);
+                setgstamount(parseInt(e.target.value))}}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -193,10 +274,10 @@ const RegisterInvoice = () => {
               variant="outlined"
               type="number"
               label="Total Amount"
-              name="amount"
+              name="totalamount"
               disabled
-              value={amount}
-              onChange={(e) => setamount(Number(e.target.value))}
+              value={totalamount}
+              
               sx={{ gridColumn: "span 12" }}
             />
             <Typography variant="h6" fontWeight="200" color={colors.grey[100]}>
@@ -222,7 +303,7 @@ const RegisterInvoice = () => {
           <Button
             variant="contained"
             onClick={() => {
-              ragisterVendorSubmit();
+              submitInvoice();
             }}
           >
             Save

@@ -13,14 +13,14 @@ import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import { loading, message,invoiceData } from "./invoiceSlice/invoice.selector";
+import { loading, message, invoiceData } from "./invoiceSlice/invoice.selector";
 import { Loader } from "../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { registerInvoice ,getallInvoice} from "./invoiceSlice/invoice.slice";
+import { registerInvoice, getallInvoice, deleteInvoice } from "./invoiceSlice/invoice.slice";
 
 const InvoiceTable = () => {
   const theme = useTheme();
@@ -49,83 +49,39 @@ const InvoiceTable = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "invoicename", headerName: "Vonder Name" },
+    { field: "invoicenumber", headerName: "Invoice Number" },
 
     {
-      field: "code",
-      headerName: "Code",
-      type: "string",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "country",
-      headerName: "Country",
+      field: "invoicedate",
+      headerName: "Invoice date",
       flex: 1,
     },
     {
-      field: "state",
-      headerName: "State",
-      flex: 1,
-    },
-    {
-      field: "city",
-      headerName: "City",
-      flex: 1,
-    },
-    {
-      field: "address",
-      headerName: "Address",
+      field: "duedate",
+      headerName: "Due Date",
       flex: 1,
     },
 
     {
-      field: "zip",
-      headerName: "Zip Code",
+      field: "amount",
+      headerName: "Amount",
       flex: 1,
     },
     {
-      field: "panno",
-      headerName: "Pan No",
+      field: "gstamount",
+      headerName: "GST Amount",
       flex: 1,
     },
-    {
-      field: "gstno",
-      headerName: "GST No",
-      flex: 1,
-    },
-    {
-      field: "cinno",
-      headerName: "CIN No",
-      flex: 1,
-    },
-    {
-      field: "website",
-      headerName: "Website",
-      flex: 1,
-    },
-    {
-      field: "isactive",
-      headerName: "Status",
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
-        <Switch
-          size="small"
-          checked={params.value as boolean}
-          onChange={(event) => {
-            const newStatus = event.target.checked;
 
-            // Get the id of the row
-            const id = params.id.toString();
-            console.log("id => ", id);
-            console.log("newStatus => ", newStatus);
-        
-            // Handle status change
-            // You might want to dispatch an action here to update the status on the server
-            
-          }}
-        />
-      ),
+    {
+      field: "totalamount",
+      headerName: "Total Amount",
+      flex: 1,
+    },
+    {
+      field: "purchaseordernumber",
+      headerName: "PO Number",
+      flex: 1,
     },
     {
       field: "actions",
@@ -142,20 +98,19 @@ const InvoiceTable = () => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
-          navigate(`addcmapany/${id || ''}`);
-
-         };
+          navigate(`addcmapany/${id || ""}`);
+        };
 
         const onClickDelete = () => {
           const id = params.id.toString();
 
-       
+          dispatch(deleteInvoice(id));
+
           // handle delete operation here
-          
         };
 
         const onClickView = () => {
-         // const id = params.id;
+          // const id = params.id;
           // handle view operation here
         };
 
@@ -232,7 +187,7 @@ const InvoiceTable = () => {
                 open={open}
                 handleClose={() => {}}
                 setShowToast={setOpen}
-                 message={toastmessage}
+                message={toastmessage}
                 severity="error"
               />
             ) : lodingState === "loading" ? (

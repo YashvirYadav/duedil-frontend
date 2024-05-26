@@ -12,11 +12,11 @@ const initialState: IRegisterInvoiceResponce = {
   error: null,
 };
 
-export const registerInvoice = createAsyncThunk<IRegisterInvoiceResponce,IInvoice>
+export const registerInvoice = createAsyncThunk<IRegisterInvoiceResponce, FormData>
 (
   "invoice/registerInvoice",async(data,{rejectWithValue})=>{
     try {
-      const response = await service.postCall("/createInvoice",data);
+      const response = await service.postCallBlob("invoice/createInvoice",data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -27,13 +27,26 @@ export const registerInvoice = createAsyncThunk<IRegisterInvoiceResponce,IInvoic
 export const getallInvoice = createAsyncThunk<IRegisterInvoiceResponce>(
     "invoice/getallInvoice",async(_, {rejectWithValue})=>{
         try {
-        const response = await service.getCall("/getallInvoice");
+        const response = await service.getCall("invoice/getallInvoice");
         return response.data;
         } catch (error) {
         return rejectWithValue(error);
         }
     }
     
+);
+
+// deleteInvoice
+
+export const deleteInvoice = createAsyncThunk<IRegisterInvoiceResponce, string>(
+    "invoice/deleteInvoice",async(id,{rejectWithValue})=>{
+        try {
+        const response = await service.deleteCall(`invoice/deleteInvoice/${id}`);
+        return response.data;
+        } catch (error) {
+        return rejectWithValue(error);
+        }
+    }
 );
 
 const invoiceSlice = createSlice({
@@ -70,6 +83,18 @@ const invoiceSlice = createSlice({
     .addCase(getallInvoice.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.message = action.payload.message;
+    }).addCase(deleteInvoice.pending, (state) => {
+      state.status = "loading";
+    })
+    .addCase(deleteInvoice.fulfilled, (state, action: PayloadAction<IRegisterInvoiceResponce>) => {
+      state.status = "succeeded";
+      state.success = action.payload.success;
+      state.message = action.payload.message;
+      state.error = null;
+    })
+    .addCase(deleteInvoice.rejected, (state, action: PayloadAction<any>) => {
+      state.status = "failed";
+      state.message = action.payload.message;
     });
   },
 });

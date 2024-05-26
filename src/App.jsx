@@ -110,6 +110,12 @@ function App() {
               <Route path="" element={<InvoiceTable />} />
               <Route path="addinvoice" element={<RegisterInvoice />} />
             </Route>
+
+            
+            <Route path="generateinvoice" element={<InvoiceContainer />}>
+              <Route path="" element={<InvoiceTable />} />
+              <Route path="addinvoice" element={<RegisterInvoice />} />
+            </Route>
           </Route>
         </Routes>
       </ThemeProvider>
