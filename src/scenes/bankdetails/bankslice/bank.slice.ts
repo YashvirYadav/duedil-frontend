@@ -10,7 +10,7 @@ export const registerBank = createAsyncThunk<IRegisterBankResponce,IBank>(
         try {
         const responce = await service.postCall(
             "bank/registerbank",
-            data
+            {...data, userId:sessionStorage.getItem("userId")}
             );
             return responce.data;
         } catch (error) {
@@ -18,6 +18,19 @@ export const registerBank = createAsyncThunk<IRegisterBankResponce,IBank>(
         }
     }
 );
+
+export const getallBank = createAsyncThunk<IRegisterBankResponce>(
+    "bank/getallBank",
+    async (_, { rejectWithValue }) => {
+        try {
+        const responce = await service.getCall("bank/getallbank/"+sessionStorage.getItem("userId"));
+        return responce.data;
+        } catch (error) {
+        return rejectWithValue(error);
+        }
+    }
+);
+
 
 export const bankSlice = createSlice({
     name: "bank",
@@ -52,6 +65,21 @@ export const bankSlice = createSlice({
             state.error = action.payload.error;
         });
         builder.addCase(registerBank.rejected, (state, action: PayloadAction<any>) => {
+            state.status = "failed";
+            state.message = action.payload.message;
+        })
+        .addCase(getallBank.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(getallBank.fulfilled, (state, action: PayloadAction<IRegisterBankResponce>) => {
+            state.statusCode = action.payload.statusCode;
+            state.status = "succeeded";
+            state.data = action.payload.data;
+            state.message = action.payload.message;
+            state.success = action.payload.success;
+            state.error = action.payload.error;
+        })
+        .addCase(getallBank.rejected, (state, action: PayloadAction<any>) => {
             state.status = "failed";
             state.message = action.payload.message;
         });

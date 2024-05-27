@@ -12,67 +12,63 @@ import { useTheme } from "@mui/material";
 import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+
+import { loading, roleData, message } from "./roleSlice/role.selector";
 import { Loader } from "../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { loading, message, userData } from "./userSlice/user.selector";
-import { getAllUsers } from "./userSlice/userslice";
-import { getroleBycompanyId } from "../role/roleSlice/role.slice";
+import { getroleBycompanyId } from "./roleSlice/role.slice";
 
-const Users = () => {
+const TableRole = () => {
+  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const lodingState = useSelector(loading);
-  const allUser = useSelector(userData);
+  const depatrment = useSelector(roleData);
   const navigate = useNavigate();
 
-  console.log("allUser => ", allUser);
-
   const toastmessage = useSelector(message);
+  console.log("toastmessage => ", toastmessage);
+  console.log("depatrment => ", depatrment);
 
-  const [open, setOpen] = useState<boolean>(false);
+const [open, setOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
-
-  useEffect(() => {
+useEffect(() => {
     dispatch(getroleBycompanyId(sessionStorage.getItem("companyId")?.toString() ?? ''));
+}, [dispatch]);
 
-  },[dispatch])
-
-  useEffect(() => {
+useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
-      setOpen(true);
+        setOpen(true);
     }
-  }, [lodingState]);
+}, [lodingState]);
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "username", headerName: "Full Name", flex: 1 },
+    { field: "rolename", headerName: "Role Name",  flex: 1 },
 
     {
-      field: "email",
-      headerName: "Email",
+      field: "description",
+      headerName: "Description",
+     
       flex: 1,
     },
+    
     {
-      field: "userrole",
-      headerName: "User Role",
+      field: "roletype",
+      headerName: "Role type",
       flex: 1,
-    },
-    {
-      field: "mobile",
-      headerName: "Phone",
-      flex: 1,
-    },
+    }, 
+    
+    
+   
 
     {
-      field: "status",
+      field: "isactive",
       headerName: "Status",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
@@ -86,11 +82,8 @@ const Users = () => {
             const id = params.id.toString();
             console.log("id => ", id);
             console.log("newStatus => ", newStatus);
-            // Handle status change
-            // You might want to dispatch an action here to update the status on the server
-            // dispatch(updateCompanyStatus({ id: id })).then(() => {
-            //   dispatch(getCompany());
-            // });
+          
+         
           }}
         />
       ),
@@ -110,19 +103,18 @@ const Users = () => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
+
         };
 
         const onClickDelete = () => {
           const id = params.id.toString();
 
-          // handle delete operation here
-          //   dispatch(deleteCompany({ id: id })).then(() => {
-          //     dispatch(getCompany());
-          //   })
+        
+
         };
 
         const onClickView = () => {
-          const id = params.id;
+          // const id = params.id;
           // handle view operation here
         };
 
@@ -147,18 +139,18 @@ const Users = () => {
     <>
       <Box m="20px">
         <Header
-          title="User"
-          subtitle="List of user for Future Reference"
+          title="Role"
+          subtitle="List of Role for Future Reference"
         />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
-              navigate("addUser");
+              navigate("addrole");
             }}
             color="secondary"
             variant="contained"
           >
-            Create New User
+            Create New role
           </Button>
         </Box>
         <Box
@@ -193,30 +185,34 @@ const Users = () => {
             },
           }}
         >
+          {lodingState ? (
+            lodingState !== "idle" && lodingState !== "loading" ? (
+              <Toast
+                open={open}
+                handleClose={() => {}}
+                setShowToast={setOpen}
+                message="test"
+                severity="error"
+              />
+            ) : lodingState === "loading" ? (
+              <Loader />
+            ) : null
+          ) : null}
+
           <DataGrid
+         
             // checkboxSelection
-            rows={Array.isArray(allUser) ? allUser : []} // Ensure that company is an array
+            rows={Array.isArray(depatrment) ? depatrment : []} // Ensure that company is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             getRowId={(row) => row._id} // Use the `_id` field as the unique id
           />
         </Box>
       </Box>
-      {lodingState ? (
-        lodingState !== "idle" && lodingState !== "loading" ? (
-          <Toast
-            open={open}
-            handleClose={() => {}}
-            setShowToast = {setOpen}
-            message={toastmessage}
-            severity="error"
-          />
-        ) : lodingState === "loading" ? (
-          <Loader />
-        ) : null
-      ) : null}
     </>
   );
 };
 
-export default Users;
+export default TableRole;
+
+

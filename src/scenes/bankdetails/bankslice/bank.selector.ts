@@ -5,7 +5,7 @@ import { IBank } from "./bank.type";
 
 export const bank = (state: RootState) => state.bank;
 
-export const depatmentData = createSelector(bank, (state) => {
+export const bankData = createSelector(bank, (state) => {
   return state.data as IBank[] | [];
 });
 

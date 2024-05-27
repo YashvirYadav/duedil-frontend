@@ -1,3 +1,5 @@
+import { IRole } from "../../role/roleSlice/role.type";
+
 export interface ILoginSuccessResponce {
   statusCode: number;
   data: IData;
@@ -31,9 +33,10 @@ export interface IRegisterRequest {
   username: string;
   email: string;
   password: string;
-  userrole: string;
+  userrole?: string;
   status: boolean;
   mobile: string;
+  role?: IRole
 }
 
 export interface ILoginRequest {

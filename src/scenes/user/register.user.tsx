@@ -19,10 +19,13 @@ import { Loader } from "../../components/Lodar";
 import { Toast } from "../../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { message,loading } from "./userSlice/user.selector";
-import { useNavigate } from 'react-router-dom';
+import { message, loading } from "./userSlice/user.selector";
+import { useNavigate } from "react-router-dom";
 import { register } from "./userSlice/userslice";
-
+import { roleData } from "../role/roleSlice/role.selector";
+import { user } from "./authSlice/auth.selector";
+import { IRole } from "../role/roleSlice/role.type";
+import { getroleBycompanyId } from "../role/roleSlice/role.slice";
 
 const RegisterCompany = () => {
   const theme = useTheme();
@@ -30,11 +33,11 @@ const RegisterCompany = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [UserName, setUserName] = useState("");
   const [Email, setEmail] = useState("");
-  const [Role, setRole] = useState("");
+  const [Role, setRole] = useState<IRole>();
   const [Status, setStatus] = useState<boolean>(false);
   const [Mobile, setMobile] = useState("");
   const lodingState = useSelector(loading);
-  const getMessage  = useSelector(message)
+  const getMessage = useSelector(message);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [errorUserName, setErrorUserName] = useState<boolean>(false);
@@ -43,8 +46,7 @@ const RegisterCompany = () => {
   const [errorStatus, setErrorStatus] = useState<boolean>(false);
 
   const authToken = () => sessionStorage.getItem("role");
-
-
+  const userrole = useSelector(roleData);
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -52,30 +54,45 @@ const RegisterCompany = () => {
     }
   }, [lodingState]);
 
-  const ragisterUserSubmit = () => {
-    if(UserName.length<1){
-      setErrorUserName(true)
-      return;
-    }
-    if(Email.length<1 || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(Email)){
-      
-      setErrorEmail(true)
-      return;
-    }
-    if(Mobile.length<10){
-      setErroeMobile(true)
-      return
-    }
-    if(Role.length<1){
-      setErrorStatus(true)
-      return
-    }
+  useEffect(() => {
+    dispatch(getroleBycompanyId(sessionStorage.getItem("companyId") ?? ""));
+  }, [dispatch]);
 
-    dispatch(register({ email: Email, username: UserName, password: "admin@123", userrole: Role, status: Status, mobile: Mobile }));
-   
+  const ragisterUserSubmit = () => {
+    if (UserName.length < 1) {
+      setErrorUserName(true);
+      return;
+    }
+    if (
+      Email.length < 1 ||
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(Email)
+    ) {
+      setErrorEmail(true);
+      return;
+    }
+    if (Mobile.length < 10) {
+      setErroeMobile(true);
+      return;
+    }
+    dispatch(
+      register({
+        email: Email,
+        username: UserName,
+        password: "admin@123",
+        role: Role,
+        status: Status,
+        mobile: Mobile,
+      })
+    );
   };
 
-
+  const menuByRole = userrole.map((item,index) => {
+    return (
+      <MenuItem key={item._id} value={index}>
+        {item.rolename} - {item.roletype}
+      </MenuItem>
+    );
+  });
 
   return (
     <>
@@ -84,12 +101,21 @@ const RegisterCompany = () => {
         <Header title="Register User" subtitle="Welcome to your dashboard" />
 
         <Box display="flex" justifyContent="end" mt="20px">
-              <Button onClick={() => navigate(-1) }color="secondary" variant="contained">
-                Back to list
-              </Button>
-            </Box>
+          <Button
+            onClick={() => navigate(-1)}
+            color="secondary"
+            variant="contained"
+          >
+            Back to list
+          </Button>
+        </Box>
 
-        <Box m="40px 0 0 0" display="grid" gridTemplateColumns="repeat(12, 1fr)" gap="20px">
+        <Box
+          m="40px 0 0 0"
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gap="20px"
+        >
           <Box
             flexDirection="column"
             gridColumn="span 6"
@@ -109,11 +135,10 @@ const RegisterCompany = () => {
               label="User Name"
               name="User Name*"
               value={UserName}
-              onChange={
-                (e) =>{ 
-                  setErrorUserName(false)
-                  setUserName(e.target.value)}
-                }
+              onChange={(e) => {
+                setErrorUserName(false);
+                setUserName(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
               error={errorUserName}
               helperText={errorUserName ? "User name is required" : ""}
@@ -128,7 +153,8 @@ const RegisterCompany = () => {
               value={Email}
               onChange={(e) => {
                 setErrorEmail(false);
-                setEmail(e.target.value)}}
+                setEmail(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
               error={errorEmail}
               helperText={errorEmail ? "User email address is required" : ""}
@@ -140,20 +166,16 @@ const RegisterCompany = () => {
               id="demo-simple-select-helper"
               label="Role"
               value={Role}
-              onChange={(e) =>{
-                setErrorStatus(false)
-               setRole(e.target.value)}}
+              onChange={(e) => {
+                setErrorStatus(false);
+                setRole(userrole[Number(e.target.value)]);
+              }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {authToken() === "superadmin" ? <MenuItem value="superadmin">Super Admin</MenuItem> : null}
-             
-              <MenuItem value="clientadmin">C Admin</MenuItem>
-              <MenuItem value="projectmanager">Project Manager</MenuItem>
-              <MenuItem value="salesanager">Sales Manager</MenuItem>
+              {menuByRole}
             </Select>
-            <div style={{marginLeft:"15px", color:'red'}}>{errorStatus ? "User role is required" : ""}</div>
+            <div style={{ marginLeft: "15px", color: "red" }}>
+              {errorStatus ? "User role is required" : ""}
+            </div>
             <FormControlLabel
               control={
                 <Switch
@@ -181,8 +203,9 @@ const RegisterCompany = () => {
               name="Mobile"
               value={Mobile}
               onChange={(e) => {
-                setErroeMobile(false)
-                setMobile(e.target.value)}}
+                setErroeMobile(false);
+                setMobile(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
               error={errorMobile}
               helperText={errorMobile ? "User mobile number is required" : ""}
@@ -218,7 +241,7 @@ const RegisterCompany = () => {
           <Toast
             open={open}
             handleClose={() => {}}
-            setShowToast = {setOpen}
+            setShowToast={setOpen}
             message={getMessage}
             severity="error"
           />

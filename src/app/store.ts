@@ -8,6 +8,7 @@ import vendorSlice from '../scenes/vendor/venderSlice/vendor.slice';
 import  departmentSlice  from '../scenes/department/departmentSlics/departmentslice';
 import invoiceSlice from '../scenes/invoices/invoiceSlice/invoice.slice';
 import bankSlice from '../scenes/bankdetails/bankslice/bank.slice';
+import roleSlice from '../scenes/role/roleSlice/role.slice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     depatment :departmentSlice,
     invoice: invoiceSlice,
     bank : bankSlice,
+    role : roleSlice,
   },
 });
 

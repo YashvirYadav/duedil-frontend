@@ -39,6 +39,14 @@ import { InvoiceContainer } from "./scenes/invoices/invoive";
 import InvoiceTable from "./scenes/invoices/table.invoice";
 import RegisterInvoice from "./scenes/invoices/register.invoice";
 
+import { BankDetails } from "./scenes/bankdetails/bankdetails";
+import RegisterBank  from "./scenes/bankdetails/register.bank"
+import TableBank from "./scenes/bankdetails/table.bank";
+
+import {Role} from "./scenes/role/Role";
+import TableRole from "./scenes/role/table.role";
+import RegisterRole from "./scenes/role/register.role"
+
 function App() {
   const [theme, colorMode] = useMode();
 
@@ -101,6 +109,11 @@ function App() {
               <Route path="adddepatrment" element={<RegisterDepatrment />} />
             </Route>
 
+            <Route path="role" element={<Role />}>
+              <Route path="" element={<TableRole />} />
+              <Route path="addrole" element={<RegisterRole />} />
+            </Route>
+
             <Route path="changepassword" element={<ChangePassword />} />
           </Route>
           <Route path="vendor" element={<VendorHome />}>
@@ -111,11 +124,17 @@ function App() {
               <Route path="addinvoice" element={<RegisterInvoice />} />
             </Route>
 
-            
             <Route path="generateinvoice" element={<InvoiceContainer />}>
               <Route path="" element={<InvoiceTable />} />
               <Route path="addinvoice" element={<RegisterInvoice />} />
             </Route>
+
+            <Route path="bank" element={<BankDetails />}>
+              <Route path="" element={<TableBank />} />
+              <Route path="addbank" element={<RegisterBank />} />
+            </Route>
+
+
           </Route>
         </Routes>
       </ThemeProvider>

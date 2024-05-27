@@ -8,9 +8,12 @@ export interface IRegisterBankResponce {
     }
 
 export interface IBank {
-    _id: string;
+    _id?: string;
+    owner: string;
     name: string;
     branch: string;
     ifsc_code: string;
     accountnumber: string;
+    userId?: string;
+    isactive: boolean;
 }
