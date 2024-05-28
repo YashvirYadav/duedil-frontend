@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { service } from "../../../services/ApiServices";
 import { ILoginSuccessResponce, IRegisterRequest } from "../authSlice/user.type";
+import { company } from "../../company/companyRedux/company.selector";
 
 
 interface InitialState {
@@ -40,13 +41,14 @@ IRegisterRequest
 "auth/register",
 async (loginRequest: IRegisterRequest, { rejectWithValue }) => {
   try {
-    const { email, username, password, userrole, status } = loginRequest;
+    const { email, username, password, status, role } = loginRequest;
     const responce = await service.postCall("users/registerByAdmin", {
       email,
       username,
       password,
-      userrole,
       status,
+      role,
+      comapanyId : sessionStorage.getItem("companyId")
     });
     return responce.data;
   } catch (error) {

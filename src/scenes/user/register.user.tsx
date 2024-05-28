@@ -34,6 +34,8 @@ const RegisterCompany = () => {
   const [UserName, setUserName] = useState("");
   const [Email, setEmail] = useState("");
   const [Role, setRole] = useState<IRole>();
+  const [roleArray, setRoleArray] = useState<IRole[]>([]);
+
   const [Status, setStatus] = useState<boolean>(false);
   const [Mobile, setMobile] = useState("");
   const lodingState = useSelector(loading);
@@ -46,7 +48,7 @@ const RegisterCompany = () => {
   const [errorStatus, setErrorStatus] = useState<boolean>(false);
 
   const authToken = () => sessionStorage.getItem("role");
-  const userrole = useSelector(roleData);
+  const userrole: IRole[] = useSelector(roleData);
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -57,6 +59,10 @@ const RegisterCompany = () => {
   useEffect(() => {
     dispatch(getroleBycompanyId(sessionStorage.getItem("companyId") ?? ""));
   }, [dispatch]);
+
+  useEffect(() => {
+    setRoleArray(userrole);
+  }, [userrole]);
 
   const ragisterUserSubmit = () => {
     if (UserName.length < 1) {
@@ -86,9 +92,11 @@ const RegisterCompany = () => {
     );
   };
 
-  const menuByRole = userrole.map((item,index) => {
+  console.log("Role => ", Role);
+
+  const menuByRole = roleArray.map((item, index) => {
     return (
-      <MenuItem key={item._id} value={index}>
+      <MenuItem key={item._id} value={item._id}>
         {item.rolename} - {item.roletype}
       </MenuItem>
     );
@@ -165,10 +173,15 @@ const RegisterCompany = () => {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Role"
-              value={Role}
+              value={Role?.rolename}
               onChange={(e) => {
                 setErrorStatus(false);
-                setRole(userrole[Number(e.target.value)]);
+
+                const role = roleArray.find(
+                  (roleItem) => roleItem._id === e.target.value
+                );
+                console.log("=>", role);
+                setRole(role);
               }}
             >
               {menuByRole}

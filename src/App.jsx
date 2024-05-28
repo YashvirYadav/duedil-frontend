@@ -40,12 +40,15 @@ import InvoiceTable from "./scenes/invoices/table.invoice";
 import RegisterInvoice from "./scenes/invoices/register.invoice";
 
 import { BankDetails } from "./scenes/bankdetails/bankdetails";
-import RegisterBank  from "./scenes/bankdetails/register.bank"
+import RegisterBank from "./scenes/bankdetails/register.bank";
 import TableBank from "./scenes/bankdetails/table.bank";
 
-import {Role} from "./scenes/role/Role";
+import { Role } from "./scenes/role/Role";
 import TableRole from "./scenes/role/table.role";
-import RegisterRole from "./scenes/role/register.role"
+import RegisterRole from "./scenes/role/register.role";
+import { Workflow } from "./scenes/worlflow/Workflow";
+import WorkflowRagistar from "./scenes/worlflow/ragistar.workflow";
+import TableWorflow from "./scenes/worlflow/table.workflow";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -114,6 +117,11 @@ function App() {
               <Route path="addrole" element={<RegisterRole />} />
             </Route>
 
+            <Route path="workflow" element={<Workflow />}>
+              <Route path="" element={<TableWorflow />} />
+              <Route path="addworkflow" element={<WorkflowRagistar />} />
+            </Route>
+
             <Route path="changepassword" element={<ChangePassword />} />
           </Route>
           <Route path="vendor" element={<VendorHome />}>
@@ -133,8 +141,6 @@ function App() {
               <Route path="" element={<TableBank />} />
               <Route path="addbank" element={<RegisterBank />} />
             </Route>
-
-
           </Route>
         </Routes>
       </ThemeProvider>

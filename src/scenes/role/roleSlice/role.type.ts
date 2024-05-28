@@ -11,7 +11,7 @@ export interface IRole  {
     _id?: string;
     rolename: string;
     description?: string;
-    roletype?: string;
+    roletype: string;
     isactive: boolean;
     companyId?: string;
   };

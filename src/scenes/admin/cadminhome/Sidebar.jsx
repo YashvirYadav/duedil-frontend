@@ -163,6 +163,17 @@ const Sidebar = () => {
                 
               </Item>
 
+              <Item
+              title="Workflow"
+              to="workflow"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}>
+                
+              </Item>
+
+              
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
