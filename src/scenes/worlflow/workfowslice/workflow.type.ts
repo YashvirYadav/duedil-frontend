@@ -16,4 +16,5 @@ export interface IRegisterWorkflowResponce {
         maxamount?: string;
         tat:string
         companyId?: string;
+        sequence:number
       };

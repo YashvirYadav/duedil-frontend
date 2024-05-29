@@ -49,6 +49,7 @@ const WorkflowRagistar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const role = useSelector(roleData);
+  const [sequence , setSequence] = useState<number>(0)
   const depatrment = useSelector(depatmentData);
 
   console.log("roleType=>",   roleType);
@@ -93,6 +94,7 @@ const WorkflowRagistar = () => {
           maxamount: maximumAmount,
           tat: TAT,
           companyId: sessionStorage.getItem("companyId") ?? "",
+          sequence: sequence
         })
       );
     
@@ -115,7 +117,7 @@ const WorkflowRagistar = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Workflow User" subtitle="Welcome to your dashboard" />
+        <Header title="Workflow Setting" subtitle="Welcome to your dashboard" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
@@ -141,9 +143,21 @@ const WorkflowRagistar = () => {
             p="10px"
             gap="10px"
           >
+
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
               Workflow Detail
             </Typography>
+
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="Sequence"
+              label="Sequence"
+              name="sequence"
+              value={sequence}
+              onChange={(e) => setSequence(Number(e.target.value))}
+              sx={{ gridColumn: "span 12" }}
+            />
 
             <InputLabel id="demo-simple-select-helper-label">
               Role type

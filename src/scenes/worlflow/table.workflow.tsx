@@ -48,6 +48,9 @@ const TableWorflow = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
+    
+    { field: "sequence", headerName: "sequence",  flex: 1 },
+    
     { field: "rolename", headerName: "Role Name",  flex: 1 },
 
     {
@@ -62,16 +65,20 @@ const TableWorflow = () => {
       headerName: "Department Name",
       flex: 1,
     }, 
-    
+    {
+      field: "minamount",
+      headerName: "Min Amount"
+    },
     
     {
       field: "maxamount",
       headerName: "Max Amount"
     },
 
+    
     {
-      field: "minamount",
-      headerName: "Min Amount"
+      field: "tat",
+      headerName: "TAT"
     },
     {
       field: "actions",
