@@ -49,6 +49,7 @@ import RegisterRole from "./scenes/role/register.role";
 import { Workflow } from "./scenes/worlflow/Workflow";
 import WorkflowRagistar from "./scenes/worlflow/ragistar.workflow";
 import TableWorflow from "./scenes/worlflow/table.workflow";
+import DashboardVendor from "./scenes/admin/vendoradmin/dashboard/dashboard"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -125,7 +126,7 @@ function App() {
             <Route path="changepassword" element={<ChangePassword />} />
           </Route>
           <Route path="vendor" element={<VendorHome />}>
-            <Route path="" element={<Dashboard />} />
+            <Route path="" element={<DashboardVendor />} />
 
             <Route path="invoice" element={<InvoiceContainer />}>
               <Route path="" element={<InvoiceTable />} />
