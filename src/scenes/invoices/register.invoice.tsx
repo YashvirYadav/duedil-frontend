@@ -139,6 +139,7 @@ if(!attachments)
     formData.append("gstamount", gstamount.toString());
     formData.append("totalamount", totalamount.toString());
     formData.append("vendorId", userID() as string);
+    formData.append("companyid", sessionStorage.getItem("companyId") as string);
 
 
     dispatch(registerInvoice(formData));

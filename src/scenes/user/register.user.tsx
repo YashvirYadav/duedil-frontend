@@ -88,6 +88,7 @@ const RegisterCompany = () => {
         role: Role,
         status: Status,
         mobile: Mobile,
+        userrole: "user"
       })
     );
   };

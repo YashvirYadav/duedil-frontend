@@ -19,7 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { loading, message, userData } from "./userSlice/user.selector";
-import { getAllUsers } from "./userSlice/userslice";
+import { deleteUser, getAllUsers, getUsersByCompanyId } from "./userSlice/userslice";
 import { getroleBycompanyId } from "../role/roleSlice/role.slice";
 
 const Users = () => {
@@ -37,7 +37,8 @@ const Users = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    dispatch(getUsersByCompanyId(sessionStorage.getItem("companyId")?.toString() ?? ''));
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -116,9 +117,10 @@ const Users = () => {
           const id = params.id.toString();
 
           // handle delete operation here
-          //   dispatch(deleteCompany({ id: id })).then(() => {
-          //     dispatch(getCompany());
-          //   })
+            dispatch(deleteUser(id )).then(() => {
+              dispatch(getUsersByCompanyId(sessionStorage.getItem("companyId")?.toString() ?? ''));
+
+            })
         };
 
         const onClickView = () => {

@@ -33,7 +33,7 @@ export interface IRegisterRequest {
   username: string;
   email: string;
   password: string;
-  userrole?: string;
+  userrole: string;
   status: boolean;
   mobile: string;
   role?: IRole

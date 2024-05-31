@@ -4,7 +4,7 @@ import { RootState } from "../../../app/store";
 export const userRoll = (state: RootState) => state.userbyrole;
 
 export const userData = createSelector(userRoll, (state) => {
-  return state.data?.data;
+  return state.data;
 });
 
 export const loading = createSelector(userRoll, (state) => {
