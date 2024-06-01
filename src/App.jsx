@@ -50,6 +50,8 @@ import { Workflow } from "./scenes/worlflow/Workflow";
 import WorkflowRagistar from "./scenes/worlflow/ragistar.workflow";
 import TableWorflow from "./scenes/worlflow/table.workflow";
 import DashboardVendor from "./scenes/admin/vendoradmin/dashboard/dashboard"
+import ExecutiveHome from "./scenes/admin/executive/executive";
+import DashboardUser from "./scenes/admin/executive/executiveDashbord"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -143,6 +145,12 @@ function App() {
               <Route path="addbank" element={<RegisterBank />} />
             </Route>
           </Route>
+
+          <Route path="user" element={<ExecutiveHome />}>
+            <Route path="" element={<DashboardUser />} />
+            <Route path="addUser" element={<Registeruser />} />
+          </Route>
+
         </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>

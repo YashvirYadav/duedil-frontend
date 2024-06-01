@@ -10,6 +10,7 @@ import invoiceSlice from '../scenes/invoices/invoiceSlice/invoice.slice';
 import bankSlice from '../scenes/bankdetails/bankslice/bank.slice';
 import roleSlice from '../scenes/role/roleSlice/role.slice';
 import  workflowSlice  from '../scenes/worlflow/workfowslice/workflowslice';
+import venderdashbord from '../scenes/admin/vendoradmin/dashboard/dashboardslice';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     bank : bankSlice,
     role : roleSlice,
     workflow: workflowSlice,
+    vendorDashboardSlice:venderdashbord,
   },
 });
 

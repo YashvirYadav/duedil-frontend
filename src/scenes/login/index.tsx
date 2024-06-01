@@ -71,6 +71,9 @@ export default function Login() {
         case 'vendoradmin':  
           navigate("/vendor");
           break;
+        case 'user':
+          navigate("/user");
+          break;  
         default:
           navigate("/");
       }

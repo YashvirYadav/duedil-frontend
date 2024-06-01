@@ -1,38 +1,34 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../../../theme";
-import { mockTransactions } from "../../../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
-import Header from "../../../../components/Header";
 
-import LineChart from "../../../../components/LineChart";
-import GeographyChart from "../../../../components/GeographyChart";
-import BarChart from "../../../../components/BarChart";
-import StatBox from "../../../../components/StatBox";
-import ProgressCircle from "../../../../components/ProgressCircle";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { tokens } from "../../../theme";
+import { mockTransactions } from "../../../data/mockData";
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+
+import Header from "../../../components/Header";
+
+import LineChart from "../../../components/LineChart";
+import GeographyChart from "../../../components/GeographyChart";
+import BarChart from "../../../components/BarChart";
+import StatBox from "../../../components/StatBox";
+import ProgressCircle from "../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
-import { loading, message, vendorDashboardData } from "./selector.vendords";
-import { useEffect } from "react";
-import { AppDispatch } from "../../../../app/store";
-import { useDispatch, useSelector } from "react-redux";
-import { getVenderDashboard } from "./dashboardslice";
 
-const DashboardVendor = () => {
+import { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+
+
+const DashboardUser = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const dispatch = useDispatch<AppDispatch>();
-  const data = useSelector(vendorDashboardData);
+ 
+  
 
-  console.log("getVenderDashboard", data);
 
-  useEffect(() => {
-    dispatch(getVenderDashboard());
-  }, [dispatch]);
+
+ 
 
   return (
     <Box m="20px">
@@ -71,10 +67,10 @@ const DashboardVendor = () => {
           justifyContent="center"
         >
           <StatBox
-            title={data.totalAmount}
+            title=""
             subtitle="Total invoice"
             progress="0.75"
-            increase={data.totalInvoice}
+            increase=""
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -90,10 +86,10 @@ const DashboardVendor = () => {
           justifyContent="center"
         >
           <StatBox
-            title={data.totalAmount}
+            title=""
             subtitle="New Invoice"
             progress="0.50"
-            increase={data.pendingInvoice}
+            increase=""
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -289,4 +285,4 @@ const DashboardVendor = () => {
   );
 };
 
-export default DashboardVendor;
+export default DashboardUser;
