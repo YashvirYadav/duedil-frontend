@@ -18,7 +18,7 @@ import { Loader } from "../../../../components/Lodar";
 import { loading, message, currentInvoice } from "./needtoact.selector";
 import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
-import { getInvoiceById, userapprove } from "./needtoact.slice";
+import { getInvoiceById, userapprove, userreject } from "./needtoact.slice";
 import { Iinvoicemovement } from "./needtoact.type";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -201,7 +201,15 @@ const NeedToactAction = () => {
           <Box m="10px">
             <Button
               onClick={() => {
-                setDialogOpen(!dialogOpen);
+                //setDialogOpen(!dialogOpen);
+
+                id && dispatch(userreject(id)).then(() => {
+                  dispatch(getInvoiceById(id));
+                  //setOpen(true);
+                  //setOpen(true);
+                });
+
+                ///
               }}
               color="error"
               variant="contained"

@@ -15,7 +15,6 @@ import { Outlet } from "react-router-dom";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import {userDashborde} from "../../../scenes/user/userSlice/user.selector"
 
-
 import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -92,7 +91,7 @@ const DashboardUser = () => {
         >
           <StatBox
             title=""
-            subtitle="New Invoice"
+            subtitle="Under approval"
             progress="0.50"
             increase=""
             icon={
@@ -102,6 +101,7 @@ const DashboardUser = () => {
             }
           />
         </Box>
+
         <Box
           gridColumn="span 3"
           bgcolor={colors.primary[400]}
@@ -111,7 +111,7 @@ const DashboardUser = () => {
         >
           <StatBox
             title="0" // Amount
-            subtitle="Under approval"
+            subtitle="Approved invoice"
             progress="0.30"
             increase="0"  // count
             icon={
