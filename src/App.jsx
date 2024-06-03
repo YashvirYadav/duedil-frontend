@@ -49,9 +49,12 @@ import RegisterRole from "./scenes/role/register.role";
 import { Workflow } from "./scenes/worlflow/Workflow";
 import WorkflowRagistar from "./scenes/worlflow/ragistar.workflow";
 import TableWorflow from "./scenes/worlflow/table.workflow";
-import DashboardVendor from "./scenes/admin/vendoradmin/dashboard/dashboard"
+import DashboardVendor from "./scenes/admin/vendoradmin/dashboard/dashboard";
 import ExecutiveHome from "./scenes/admin/executive/executive";
-import DashboardUser from "./scenes/admin/executive/executiveDashbord"
+import DashboardUser from "./scenes/admin/executive/executiveDashbord";
+import { Needtoact } from "./scenes/admin/executive/needtoact/needtoact";
+import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table"
+import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -149,8 +152,13 @@ function App() {
           <Route path="user" element={<ExecutiveHome />}>
             <Route path="" element={<DashboardUser />} />
             <Route path="addUser" element={<Registeruser />} />
-          </Route>
 
+            <Route path="neetoact" element={<Needtoact />}>
+              <Route path="" element={<NeedtoactTable />} />
+              {/* <Route path="addbank" element={<RegisterBank />} /> */}
+              <Route path="action/:id?" element={<NeedToactAction />} />
+            </Route>
+          </Route>
         </Routes>
       </ThemeProvider>
     </ColorModeContext.Provider>

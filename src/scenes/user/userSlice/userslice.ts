@@ -1,10 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { service } from "../../../services/ApiServices";
-import { IRegisterRequest, IUser } from "../authSlice/user.type";
-import { company } from "../../company/companyRedux/company.selector";
+import { IRegisterRequest, IUser, IUserDashboard } from "../authSlice/user.type";
 
 interface ILoginSuccessResponce {
   data: IUser[] | null;
+  dashboard: IUserDashboard ;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   message: string;
@@ -15,6 +15,11 @@ const initialState: ILoginSuccessResponce = {
   status: "idle",
   error: null,
   message: "",
+  dashboard: {
+    needtoact: 0,
+    history: 0,
+    needtoacttotal: 0,
+  }
 };
 
 // get all users
@@ -88,6 +93,43 @@ export const deleteUser = createAsyncThunk<ILoginSuccessResponce, string>(
   }
 );
 
+
+
+
+// export const getuserDashbord = createAsyncThunk<ILoginSuccessResponce>(
+//   "auth/getDashbord",
+//   async (_,{ rejectWithValue }) => {
+//     try {
+//       const responce = await service.postCall(`users/userdashboard`,{
+//         companyId: sessionStorage.getItem("companyId"),
+//         userId: sessionStorage.getItem("userId")
+//       });
+//       return responce.data;
+//     } catch (error) {
+//       const err = error;
+//       return rejectWithValue(err);
+//     }
+//   }
+
+// );
+
+
+export const getuserDashbord = createAsyncThunk<ILoginSuccessResponce>(
+  "auth/getDashbord",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await service.postCall(`users/userdashboard`, {
+        companyId: sessionStorage.getItem("companyId"),
+        userId: sessionStorage.getItem("userId"),
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
 // create slice
 export const userSliceByRoll = createSlice({
   name: "userSliceByRoll",
@@ -159,6 +201,21 @@ export const userSliceByRoll = createSlice({
         }
       )
       .addCase(deleteUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getuserDashbord.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(getuserDashbord.fulfilled, (state, action: PayloadAction<any>) => {
+        state.status = "succeeded";
+        state.error = "";
+
+        console.log("action.payload.dashboard", action.payload);
+        state.dashboard = action.payload.data;
+      })
+      .addCase(getuserDashbord.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

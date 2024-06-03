@@ -128,24 +128,8 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Post Invoice"
-              to="invoice"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title="Generate invoice"
-              to="generateinvoice"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title="Bank"
-              to="bank"
+              title="Need to act"
+              to="neetoact"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

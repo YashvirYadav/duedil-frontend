@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { tokens } from "../../src/theme";
+import { useTheme } from "@mui/material";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -16,11 +18,18 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+type Props = {
+  open: boolean;
+  handleClose: () => void;
+  handleOpen: () => void;
+  id: string;
+}
 
+export default function BasicModal(props: Props) {
+
+  const { open, handleClose, handleOpen, id } = props;
+    const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>

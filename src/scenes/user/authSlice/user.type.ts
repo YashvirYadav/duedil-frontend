@@ -3,9 +3,10 @@ import { IRole } from "../../role/roleSlice/role.type";
 export interface ILoginSuccessResponce {
   statusCode: number;
   data: IData;
+  dashboard: IUserDashboard;
   message: string;
   success: boolean;
-  }
+}
 
 export interface IData {
   user: IUser;
@@ -36,10 +37,16 @@ export interface IRegisterRequest {
   userrole: string;
   status: boolean;
   mobile: string;
-  role?: IRole
+  role?: IRole;
 }
 
 export interface ILoginRequest {
   email: string;
   password: string;
+}
+
+export interface IUserDashboard {
+  needtoact: number;
+  history: number;
+  needtoacttotal: number;
 }

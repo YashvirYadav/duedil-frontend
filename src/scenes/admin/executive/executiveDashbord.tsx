@@ -13,22 +13,27 @@ import StatBox from "../../../components/StatBox";
 import ProgressCircle from "../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import {userDashborde} from "../../../scenes/user/userSlice/user.selector"
 
 
 import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import {  getuserDashbord } from "../../user/userSlice/userslice";
+import { AppDispatch } from "../../../app/store";
 
 
 const DashboardUser = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
- 
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const data = useSelector(userDashborde);
 
+  console.log("=>",data);
 
-
- 
+  useEffect(() => {
+    dispatch(getuserDashbord());
+  }, [dispatch]);
 
   return (
     <Box m="20px">
@@ -67,10 +72,10 @@ const DashboardUser = () => {
           justifyContent="center"
         >
           <StatBox
-            title=""
-            subtitle="Total invoice"
+            title={data.needtoacttotal}
+            subtitle="Need to action"
             progress="0.75"
-            increase=""
+            increase={data.needtoact}
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
