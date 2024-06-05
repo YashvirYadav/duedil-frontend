@@ -115,7 +115,7 @@ export default function Login() {
         </div>
         <div className="rightPanel">
           <Container component="main" maxWidth="xs">
-         <div className="welcometxt"> Welcome to Tapsaya Group </div>
+         <div className="welcometxt"> Welcome to Acctax Consultancy Limited </div>
             <Box
               sx={{
                 backgroundColor: colors.primary[400],

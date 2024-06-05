@@ -6,6 +6,7 @@ export interface INeedtoactResponce {
     message: string;
     success: boolean;
     error: string | null;
+    pdfUrl: File | null;
   }
   
   export interface IInvoice {

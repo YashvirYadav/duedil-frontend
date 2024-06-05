@@ -23,7 +23,6 @@ import { useNavigate } from "react-router-dom";
 import { getroleBycompanyId } from "./roleSlice/role.slice";
 
 const TableRole = () => {
-  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
@@ -35,37 +34,38 @@ const TableRole = () => {
   console.log("toastmessage => ", toastmessage);
   console.log("depatrment => ", depatrment);
 
-const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
-useEffect(() => {
-    dispatch(getroleBycompanyId(sessionStorage.getItem("companyId")?.toString() ?? ''));
-}, [dispatch]);
+  useEffect(() => {
+    dispatch(
+      getroleBycompanyId(sessionStorage.getItem("companyId")?.toString() ?? "")
+    );
+  }, [dispatch]);
 
-useEffect(() => {
+
+  useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
-        setOpen(true);
+      setOpen(true);
     }
-}, [lodingState]);
+  }, [lodingState]);
+
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "rolename", headerName: "Role Name",  flex: 1 },
+    { field: "rolename", headerName: "Role Name", flex: 1 },
 
     {
       field: "description",
       headerName: "Description",
-     
+
       flex: 1,
     },
-    
+
     {
       field: "roletype",
       headerName: "Role type",
       flex: 1,
-    }, 
-    
-    
-   
+    },
 
     {
       field: "isactive",
@@ -82,8 +82,6 @@ useEffect(() => {
             const id = params.id.toString();
             console.log("id => ", id);
             console.log("newStatus => ", newStatus);
-          
-         
           }}
         />
       ),
@@ -103,14 +101,10 @@ useEffect(() => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
-
         };
 
         const onClickDelete = () => {
           const id = params.id.toString();
-
-        
-
         };
 
         const onClickView = () => {
@@ -138,10 +132,7 @@ useEffect(() => {
   return (
     <>
       <Box m="20px">
-        <Header
-          title="Role"
-          subtitle="List of Role for Future Reference"
-        />
+        <Header title="Role" subtitle="List of Role for Future Reference" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
@@ -200,7 +191,11 @@ useEffect(() => {
           ) : null}
 
           <DataGrid
-         
+            sx={{
+              "& .MuiDataGrid-cell": {
+                fontSize: "16px", // Change this value to your desired font size
+              },
+            }}
             // checkboxSelection
             rows={Array.isArray(depatrment) ? depatrment : []} // Ensure that company is an array
             columns={columns}
@@ -214,5 +209,3 @@ useEffect(() => {
 };
 
 export default TableRole;
-
-

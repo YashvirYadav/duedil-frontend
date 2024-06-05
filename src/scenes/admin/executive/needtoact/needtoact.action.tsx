@@ -1,5 +1,4 @@
 import {
-  TextField,
   useTheme,
   Typography,
   Button,
@@ -18,7 +17,7 @@ import { Loader } from "../../../../components/Lodar";
 import { loading, message, currentInvoice } from "./needtoact.selector";
 import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
-import { getInvoiceById, userapprove, userreject } from "./needtoact.slice";
+import { getAttachment, getInvoiceById, userapprove, userreject } from "./needtoact.slice";
 import { Iinvoicemovement } from "./needtoact.type";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -30,6 +29,7 @@ import NumbersIcon from "@mui/icons-material/Numbers";
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import DownloadIcon from '@mui/icons-material/Download';
+import LayersIcon from '@mui/icons-material/Layers';
 
 const NeedToactAction = () => {
   const theme = useTheme();
@@ -61,37 +61,29 @@ const NeedToactAction = () => {
   }, [dispatch]);
 
   const [invoicenumber, setinvoicenumber] = useState<string>("");
-  const [errorInvoiceNumber, setErrorInviceNumber] = useState<boolean>(false);
+
 
   const [invoicemovement, setinvoicemovement] = useState<Iinvoicemovement[]>(
     []
   );
 
   const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
-  const [errorInvoiceDate, setErrorInvoiceDate] = useState<boolean>(false);
-
+ 
   const [duedate, setduedate] = useState<string>(formattedDate);
-  const [errorDueDate, setErrorDueDate] = useState<boolean>(false);
 
   const [amount, setamount] = useState<number>(0);
-  const [errorAmount, setErrorAmount] = useState<boolean>(false);
-
+ 
   const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-  const [errorPurchaseOrderNumber, setErrorPurchaseOrderNumber] =
-    useState<boolean>(false);
+
   const [gstamount, setgstamount] = useState<number | string>(0);
-  const [errorGstAmount, setErrorGstAmount] = useState<boolean>(false);
-  const [attachments, setattachments] = useState<File>();
+
+  const [attachments, setattachments] = useState<string>();
 
   const [totalamount, settotalamount] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
-  const [flageApproveOrReject, setFlageApproveOrReject] = useState<string>();
-
-  const ragisterVendorSubmit = () => {};
 
   useEffect(() => {
     settotalamount(Number(amount) + Number(gstamount));
@@ -109,6 +101,7 @@ const NeedToactAction = () => {
       setgstamount(invoice.gstamount || 0);
       settotalamount(invoice.totalamount || 0);
       setinvoicemovement(invoice.invoicemovement || []);
+      setattachments(invoice.attachments || "");
     }
   }, [invoice]);
 
@@ -127,13 +120,6 @@ const NeedToactAction = () => {
     }
   }, [lodingState]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      console.log(event.target.files[0]);
-
-      setattachments(event.target.files[0]);
-    }
-  };
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -182,6 +168,8 @@ const NeedToactAction = () => {
     setDialogOpen(!dialogOpen);
   };
 
+  console.log("userrole", sessionStorage.getItem("rolename"));
+
   return (
     <>
       <Box m="20px">
@@ -198,6 +186,36 @@ const NeedToactAction = () => {
               Back to list
             </Button>
           </Box>
+          { sessionStorage.getItem("userrole") === "GRN" && 
+          
+          <Box m="10px">
+            <Button
+           
+              color="info"
+              variant="contained"
+              startIcon={<LayersIcon />}
+            >
+              GRN items
+            </Button>
+          </Box>
+          }
+
+{ sessionStorage.getItem("userrole") === "Finance" && 
+          
+          <Box m="10px">
+            <Button
+           
+              color="info"
+              variant="contained"
+              startIcon={<LayersIcon />}
+            >
+              Add TDS details 
+            </Button>
+          </Box>
+          }
+          
+          
+
           <Box m="10px">
             <Button
               onClick={() => {
@@ -333,7 +351,7 @@ const NeedToactAction = () => {
                     style={{ fontSize: 50, color: "#94e2cd" }}
                   ></DateRangeIcon>{" "}
                 </Box>
-                <Box>
+                <Box p="5px">
                   <Typography
                     variant="h5"
                     fontWeight="600"
@@ -361,7 +379,7 @@ const NeedToactAction = () => {
                     style={{ fontSize: 50, color: "#94e2cd" }}
                   ></DateRangeIcon>{" "}
                 </Box>
-                <Box>
+                <Box p="5px">
                   <Typography
                     variant="h5"
                     fontWeight="600"
@@ -514,7 +532,8 @@ const NeedToactAction = () => {
                 
                     <Button
                       onClick={() => {
-                        console.log("download");
+                        
+                        attachments && dispatch(getAttachment(attachments));
                       }}
                       color="secondary"
                       variant="contained"

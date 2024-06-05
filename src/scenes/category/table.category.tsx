@@ -217,7 +217,11 @@ const TableCategory = () => {
           ) : null}
 
           <DataGrid
-         
+         sx={{
+          "& .MuiDataGrid-cell": {
+            fontSize: "16px", // Change this value to your desired font size
+          },
+        }}
             // checkboxSelection
             rows={Array.isArray(category) ? category : []} // Ensure that company is an array
             columns={columns}

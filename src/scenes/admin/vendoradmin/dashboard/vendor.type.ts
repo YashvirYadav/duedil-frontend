@@ -1,3 +1,5 @@
+import { IInvoice } from "../../executive/needtoact/needtoact.type";
+
 export interface IVendorDashboardResponce {
     statusCode: number;
     status: "idle" | "loading" | "succeeded" | "failed";
@@ -5,13 +7,20 @@ export interface IVendorDashboardResponce {
     message: string;
     success: boolean;
     error: string | null;
+    invoice : IInvoice[]
     }
 
+    
     export interface IVendorDashboard {
         totalInvoice: number
         totalAmount: number,
-        pendingInvoice: number,
+        
+        newInvoice: number,
+        newInvoiceAmount: number,
+
         wipInvoice: number,
+        wipInvoiceAmount: number
+
         paidInvoice: number,
-        rejectedInvoice: number
+        paidInvoiceAmount: number
     } 

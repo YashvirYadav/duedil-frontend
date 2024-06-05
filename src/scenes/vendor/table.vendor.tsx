@@ -20,7 +20,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { deleteVendor, getVandor, updateVendorStatus } from "./venderSlice/vendor.slice";
+import {
+  deleteVendor,
+  getVandor,
+  updateVendorStatus,
+} from "./venderSlice/vendor.slice";
 
 const Vendor = () => {
   const theme = useTheme();
@@ -38,7 +42,7 @@ const Vendor = () => {
   console.log("vendor => ", vendor);
 
   useEffect(() => {
-    dispatch(getVandor());
+    dispatch(getVandor(sessionStorage.getItem("companyId") || ""));
   }, [dispatch]);
 
   useEffect(() => {
@@ -120,11 +124,10 @@ const Vendor = () => {
             console.log("id => ", id);
             console.log("newStatus => ", newStatus);
             dispatch(updateVendorStatus(id)).then(() => {
-              dispatch(getVandor());
+              dispatch(getVandor(sessionStorage.getItem("companyId") || ""));
             });
             // Handle status change
             // You might want to dispatch an action here to update the status on the server
-            
           }}
         />
       ),
@@ -144,22 +147,20 @@ const Vendor = () => {
           const id = params.id;
           // handle edit operation here
           console.log("id => ", id);
-          navigate(`addcmapany/${id || ''}`);
-
-         };
+          navigate(`addcmapany/${id || ""}`);
+        };
 
         const onClickDelete = () => {
           const id = params.id.toString();
 
           dispatch(deleteVendor(id)).then(() => {
-            dispatch(getVandor());
+            dispatch(getVandor(sessionStorage.getItem("companyId") || ""));
           });
           // handle delete operation here
-          
         };
 
         const onClickView = () => {
-         // const id = params.id;
+          // const id = params.id;
           // handle view operation here
         };
 
@@ -183,10 +184,7 @@ const Vendor = () => {
   return (
     <>
       <Box m="20px">
-        <Header
-          title="VENDOR"
-          subtitle="List of vendor for Future Reference"
-        />
+        <Header title="VENDOR" subtitle="List of vendor for Future Reference" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
@@ -236,7 +234,7 @@ const Vendor = () => {
                 open={open}
                 handleClose={() => {}}
                 setShowToast={setOpen}
-                 message={toastmessage}
+                message={toastmessage}
                 severity="error"
               />
             ) : lodingState === "loading" ? (
@@ -246,6 +244,11 @@ const Vendor = () => {
 
           <DataGrid
             // checkboxSelection
+            sx={{
+              "& .MuiDataGrid-cell": {
+                fontSize: "16px", // Change this value to your desired font size
+              },
+            }}
             rows={Array.isArray(vendor) ? vendor : []} // Ensure that vendor is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}

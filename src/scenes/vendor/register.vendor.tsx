@@ -157,6 +157,7 @@ const Registervendor = () => {
            mobile: Mobile,
            paymentterms: paymentterms,
            creditlimit: credlimit,
+           companyId: sessionStorage.getItem("companyId")?.toString() ?? ""
        }
 
      dispatch(registerVendor(vendor));

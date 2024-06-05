@@ -15,24 +15,128 @@ import StatBox from "../../../../components/StatBox";
 import ProgressCircle from "../../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 
-import { loading, message, vendorDashboardData } from "./selector.vendords";
-import { useEffect } from "react";
+import {
+  loading,
+  message,
+  vendorDashboardData,
+  vendorInvoiceList,
+} from "./selector.vendords";
+import { useEffect, useState } from "react";
 import { AppDispatch } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getVenderDashboard } from "./dashboardslice";
+import { getCompletedInvoice, getMyInvoice, getMyInvoiceNew, getMyWipInvoice, getVenderDashboard } from "./dashboardslice";
+import {
+  DataGrid,
+  GridToolbar,
+  GridColDef,
+  GridRenderCellParams,
+} from "@mui/x-data-grid";
+import { Toast } from "../../../../components/Toast";
+import { Loader } from "../../../../components/Lodar";
 
 const DashboardVendor = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector(vendorDashboardData);
-
-  console.log("getVenderDashboard", data);
+  const lodingState = useSelector(loading);
+  const toastmessage = useSelector(message);
+  const invoice = useSelector(vendorInvoiceList);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getVenderDashboard());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getMyInvoice());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (lodingState === "failed" || lodingState === "succeeded") {
+      setOpen(true);
+    }
+  }, [lodingState]);
+
+  const columns: GridColDef<any[number]>[] = [
+    { field: "invoicenumber", headerName: "Invoice Number" },
+
+    {
+      field: "invoicedate",
+      headerName: "Invoice date",
+      flex: 1,
+    },
+    {
+      field: "duedate",
+      headerName: "Due Date",
+      flex: 1,
+    },
+
+    {
+      field: "amount",
+      headerName: "Amount",
+      flex: 1,
+    },
+    {
+      field: "gstamount",
+      headerName: "GST Amount",
+      flex: 1,
+    },
+
+    {
+      field: "totalamount",
+      headerName: "Total Amount",
+      flex: 1,
+    },
+    {
+      field: "purchaseordernumber",
+      headerName: "PO Number",
+      flex: 1,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      sortable: false,
+      headerAlign: "center",
+      align: "center",
+      width: 200,
+      // Remove the 'disableClickEventBubbling' property
+      // from the object literal
+      // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
+      renderCell: (params: GridRenderCellParams) => {
+        const onClickView = () => {
+          // const id = params.id;
+          // handle view operation here
+          const id = params.id.toString();
+          navigate(`action/${id || ""}`);
+        };
+
+        return (
+          <div>
+            <IconButton onClick={onClickView}>
+              <VisibilityIcon />
+            </IconButton>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const actionNewInvoice=()=>{
+    dispatch(getMyInvoiceNew());
+  }
+
+  const actionUnderApproval=()=>{
+    dispatch(getMyWipInvoice());
+  }
+
+  const actionPaidInvoice=()=>{
+    dispatch(getCompletedInvoice());
+  }
 
   return (
     <Box m="20px">
@@ -69,6 +173,7 @@ const DashboardVendor = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          
         >
           <StatBox
             title={data.totalAmount}
@@ -88,50 +193,13 @@ const DashboardVendor = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={actionNewInvoice}
         >
           <StatBox
-            title={data.totalAmount}
+            title={data.newInvoiceAmount}
             subtitle="New Invoice"
             progress="0.50"
-            increase={data.pendingInvoice}
-            icon={
-              <ReceiptIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          bgcolor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            title="0" // Amount
-            subtitle="Under approval"
-            progress="0.30"
-            increase="0"  // count
-            icon={
-              <ReceiptIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          bgcolor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            title="0"
-            subtitle="Paid invoice"
-            progress="0.80"
-            increase="0"
+            increase={data.newInvoice}
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -140,8 +208,110 @@ const DashboardVendor = () => {
           />
         </Box>
 
+        <Box
+          gridColumn="span 3"
+          bgcolor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={actionUnderApproval}
+        >
+          <StatBox
+            title={data.wipInvoiceAmount} // Amount
+            subtitle="Under approval"
+            progress="0.30"
+            increase={data.wipInvoice} // count
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          gridColumn="span 3"
+          bgcolor={colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={actionPaidInvoice}
+        >
+          <StatBox
+            title={data.paidInvoice}
+            subtitle="Paid invoice"
+            progress="0.80"
+            increase={data.paidInvoiceAmount}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        </Box>
+
+        <Box
+          m="40px 0 0 0"
+          height="75vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.grey[100]} !important`,
+            },
+          }}
+        >
+          {lodingState ? (
+            lodingState !== "idle" && lodingState !== "loading" ? (
+              <Toast
+                open={open}
+                handleClose={() => {}}
+                setShowToast={setOpen}
+                message={toastmessage}
+                severity="error"
+              />
+            ) : lodingState === "loading" ? (
+              <Loader />
+            ) : null
+          ) : null}
+
+          <DataGrid
+            sx={{
+              "& .MuiDataGrid-cell": {
+                fontSize: "16px", // Change this value to your desired font size
+              },
+            }}
+            // checkboxSelection
+            rows={Array.isArray(invoice) ? invoice : []} // Ensure that invoice is an array
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            getRowId={(row) => row._id} // Use the `_id` field as the unique id
+          />
+        </Box>
+
         {/* ROW 2 */}
-        <Box gridColumn="span 8" gridRow="span 2" bgcolor={colors.primary[400]}>
+        {/* <Box gridColumn="span 8" gridRow="span 2" bgcolor={colors.primary[400]}>
           <Box
             mt="25px"
             p="0 30px"
@@ -176,8 +346,8 @@ const DashboardVendor = () => {
           <Box height="250px" m="-20px 0 0 0">
             <LineChart isDashboard={true} />
           </Box>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           gridColumn="span 4"
           gridRow="span 2"
           bgcolor={colors.primary[400]}
@@ -226,9 +396,9 @@ const DashboardVendor = () => {
               </Box>
             </Box>
           ))}
-        </Box>
+        </Box> */}
 
-        <Box
+        {/* <Box
           gridColumn="span 4"
           gridRow="span 2"
           bgcolor={colors.primary[400]}
@@ -253,8 +423,8 @@ const DashboardVendor = () => {
             </Typography>
             <Typography>Includes extra misc expenditures and costs</Typography>
           </Box>
-        </Box>
-        <Box gridColumn="span 4" gridRow="span 2" bgcolor={colors.primary[400]}>
+        </Box> */}
+        {/* <Box gridColumn="span 4" gridRow="span 2" bgcolor={colors.primary[400]}>
           <Typography
             variant="h5"
             fontWeight="600"
@@ -265,8 +435,8 @@ const DashboardVendor = () => {
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
           </Box>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           gridColumn="span 4"
           gridRow="span 2"
           bgcolor={colors.primary[400]}
@@ -282,8 +452,8 @@ const DashboardVendor = () => {
           <Box height="200px">
             <GeographyChart isDashboard={true} />
           </Box>
-        </Box>
-      </Box>
+        </Box> */}
+      
       <Outlet></Outlet>
     </Box>
   );

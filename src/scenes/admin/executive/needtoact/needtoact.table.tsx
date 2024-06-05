@@ -145,7 +145,7 @@ const NeedtoactTable = () => {
           title="Need to action"
           subtitle="List of Need action on invoice"
         />
-        <Box display="flex" justifyContent="end" mt="20px">
+        {/* <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
              // navigate("addinvoice");
@@ -156,7 +156,7 @@ const NeedtoactTable = () => {
           >
             Create New invoice
           </Button>
-        </Box>
+        </Box> */}
         <Box
           m="40px 0 0 0"
           height="75vh"
@@ -204,6 +204,11 @@ const NeedtoactTable = () => {
           ) : null}
 
           <DataGrid
+          sx={{
+            "& .MuiDataGrid-cell": {
+              fontSize: "16px", // Change this value to your desired font size
+            },
+          }}
             // checkboxSelection
             rows={Array.isArray(invoice) ? invoice : []} // Ensure that invoice is an array
             columns={columns}

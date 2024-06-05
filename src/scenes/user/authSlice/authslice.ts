@@ -79,6 +79,7 @@ const postSlice = createSlice({
           sessionStorage.setItem("name", action.payload.data.user.username);
           sessionStorage.setItem("companyId", action.payload.data.user.comapanyId);
           sessionStorage.setItem("userId", action.payload.data.user._id);
+          sessionStorage.setItem("userrole", action.payload.data.user?.role?.rolename || ""); // Handle undefined value
         }
       )
       .addCase(login.rejected, (state, action: PayloadAction<any>) => {

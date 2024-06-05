@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { service } from "../../../../services/ApiServices";
 import { INeedtoactResponce } from "./needtoact.type";
+import axios from "axios";
 
 const initialState: INeedtoactResponce = {
   statusCode: 0,
@@ -10,6 +11,7 @@ const initialState: INeedtoactResponce = {
   success: false,
   error: null,
   currentInvoice: null,
+  pdfUrl: null,
 };
 
 export const getNeedtoact = createAsyncThunk<INeedtoactResponce>(
@@ -31,8 +33,8 @@ export const userapprove = createAsyncThunk<INeedtoactResponce, string>(
   "users/userapprove",
   async (id, { rejectWithValue }) => {
     try {
-        console.log("id", id);
-        const response = await service.postCall("users/userapprove", {
+      console.log("id", id);
+      const response = await service.postCall("users/userapprove", {
         invoiceId: id,
         userId: sessionStorage.getItem("userId"),
         companyId: sessionStorage.getItem("companyId"),
@@ -60,12 +62,46 @@ export const userreject = createAsyncThunk<INeedtoactResponce, string>(
   }
 );
 
-
 export const getInvoiceById = createAsyncThunk<INeedtoactResponce, string>(
   "users/getInvoiceById",
   async (id, { rejectWithValue }) => {
     try {
       const response = await service.getCall("invoice/getinvoiceid/" + id);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+// get attachment
+
+export const getAttachment = createAsyncThunk<File, string>(
+  "users/getAttachment",
+  async (filename, { rejectWithValue }) => {
+    try {
+
+      const file = filename.split("/")[2]
+
+      const response = await axios.get(
+        "http://localhost:8000/api/v1/invoice/getattachment/"+file,
+        {
+          responseType: "blob", // Important for handling binary data
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      // Create a URL for the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "invoice.pdf"); // Specify the file name here
+      document.body.appendChild(link);
+      link.click();
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -137,6 +173,18 @@ export const needtoactSlice = createSlice({
         state.success = action.payload.success;
       })
       .addCase(userreject.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getAttachment.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getAttachment.fulfilled, (state, action: PayloadAction<any>) => {
+        state.status = "succeeded";
+        console.log("action.payload", action.payload);
+        state.pdfUrl = action.payload;
+      })
+      .addCase(getAttachment.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

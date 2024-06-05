@@ -8,6 +8,10 @@ export const vendorDashboardData = createSelector(vendorDashboard, (state) => {
   return state.data;
 });
 
+export const vendorInvoiceList = createSelector(vendorDashboard, (state) => {
+  return state.invoice;
+});
+
 
 
 

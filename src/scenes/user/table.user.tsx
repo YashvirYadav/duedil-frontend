@@ -196,6 +196,11 @@ const Users = () => {
           }}
         >
           <DataGrid
+          sx={{
+            "& .MuiDataGrid-cell": {
+              fontSize: "18px", // Change this value to your desired font size
+            },
+          }}
             // checkboxSelection
             rows={Array.isArray(allUser) ? allUser : []} // Ensure that company is an array
             columns={columns}
