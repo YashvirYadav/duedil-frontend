@@ -47,6 +47,11 @@ const DashboardVendor = () => {
   const invoice = useSelector(vendorInvoiceList);
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
+  const [selectedTotalInvoice, setselectedTotalInvoice] = useState<boolean>(true);
+  const [selectedNewInvoice, setselectedNewInvoice] = useState<boolean>(false);
+  const [selectedUnderApproval, setselectedUnderApproval] = useState<boolean>(false); 
+  const [selectedPaidInvoice, setselectedPaidInvoice] = useState<boolean>(false);
+
 
   useEffect(() => {
     dispatch(getVenderDashboard());
@@ -69,11 +74,16 @@ const DashboardVendor = () => {
       field: "invoicedate",
       headerName: "Invoice date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.invoicedate && params.row.invoicedate.split("T")[0],
     },
     {
       field: "duedate",
       headerName: "Due Date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.duedate && params.row.duedate.split("T")[0],
+    
     },
 
     {
@@ -112,7 +122,7 @@ const DashboardVendor = () => {
           // const id = params.id;
           // handle view operation here
           const id = params.id.toString();
-          navigate(`action/${id || ""}`);
+          navigate(`viewinvoice/${id || ""}`);
         };
 
         return (
@@ -128,14 +138,41 @@ const DashboardVendor = () => {
 
   const actionNewInvoice=()=>{
     dispatch(getMyInvoiceNew());
+    setselectedNewInvoice(true);
+    // other false
+    setselectedTotalInvoice(false);
+    setselectedUnderApproval(false);
+    setselectedPaidInvoice(false);
   }
 
   const actionUnderApproval=()=>{
     dispatch(getMyWipInvoice());
+    setselectedUnderApproval(true);
+    // other false
+    setselectedNewInvoice(false);
+    setselectedTotalInvoice(false);
+    setselectedPaidInvoice(false);
+
   }
 
   const actionPaidInvoice=()=>{
     dispatch(getCompletedInvoice());
+    setselectedPaidInvoice(true);
+    // other false
+    setselectedNewInvoice(false);
+    setselectedUnderApproval(false);
+    setselectedTotalInvoice(false);
+
+  }
+
+  const actionTotalInvoice=()=>{
+    dispatch(getMyInvoice());
+    setselectedTotalInvoice(true);
+    // other false
+    setselectedNewInvoice(false);
+    setselectedUnderApproval(false);
+    setselectedPaidInvoice(false);
+
   }
 
   return (
@@ -169,10 +206,17 @@ const DashboardVendor = () => {
         {/* ROW 1 */}
         <Box
           gridColumn="span 3"
-          bgcolor={colors.primary[400]}
+          bgcolor={selectedTotalInvoice?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={actionTotalInvoice}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+          }}
           
         >
           <StatBox
@@ -180,6 +224,7 @@ const DashboardVendor = () => {
             subtitle="Total invoice"
             progress="0.75"
             increase={data.totalInvoice}
+           
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -189,11 +234,17 @@ const DashboardVendor = () => {
         </Box>
         <Box
           gridColumn="span 3"
-          bgcolor={colors.primary[400]}
+          bgcolor={selectedNewInvoice ?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
           onClick={actionNewInvoice}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+          }}
         >
           <StatBox
             title={data.newInvoiceAmount}
@@ -210,11 +261,17 @@ const DashboardVendor = () => {
 
         <Box
           gridColumn="span 3"
-          bgcolor={colors.primary[400]}
+          bgcolor={selectedUnderApproval?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
           onClick={actionUnderApproval}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+          }}
         >
           <StatBox
             title={data.wipInvoiceAmount} // Amount
@@ -230,11 +287,17 @@ const DashboardVendor = () => {
         </Box>
         <Box
           gridColumn="span 3"
-          bgcolor={colors.primary[400]}
+          bgcolor={selectedPaidInvoice?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
           onClick={actionPaidInvoice}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+          }}
         >
           <StatBox
             title={data.paidInvoice}
@@ -299,7 +362,7 @@ const DashboardVendor = () => {
           <DataGrid
             sx={{
               "& .MuiDataGrid-cell": {
-                fontSize: "16px", // Change this value to your desired font size
+                fontSize: "14px", // Change this value to your desired font size
               },
             }}
             // checkboxSelection

@@ -36,8 +36,6 @@ const NeedtoactTable = () => {
 
   console.log("invoice => ", invoice);
 
-  
-
   useEffect(() => {
     dispatch(getNeedtoact());
   }, [dispatch]);
@@ -56,11 +54,16 @@ const NeedtoactTable = () => {
       field: "invoicedate",
       headerName: "Invoice date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.invoicedate && params.row.invoicedate.split("T")[0],
     },
     {
       field: "duedate",
       headerName: "Due Date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.duedate && params.row.duedate.split("T")[0],
+    
     },
 
     {

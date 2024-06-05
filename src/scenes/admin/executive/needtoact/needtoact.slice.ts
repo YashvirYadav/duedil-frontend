@@ -29,15 +29,14 @@ export const getNeedtoact = createAsyncThunk<INeedtoactResponce>(
   }
 );
 
-export const userapprove = createAsyncThunk<INeedtoactResponce, string>(
-  "users/userapprove",
-  async (id, { rejectWithValue }) => {
+//getuserinvoicesbyhistorywip
+
+export const getuserinvoicesbyhistorywip = createAsyncThunk<INeedtoactResponce>(
+  "users/getuserinvoicesbyhistorywip",
+  async (_, { rejectWithValue }) => {
     try {
-      console.log("id", id);
-      const response = await service.postCall("users/userapprove", {
-        invoiceId: id,
+      const response = await service.postCall("users/getuserinvoicesbyhistorywip", {
         userId: sessionStorage.getItem("userId"),
-        companyId: sessionStorage.getItem("companyId"),
       });
       return response.data;
     } catch (error) {
@@ -46,14 +45,64 @@ export const userapprove = createAsyncThunk<INeedtoactResponce, string>(
   }
 );
 
-export const userreject = createAsyncThunk<INeedtoactResponce, string>(
-  "users/userreject",
-  async (id, { rejectWithValue }) => {
+//getuserinvoicesbyhistoryrejected
+export const getuserinvoicesbyhistoryrejected = createAsyncThunk<INeedtoactResponce>(
+  "users/getuserinvoicesbyhistoryrejected",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await service.postCall("users/userrejectinvoice", {
-        invoiceId: id,
+      const response = await service.postCall("users/getuserinvoicesbyhistoryrejected", {
+        userId: sessionStorage.getItem("userId"),
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+//getuserinvoicesbyhistoryapproved
+
+export const getuserinvoicesbyhistoryapproved = createAsyncThunk<INeedtoactResponce>(
+  "users/getuserinvoicesbyhistorycompleted",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await service.postCall("users/getuserinvoicesbyhistorycompleted", {
+        userId: sessionStorage.getItem("userId"),
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const userapprove = createAsyncThunk<INeedtoactResponce, {id:string,comment:string}>(
+  "users/userapprove",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log("id", data.id);
+      const response = await service.postCall("users/userapprove", {
+        invoiceId: data.id,
         userId: sessionStorage.getItem("userId"),
         companyId: sessionStorage.getItem("companyId"),
+        comment: data.comment,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const userreject = createAsyncThunk<INeedtoactResponce, {id:string,comment:string}>(
+  "users/userreject",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await service.postCall("users/userrejectinvoice", {
+        invoiceId: data.id,
+        userId: sessionStorage.getItem("userId"),
+        companyId: sessionStorage.getItem("companyId"),
+        comment: data.comment,
       });
       return response.data;
     } catch (error) {
@@ -185,6 +234,45 @@ export const needtoactSlice = createSlice({
         state.pdfUrl = action.payload;
       })
       .addCase(getAttachment.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getuserinvoicesbyhistorywip.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getuserinvoicesbyhistorywip.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload.data;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(getuserinvoicesbyhistorywip.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getuserinvoicesbyhistoryrejected.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getuserinvoicesbyhistoryrejected.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload.data;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(getuserinvoicesbyhistoryrejected.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getuserinvoicesbyhistoryapproved.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getuserinvoicesbyhistoryapproved.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload.data;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(getuserinvoicesbyhistoryapproved.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

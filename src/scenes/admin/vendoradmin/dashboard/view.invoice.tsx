@@ -7,7 +7,6 @@ import {
   DialogContentText,
   DialogContent,
   DialogActions,
-  TextField,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../../../theme";
@@ -15,7 +14,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../../../../components/Lodar";
-import { loading, message, currentInvoice } from "./needtoact.selector";
+import {
+  loading,
+  message,
+  currentInvoice,
+} from "../../executive/needtoact/needtoact.selector";
 import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
 import {
@@ -23,8 +26,7 @@ import {
   getInvoiceById,
   userapprove,
   userreject,
-} from "./needtoact.slice";
-import { Iinvoicemovement } from "./needtoact.type";
+} from "../../executive/needtoact/needtoact.slice";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -36,10 +38,9 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DownloadIcon from "@mui/icons-material/Download";
 import LayersIcon from "@mui/icons-material/Layers";
-// import Textarea from '@mui/joy/Textarea';
+import { Iinvoicemovement } from "../../executive/needtoact/needtoact.type";
 
-
-const NeedToactAction = () => {
+const ViewInvice = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
@@ -189,68 +190,6 @@ const NeedToactAction = () => {
               startIcon={<KeyboardBackspaceIcon />}
             >
               Back to list
-            </Button>
-          </Box>
-          {sessionStorage.getItem("userrole") === "GRN" && (
-            <Box m="10px">
-              <Button
-                color="info"
-                variant="contained"
-                startIcon={<LayersIcon />}
-              >
-                GRN items
-              </Button>
-            </Box>
-          )}
-
-          {sessionStorage.getItem("userrole") === "Finance" && (
-            <Box m="10px">
-              <Button
-                color="info"
-                variant="contained"
-                startIcon={<LayersIcon />}
-              >
-                Add TDS details
-              </Button>
-            </Box>
-          )}
-
-          <Box m="10px">
-            <Button
-              onClick={() => {
-                setDialogOpen(!dialogOpen);
-
-                // id &&
-                //   dispatch(userreject({ id: id, comment: "hello" })).then(
-                //     () => {
-                //       dispatch(getInvoiceById(id));
-                //     }
-                //   );
-
-                ///
-              }}
-              color="error"
-              variant="contained"
-              startIcon={<ThumbDownIcon />}
-            >
-              Reject
-            </Button>
-          </Box>
-          <Box m="10px">
-            <Button
-              onClick={() => {
-                id &&
-                  dispatch(userapprove({ id: id, comment: "hello" })).then(
-                    () => {
-                      dispatch(getInvoiceById(id));
-                    }
-                  );
-              }}
-              color="secondary"
-              variant="contained"
-              startIcon={<ThumbUpAltIcon />}
-            >
-              Approve
             </Button>
           </Box>
         </Box>
@@ -618,40 +557,24 @@ const NeedToactAction = () => {
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to approve?
           </DialogContentText>
-          <TextField
-        
-          fullWidth
-              id="invoicenumber"
-              variant="outlined"
-              type="text"
-              label="Comment"
-              name="Comment"
-              multiline
-              rows={4}
-              placeholder="Enter your comment here"
-              maxRows={12}
-              
-              sx={{ gridColumn: "span 12",marginTop: '12px'  }}
-            />
-
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleClose}
-            color="info"
+            color="error"
             startIcon={<CloseIcon />}
             variant="contained"
           >
-            Cancel
+            No
           </Button>
           <Button
             onClick={handleApprove}
-            color="secondary"
+            color="warning"
             startIcon={<DoneAllIcon />}
             variant="contained"
             autoFocus
           >
-            Approve
+            Yes
           </Button>
         </DialogActions>
       </Dialog>
@@ -659,4 +582,4 @@ const NeedToactAction = () => {
   );
 };
 
-export default NeedToactAction;
+export default ViewInvice;

@@ -55,6 +55,8 @@ import DashboardUser from "./scenes/admin/executive/executiveDashbord";
 import { Needtoact } from "./scenes/admin/executive/needtoact/needtoact";
 import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table"
 import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action"
+import ViewInvice from "./scenes/admin/vendoradmin/dashboard/view.invoice"
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -130,8 +132,10 @@ function App() {
 
             <Route path="changepassword" element={<ChangePassword />} />
           </Route>
+
           <Route path="vendor" element={<VendorHome />}>
             <Route path="" element={<DashboardVendor />} />
+            <Route path="viewinvoice/:id?" element={<ViewInvice />} />
 
             <Route path="invoice" element={<InvoiceContainer />}>
               <Route path="" element={<InvoiceTable />} />
@@ -152,6 +156,8 @@ function App() {
           <Route path="user" element={<ExecutiveHome />}>
             <Route path="" element={<DashboardUser />} />
             <Route path="addUser" element={<Registeruser />} />
+            <Route path="viewinvoice/:id?" element={<ViewInvice />} />
+            <Route path="action/:id?" element={<NeedToactAction />} />
 
             <Route path="neetoact" element={<Needtoact />}>
               <Route path="" element={<NeedtoactTable />} />
