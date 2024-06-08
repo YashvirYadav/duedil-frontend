@@ -67,7 +67,7 @@ const RegisterInvoice = () => {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const ragisterVendorSubmit = () => {};
+ 
 
   const { id } = useParams<{ id?: string }>();
 
@@ -140,6 +140,7 @@ if(!attachments)
     formData.append("totalamount", totalamount.toString());
     formData.append("vendorId", userID() as string);
     formData.append("companyid", sessionStorage.getItem("companyId") as string);
+    formData.append("vendorname", sessionStorage.getItem("name") as string);
 
 
     dispatch(registerInvoice(formData));

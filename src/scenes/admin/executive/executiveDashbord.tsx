@@ -140,12 +140,17 @@ const DashboardUser = () => {
   }
 
   return (
-    <Box m="20px">
+    <Box sx={{ 
+      marginLeft: '20px',  // replace 'yourMargin' with your desired margin
+      marginRight: '20px', // replace 'yourMargin' with your desired margin
+      marginTop: '0px',   // replace 'yourMargin' with your desired margin
+      marginBottom: '20px' // replace 'yourMargin' with your desired margin
+    }}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        {/* <Header title="DASHBOARD" subtitle="Welcome to your dashboard" /> */}
 
-        <Box>
+        {/* <Box>
           <Button
             sx={{
               backgroundColor: colors.blueAccent[700],
@@ -158,7 +163,7 @@ const DashboardUser = () => {
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Reports
           </Button>
-        </Box>
+        </Box> */}
       </Box>
       {/* GRID & CHARTS */}
       <Box

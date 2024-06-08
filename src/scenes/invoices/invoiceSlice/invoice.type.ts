@@ -19,4 +19,5 @@ export interface IInvoice {
   attachments?: string;
   totalamount?: number;
   vendorId?: string;
+  vendorname? : string;
 }

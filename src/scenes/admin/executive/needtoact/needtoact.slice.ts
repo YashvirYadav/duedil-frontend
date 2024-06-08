@@ -158,6 +158,20 @@ export const getAttachment = createAsyncThunk<File, string>(
   }
 );
 
+//
+
+export const addgrnitems = createAsyncThunk<INeedtoactResponce, FormData>(
+  "users/addgrnitems",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await service.postCallBlob("invoice/addgrnitems", data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const needtoactSlice = createSlice({
   name: "needtoact",
   initialState,
@@ -273,6 +287,19 @@ export const needtoactSlice = createSlice({
         state.success = action.payload.success;
       })
       .addCase(getuserinvoicesbyhistoryapproved.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(addgrnitems.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addgrnitems.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        //state.data = action.payload.data;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(addgrnitems.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

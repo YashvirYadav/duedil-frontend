@@ -20,6 +20,7 @@ export interface INeedtoactResponce {
     attachments?: string;
     totalamount?: number;
     vendorId?: string;
+    vendorname?: string;
     invoicemovement?: Iinvoicemovement[];
   }
 
@@ -34,4 +35,5 @@ export interface INeedtoactResponce {
     atat: number;
     status: string;
     _id: string;
+    
 }

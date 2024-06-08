@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Input,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../../../theme";
@@ -19,6 +20,7 @@ import { loading, message, currentInvoice } from "./needtoact.selector";
 import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
 import {
+  addgrnitems,
   getAttachment,
   getInvoiceById,
   userapprove,
@@ -36,8 +38,12 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DownloadIcon from "@mui/icons-material/Download";
 import LayersIcon from "@mui/icons-material/Layers";
-// import Textarea from '@mui/joy/Textarea';
+import PersonIcon from "@mui/icons-material/Person";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 
+// import Textarea from '@mui/joy/Textarea';
 
 const NeedToactAction = () => {
   const theme = useTheme();
@@ -89,7 +95,18 @@ const NeedToactAction = () => {
 
   const [open, setOpen] = useState<boolean>(false);
 
+  const [commentEmapty, setCommentEmpty] = useState<boolean>(false);
+
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>("");
+  const [actionType, setActionType] = useState<string>("");
+  const [currentuser, setCurrentUser] = useState<string>("");
+  const [vendorName, setVendorName] = useState<string>("");
+  const [showGrn, setShowGrn] = useState<boolean>(false);
+  const [noteType, setNoteType] = useState<string>("Credit note");
+  const [noteAmount, setNoteAmount] = useState<number>(0);
+  const [grnNoteComment, setGrnNoteComment] = useState<string>("");
+  const [grnattachments, setgrnattachments] = useState<File>();
 
   useEffect(() => {
     settotalamount(Number(amount) + Number(gstamount));
@@ -108,6 +125,13 @@ const NeedToactAction = () => {
       settotalamount(invoice.totalamount || 0);
       setinvoicemovement(invoice.invoicemovement || []);
       setattachments(invoice.attachments || "");
+      setCurrentUser(
+        (invoice.invoicemovement &&
+          invoice.invoicemovement[invoice.invoicemovement?.length - 1]
+            .username) ||
+          ""
+      );
+      setVendorName(invoice.vendorname || "");
     }
   }, [invoice]);
 
@@ -126,30 +150,42 @@ const NeedToactAction = () => {
     }
   }, [lodingState]);
 
+  const saveGRN = () => {
+    
+    const data = new FormData();
+    data.append("attachments", grnattachments as Blob);
+    data.append("id", id || "");
+    data.append("notetype", noteType);
+    data.append("noteamount", noteAmount.toString());
+    data.append("noteremark", grnNoteComment);
+    dispatch(addgrnitems(data))
+
+    setShowGrn(!showGrn)
+
+  }
+
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "index", headerName: "Sequence", flex: 1 },
+    { field: "index", headerName: "Seq" },
 
     {
       field: "username",
       headerName: "Action with",
-      flex: 1,
+      flex: 1.5,
       valueGetter: (params) => `${params.row.username} - ${params.row.role}`,
     },
     {
       field: "tat",
       headerName: "TAT",
-      flex: 1,
     },
     {
       field: "atat",
       headerName: "ATAT",
-      flex: 1,
     },
     {
       field: "indate",
       headerName: "In Date",
-      flex: 1,
+
       valueGetter: (params) =>
         params.row.indate && params.row.indate.split("T")[0],
     },
@@ -160,20 +196,52 @@ const NeedToactAction = () => {
       valueGetter: (params) =>
         params.row.outdate && params.row.outdate.split("T")[0],
     },
+    {
+      field: "comment",
+      headerName: "Remarks",
+      flex: 1,
+    },
 
     {
       field: "status",
       headerName: "Status",
-      flex: 1,
     },
   ];
 
-  const handleApprove = () => {};
+  const handleApprove = () => {
+    if (actionType === "approve") {
+      id &&
+        dispatch(userapprove({ id: id, comment: comment })).then(() => {
+          dispatch(getInvoiceById(id));
+        });
+    } else if (actionType === "reject") {
+      if (comment.length < 3) {
+        setCommentEmpty(true);
+        return;
+      }
+
+      id &&
+        dispatch(userreject({ id: id, comment: comment })).then(() => {
+          dispatch(getInvoiceById(id));
+        });
+    }
+
+    setDialogOpen(!dialogOpen);
+  };
   const handleClose = () => {
     setDialogOpen(!dialogOpen);
   };
 
-  console.log("userrole", sessionStorage.getItem("rolename"));
+  console.log("showGrn=>", showGrn);
+ 
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      console.log(event.target.files[0]);
+
+      setgrnattachments(event.target.files[0]);
+    }
+  };
 
   return (
     <>
@@ -196,6 +264,7 @@ const NeedToactAction = () => {
               <Button
                 color="info"
                 variant="contained"
+                onClick={() => setShowGrn(!showGrn)}
                 startIcon={<LayersIcon />}
               >
                 GRN items
@@ -218,16 +287,8 @@ const NeedToactAction = () => {
           <Box m="10px">
             <Button
               onClick={() => {
+                setActionType("reject");
                 setDialogOpen(!dialogOpen);
-
-                // id &&
-                //   dispatch(userreject({ id: id, comment: "hello" })).then(
-                //     () => {
-                //       dispatch(getInvoiceById(id));
-                //     }
-                //   );
-
-                ///
               }}
               color="error"
               variant="contained"
@@ -239,12 +300,8 @@ const NeedToactAction = () => {
           <Box m="10px">
             <Button
               onClick={() => {
-                id &&
-                  dispatch(userapprove({ id: id, comment: "hello" })).then(
-                    () => {
-                      dispatch(getInvoiceById(id));
-                    }
-                  );
+                setActionType("approve");
+                setDialogOpen(!dialogOpen);
               }}
               color="secondary"
               variant="contained"
@@ -399,6 +456,70 @@ const NeedToactAction = () => {
                 </Box>
               </Box>
             </Box>
+
+            <Box
+              m="0px 0 0 0"
+              display="grid"
+              gridTemplateColumns="repeat(6, 1fr)"
+              gap="20px"
+            >
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <PersonIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></PersonIcon>{" "}
+                </Box>
+                <Box p="5px">
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Vender Name
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    {vendorName}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <PersonIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></PersonIcon>{" "}
+                </Box>
+                <Box p="5px">
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Current User
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    {currentuser}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           </Box>
 
           <Box
@@ -542,6 +663,48 @@ const NeedToactAction = () => {
                 </Box>
               </Box>
             </Box>
+
+            <Box
+              m="0px 0 0 0"
+              display="grid"
+              gridTemplateColumns="repeat(6, 1fr)"
+              gap="20px"
+            >
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <CurrencyRupeeIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></CurrencyRupeeIcon>{" "}
+                </Box>
+                <Box>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Credit/Debit Note
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    XXXXXXX
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              ></Box>
+            </Box>
           </Box>
         </Box>
 
@@ -573,6 +736,12 @@ const NeedToactAction = () => {
             Movement details
           </Typography>
           <DataGrid
+            sx={{
+              "& .MuiDataGrid-cell": {
+                fontSize: "14px", // Change this value to your desired font size
+              },
+            }}
+            density="compact"
             // checkboxSelection
             rows={Array.isArray(invoicemovement) ? invoicemovement : []} // Ensure that invoice is an array
             columns={columns}
@@ -613,27 +782,35 @@ const NeedToactAction = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Confirm Approval"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {actionType === "approve" ? "Confirm Approval" : "Confirm Rejection"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to approve?
+            {actionType === "approve"
+              ? "Are you sure you want to approve this invoice"
+              : "Please mention rejection reason in below field*"}
           </DialogContentText>
           <TextField
-        
-          fullWidth
-              id="invoicenumber"
-              variant="outlined"
-              type="text"
-              label="Comment"
-              name="Comment"
-              multiline
-              rows={4}
-              placeholder="Enter your comment here"
-              maxRows={12}
-              
-              sx={{ gridColumn: "span 12",marginTop: '12px'  }}
-            />
-
+            fullWidth
+            id="invoicenumber"
+            variant="outlined"
+            type="text"
+            label="Remaks"
+            name="Remaks"
+            multiline
+            rows={4}
+            placeholder="Enter your comment here"
+            maxRows={12}
+            value={comment}
+            error={commentEmapty}
+            helperText={commentEmapty ? "Comment is required" : ""}
+            onChange={(e) => {
+              setCommentEmpty(false);
+              setComment(e.target.value);
+            }}
+            sx={{ gridColumn: "span 12", marginTop: "12px" }}
+          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -646,12 +823,114 @@ const NeedToactAction = () => {
           </Button>
           <Button
             onClick={handleApprove}
-            color="secondary"
+            color={actionType === "approve" ? "secondary" : "error"}
             startIcon={<DoneAllIcon />}
             variant="contained"
             autoFocus
           >
-            Approve
+            {actionType === "approve" ? "Approve" : "Reject"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* dilog fro GRN */}
+
+      <Dialog
+        sx={{
+          borderRadius: "20px",
+          "& .MuiDialog-paper": {
+            borderRadius: "10px",
+            backgroundColor: colors.primary[500],
+            color: colors.grey[100],
+            height: "400px",
+            WebkitAlignContent: "center",
+            width: "400px",
+          },
+        }}
+        open={showGrn}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Add GRN credit/debit note
+        </DialogTitle>
+        <DialogContent>
+          <RadioGroup
+            row
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="Credit note"
+            name="radio-buttons-group"
+            onChange={(e) => {
+              setNoteType(e.target.value);
+              console.log("e=>", e.target.value);
+            }}
+          >
+            <FormControlLabel
+              value="Credit note"
+              control={<Radio />}
+              label="Credit note"
+            />
+            <FormControlLabel
+              value="Debit note"
+              control={<Radio />}
+              label="Debit note"
+            />
+          </RadioGroup>
+
+          <TextField
+            fullWidth
+            id="amount"
+            label={noteType+" Amount"}
+            type="number"
+            variant="outlined"
+            value={noteAmount}
+            onChange={(e) => {
+              setNoteAmount(Number(e.target.value));
+            }}
+            sx={{ gridColumn: "span 12" }}
+          />
+
+          <TextField
+            fullWidth
+            id="invoicenumber"
+            variant="outlined"
+            type="text"
+            label="Remaks"
+            name="Remaks"
+            multiline
+            rows={4}
+            placeholder="Enter your comment here"
+            maxRows={12}
+            value={grnNoteComment}
+            error={commentEmapty}
+            helperText={commentEmapty ? "Comment is required" : ""}
+            onChange={(e) => {
+            //  setCommentEmpty(false);
+            setGrnNoteComment(e.target.value);
+            }}
+            sx={{ gridColumn: "span 12", marginTop: "12px" }}
+          />
+          <input type="file" accept="pdf/*" style={{ marginTop: "20px" }} onChange={handleFileChange} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleClose}
+            color="info"
+            startIcon={<CloseIcon />}
+            variant="contained"
+          >
+            Cancel
+          </Button>
+          <Button
+           
+            color="secondary"
+            startIcon={<DoneAllIcon />}
+            variant="contained"
+            autoFocus
+            onClick={saveGRN}
+          >
+            Add Grn
           </Button>
         </DialogActions>
       </Dialog>

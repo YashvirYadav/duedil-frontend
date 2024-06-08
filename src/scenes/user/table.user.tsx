@@ -75,7 +75,7 @@ const Users = () => {
     {
       field: "status",
       headerName: "Status",
-      flex: 1,
+    
       renderCell: (params: GridRenderCellParams) => (
         <Switch
           size="small"
@@ -123,10 +123,6 @@ const Users = () => {
             })
         };
 
-        const onClickView = () => {
-          const id = params.id;
-          // handle view operation here
-        };
 
         return (
           <div>
@@ -136,9 +132,7 @@ const Users = () => {
             <IconButton color="secondary" onClick={onClickDelete}>
               <DeleteIcon />
             </IconButton>
-            <IconButton onClick={onClickView}>
-              <VisibilityIcon />
-            </IconButton>
+            
           </div>
         );
       },
@@ -198,7 +192,7 @@ const Users = () => {
           <DataGrid
           sx={{
             "& .MuiDataGrid-cell": {
-              fontSize: "18px", // Change this value to your desired font size
+              fontSize: "14px", // Change this value to your desired font size
             },
           }}
             // checkboxSelection

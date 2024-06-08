@@ -39,6 +39,7 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DownloadIcon from "@mui/icons-material/Download";
 import LayersIcon from "@mui/icons-material/Layers";
 import { Iinvoicemovement } from "../../executive/needtoact/needtoact.type";
+import PersonIcon from '@mui/icons-material/Person';
 
 const ViewInvice = () => {
   const theme = useTheme();
@@ -91,6 +92,9 @@ const ViewInvice = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [vendorName, setVendorName] = useState<string>("")
+  const [currentuser, setCurrentUser] = useState<string>("");
+
 
   useEffect(() => {
     settotalamount(Number(amount) + Number(gstamount));
@@ -109,6 +113,8 @@ const ViewInvice = () => {
       settotalamount(invoice.totalamount || 0);
       setinvoicemovement(invoice.invoicemovement || []);
       setattachments(invoice.attachments || "");
+      setCurrentUser(invoice.invoicemovement && invoice.invoicemovement[invoice.invoicemovement?.length-1].username || "");
+      setVendorName(invoice.vendorname || "")
     }
   }, [invoice]);
 
@@ -129,7 +135,7 @@ const ViewInvice = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "index", headerName: "Sequence", flex: 1 },
+    { field: "index", headerName: "Sequence"},
 
     {
       field: "username",
@@ -140,12 +146,12 @@ const ViewInvice = () => {
     {
       field: "tat",
       headerName: "TAT",
-      flex: 1,
+     
     },
     {
       field: "atat",
       headerName: "ATAT",
-      flex: 1,
+     
     },
     {
       field: "indate",
@@ -163,9 +169,15 @@ const ViewInvice = () => {
     },
 
     {
+      field: "comment",
+      headerName: "Remarks",
+      flex: 1,
+    },
+
+    {
       field: "status",
       headerName: "Status",
-      flex: 1,
+   
     },
   ];
 
@@ -338,6 +350,70 @@ const ViewInvice = () => {
                 </Box>
               </Box>
             </Box>
+            <Box
+              m="0px 0 0 0"
+              display="grid"
+              gridTemplateColumns="repeat(6, 1fr)"
+              gap="20px"
+            >
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <PersonIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></PersonIcon>{" "}
+                </Box>
+                <Box p="5px">
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Vender Name
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    {vendorName}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <PersonIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></PersonIcon>{" "}
+                </Box>
+                <Box p="5px">
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Current User
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    {currentuser}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+
           </Box>
 
           <Box
@@ -481,6 +557,51 @@ const ViewInvice = () => {
                 </Box>
               </Box>
             </Box>
+            <Box
+              m="0px 0 0 0"
+              display="grid"
+              gridTemplateColumns="repeat(6, 1fr)"
+              gap="20px"
+            >
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                <Box>
+                  <CurrencyRupeeIcon
+                    style={{ fontSize: 50, color: "#94e2cd" }}
+                  ></CurrencyRupeeIcon>{" "}
+                </Box>
+                <Box>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    Credit/Debit Note
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    XXXXXXX
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="left"
+                mt="20px"
+                gridColumn="span 3"
+              >
+                
+                
+              </Box>
+            </Box>
+
           </Box>
         </Box>
 
