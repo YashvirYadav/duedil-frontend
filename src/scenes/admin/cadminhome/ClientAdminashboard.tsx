@@ -239,7 +239,7 @@ const ClientAdminashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Task role with pending invoices
+              Pending invoices with roles
               </Typography>
               <Typography
                 variant="h3"
@@ -294,10 +294,10 @@ const ClientAdminashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {invoice.invoicenumber}
+                  {invoice.vendorname}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {invoice.invoicemovement &&
+                <em>Pending with:</em>   {invoice.invoicemovement &&
                     invoice.invoicemovement.length > 0 &&
                     invoice.invoicemovement[invoice.invoicemovement.length - 1]
                       .username}
@@ -305,12 +305,12 @@ const ClientAdminashboard = () => {
               </Box>
               <Box color={colors.grey[100]}>
               <Typography  fontWeight="600" color={colors.greenAccent[500]}>
-                  {invoice.invoicemovement &&
+              <em>TAT:</em>  {invoice.invoicemovement &&
                     invoice.invoicemovement.length > 0 &&
                     invoice.invoicemovement[invoice.invoicemovement.length - 1]
-                      .username}
+                      .tat}
                 </Typography>
-                {invoice.invoicemovement &&
+                <em>Pending since:</em> {invoice.invoicemovement &&
                   invoice.invoicemovement.length > 0 &&
                   invoice.invoicemovement[invoice.invoicemovement.length - 1]
                     .indate.toString()
