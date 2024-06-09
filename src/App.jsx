@@ -56,6 +56,7 @@ import { Needtoact } from "./scenes/admin/executive/needtoact/needtoact";
 import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table"
 import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action"
 import ViewInvice from "./scenes/admin/vendoradmin/dashboard/view.invoice"
+import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard"
 
 
 function App() {
@@ -103,7 +104,7 @@ function App() {
           </Route>
 
           <Route path="clientadmin" element={<CadminHome />}>
-            <Route path="" element={<Dashboard />} />
+            <Route path="" element={<ClientAdminashboard />} />
 
             <Route path="user" element={<UserContener />}>
               <Route path="" element={<Users />} />

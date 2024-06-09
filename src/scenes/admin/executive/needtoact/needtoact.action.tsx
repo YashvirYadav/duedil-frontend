@@ -915,7 +915,7 @@ const NeedToactAction = () => {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={handleClose}
+            onClick={()=>setShowGrn(false)}
             color="info"
             startIcon={<CloseIcon />}
             variant="contained"

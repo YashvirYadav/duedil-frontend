@@ -185,6 +185,7 @@ const DashboardUser = () => {
             "&:hover": {
               backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
             },
+            cursor: 'pointer'
           }}
         >
           <StatBox

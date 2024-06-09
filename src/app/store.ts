@@ -12,6 +12,7 @@ import roleSlice from '../scenes/role/roleSlice/role.slice';
 import  workflowSlice  from '../scenes/worlflow/workfowslice/workflowslice';
 import venderdashbord from '../scenes/admin/vendoradmin/dashboard/dashboardslice';
 import needtoactSlice from '../scenes/admin/executive/needtoact/needtoact.slice';
+import cadminslice from '../scenes/admin/cadminhome/cadminslice/cadminslice';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     workflow: workflowSlice,
     vendorDashboardSlice:venderdashbord,
     needtoact : needtoactSlice,
+    clientadmin:cadminslice
   },
 });
 

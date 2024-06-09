@@ -1,12 +1,11 @@
-export interface INeedtoactResponce {
+export interface IClientAdminResponce {
     statusCode: number;
     status: "idle" | "loading" | "succeeded" | "failed";
-    data: IInvoice[] | IInvoice;
-    currentInvoice: IInvoice | null;
     message: string;
     success: boolean;
+    data: IInvoice[] ;
     error: string | null;
-    pdfUrl: File | null;
+    dashboard: dashboard;
   }
   
   export interface IInvoice {
@@ -36,3 +35,19 @@ export interface INeedtoactResponce {
     status: string;
     _id: string;
     }
+
+  export interface dashboard{
+    totalInvoicecount : number;
+    totalAmount : number;
+    newandwipInvoicecount : number;
+    newandwipAmount : number;
+    rejectedInvoicecount : number;
+    rejectedAmount : number;
+    paidInvoicecount : number;
+    paidAmount  : number;
+
+
+  }
+ 
+
+ 
