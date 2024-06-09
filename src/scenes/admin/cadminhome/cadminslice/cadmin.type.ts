@@ -6,6 +6,7 @@ export interface IClientAdminResponce {
     data: IInvoice[] ;
     error: string | null;
     dashboard: dashboard;
+    chartdata: Ichartdata[];
   }
   
   export interface IInvoice {
@@ -21,6 +22,12 @@ export interface IClientAdminResponce {
     vendorId?: string;
     vendorname?: string;
     invoicemovement?: Iinvoicemovement[];
+   
+  }
+
+  export interface Ichartdata {
+      x: string;
+      y: number;
   }
 
   export interface Iinvoicemovement {

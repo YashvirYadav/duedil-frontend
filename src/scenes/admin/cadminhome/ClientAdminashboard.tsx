@@ -14,12 +14,13 @@ import BarChart from "../../../components/BarChart";
 import StatBox from "../../../components/StatBox";
 import ProgressCircle from "../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
-import { dashboard, dashboarddata } from "./cadminslice/cadmin.selector";
+import { dashboard, dashboarddata, chartdata } from "./cadminslice/cadmin.selector";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import {
   getdashboardforclientadmin,
   getslaexpiry,
+  charRoleWice,
 } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
@@ -30,6 +31,7 @@ const ClientAdminashboard = () => {
 
   const dashboardData = useSelector(dashboard);
   const slaexpiry = useSelector(dashboarddata);
+  const chartValue = useSelector(chartdata);
   const dispatch = useDispatch<AppDispatch>();
 
   const actiontotalInvoice = () => {
@@ -56,14 +58,23 @@ const ClientAdminashboard = () => {
     paidAmount,
   } = dashboardData;
 
-  console.log("slaexpiry=>", Array.from(slaexpiry));
-
   useEffect(() => {
     dispatch(getdashboardforclientadmin());
   }, [dispatch]);
   useEffect(() => {
     dispatch(getslaexpiry());
   }, [dispatch]);
+  useEffect(() => {
+    dispatch(charRoleWice());
+  }, [dispatch]);
+
+  const dataChart = {
+    id: "Progress",
+    color: tokens("dark").greenAccent[500],
+    data: chartValue
+  }
+
+  console.log("chartValue=>", chartValue);
 
   return (
     <Box m="20px">
@@ -201,7 +212,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={rejectedAmount}
+            title={paidAmount}
             subtitle="Completed Invoices"
             progress="0.80"
             increase={paidInvoicecount}
@@ -228,14 +239,14 @@ const ClientAdminashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Revenue Generated
+                Task role with pending invoices
               </Typography>
               <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                $59,342.32
+                {/* $59,342.32 */}
               </Typography>
             </Box>
             <Box>
@@ -247,7 +258,8 @@ const ClientAdminashboard = () => {
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            
+           { chartValue && <LineChart isDashboard={true} dataValue={[dataChart]} />}
           </Box>
         </Box>
         <Box

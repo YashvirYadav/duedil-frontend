@@ -18,8 +18,24 @@ const initialState: IClientAdminResponce = {
         paidInvoicecount: 0,
         paidAmount: 0,
     },
-    data: []
+    data: [],
+    chartdata: []
 }
+
+export const charRoleWice = createAsyncThunk<IClientAdminResponce>(
+    "clientadmin/charRoleWice",
+    async (_, { rejectWithValue }) => {
+        try {
+            const responce = await service.getCall(
+                "invoice/getinvoicecountwithpendingrole/"+ sessionStorage.getItem("companyId")
+            )
+            return responce.data
+        } catch (error) {
+            const err = error as IClientAdminResponce
+            return rejectWithValue(err)
+        }
+    }
+)
 
 export const getdashboardforclientadmin = createAsyncThunk<IClientAdminResponce>(
     "clientadmin/getdashboard",
@@ -86,6 +102,20 @@ export const cadminSlice = createSlice({
             state.data = action.payload.data 
         })
         .addCase(getslaexpiry.rejected, (state, action) => {
+            state.status = "failed"
+            state.error = action.payload as string
+        })
+        .addCase(charRoleWice.pending, (state) => {
+            state.status = "loading"
+        })
+        .addCase(charRoleWice.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.success = action.payload.success
+            console.log("========",action.payload.data)
+            state.chartdata = action.payload.data as any
+        })
+        .addCase(charRoleWice.rejected, (state, action) => {
             state.status = "failed"
             state.error = action.payload as string
         })

@@ -12,6 +12,11 @@ export const dashboarddata = createSelector(clientadmin, (state) => {
     return state.data;
   });
 
+export const chartdata = createSelector(clientadmin, (state) => {
+
+    return state.chartdata;
+  });  
+
 export const loading = createSelector(clientadmin, (state) => {
   return state.status;
 });
