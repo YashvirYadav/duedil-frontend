@@ -14,9 +14,11 @@ import BarChart from "../../../components/BarChart";
 import StatBox from "../../../components/StatBox";
 import ProgressCircle from "../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
-import { dashboard, dashboarddata, chartdata } from "./cadminslice/cadmin.selector";
+import { dashboard, dashboarddataSLA, chartdata } from "./cadminslice/cadmin.selector";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
+import { useNavigate } from "react-router-dom";
+
 import {
   getdashboardforclientadmin,
   getslaexpiry,
@@ -30,21 +32,29 @@ const ClientAdminashboard = () => {
   const [action, setAction] = useState<string>("totalInvoice");
 
   const dashboardData = useSelector(dashboard);
-  const slaexpiry = useSelector(dashboarddata);
+  const navigate = useNavigate();
+
+  const slaexpiry = useSelector(dashboarddataSLA);
   const chartValue = useSelector(chartdata);
   const dispatch = useDispatch<AppDispatch>();
 
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
+    
+    navigate(`invoice/Total Invoice`);
   };
   const actionunderReview = () => {
     setAction("underReview");
+    navigate(`invoice/Under Review`);
+
   };
   const actionRejected = () => {
     setAction("rejected");
+    navigate(`invoice/Rejected Invoice`);
   };
   const actionPaid = () => {
     setAction("paid");
+    navigate(`invoice/Paid Invoice`);
   };
 
   const {

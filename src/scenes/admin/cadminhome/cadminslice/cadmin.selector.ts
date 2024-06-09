@@ -8,8 +8,13 @@ export const dashboard = createSelector(clientadmin, (state) => {
   return state.dashboard;
 });
 
-export const dashboarddata = createSelector(clientadmin, (state) => {
-    return state.data;
+export const invoice = createSelector(clientadmin, (state) => {
+  return state.data;
+}
+);
+
+export const dashboarddataSLA = createSelector(clientadmin, (state) => {
+    return state.sla;
   });
 
 export const chartdata = createSelector(clientadmin, (state) => {

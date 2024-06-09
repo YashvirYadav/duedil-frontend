@@ -7,6 +7,7 @@ export interface IClientAdminResponce {
     error: string | null;
     dashboard: dashboard;
     chartdata: Ichartdata[];
+    sla: IInvoice[];
   }
   
   export interface IInvoice {

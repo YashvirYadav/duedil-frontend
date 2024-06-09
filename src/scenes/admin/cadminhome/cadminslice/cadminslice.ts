@@ -19,7 +19,8 @@ const initialState: IClientAdminResponce = {
         paidAmount: 0,
     },
     data: [],
-    chartdata: []
+    chartdata: [],
+    sla: []
 }
 
 export const charRoleWice = createAsyncThunk<IClientAdminResponce>(
@@ -70,6 +71,69 @@ export const getslaexpiry = createAsyncThunk<IClientAdminResponce>(
 
 )
 
+//getinvoicebycompanyid
+export const getinvoicebycompanyid = createAsyncThunk<IClientAdminResponce>(
+    "clientadmin/getinvoicebycompanyid",
+    async (_, { rejectWithValue }) => {
+        try {
+            const responce = await service.getCall(
+                "invoice/getinvoicebycompanyid/"+ sessionStorage.getItem("companyId")
+            )
+            return responce.data
+        } catch (error) {
+            const err = error as IClientAdminResponce
+            return rejectWithValue(err)
+        }
+    }
+
+)
+//underreviewbycompanyid
+export const underreviewbycompanyid = createAsyncThunk<IClientAdminResponce>(
+    "clientadmin/underreviewbycompanyid",
+    async (_, { rejectWithValue }) => {
+        try {
+            const responce = await service.getCall(
+                "invoice/underreviewbycompanyid/"+ sessionStorage.getItem("companyId")
+            )
+            return responce.data
+        } catch (error) {
+            const err = error as IClientAdminResponce
+            return rejectWithValue(err)
+        }
+    }
+)
+//rejectedbycompanyid
+export const rejectedbycompanyid = createAsyncThunk<IClientAdminResponce>(
+    "clientadmin/rejectedbycompanyid",
+    async (_, { rejectWithValue }) => {
+        try {
+            const responce = await service.getCall(
+                "invoice/rejectedbycompanyid/"+ sessionStorage.getItem("companyId")
+            )
+            return responce.data
+        } catch (error) {
+            const err = error as IClientAdminResponce
+            return rejectWithValue(err)
+        }
+    }
+)
+
+//completedbycompanyid
+export const completedbycompanyid = createAsyncThunk<IClientAdminResponce>(
+    "clientadmin/completedbycompanyid",
+    async (_, { rejectWithValue }) => {
+        try {
+            const responce = await service.getCall(
+                "invoice/completedbycompanyid/"+ sessionStorage.getItem("companyId")
+            )
+            return responce.data
+        } catch (error) {
+            const err = error as IClientAdminResponce
+            return rejectWithValue(err)
+        }
+    }
+)
+
 export const cadminSlice = createSlice({
     name: "clientadmin",
     initialState,
@@ -99,7 +163,7 @@ export const cadminSlice = createSlice({
             state.status = "succeeded"
             state.message = action.payload.message
             state.success = action.payload.success
-            state.data = action.payload.data 
+            state.sla = action.payload.data 
         })
         .addCase(getslaexpiry.rejected, (state, action) => {
             state.status = "failed"
@@ -116,6 +180,59 @@ export const cadminSlice = createSlice({
             state.chartdata = action.payload.data as any
         })
         .addCase(charRoleWice.rejected, (state, action) => {
+            state.status = "failed"
+            state.error = action.payload as string
+        })
+        .addCase(getinvoicebycompanyid.pending, (state) => {
+            state.status = "loading"
+        })
+        .addCase(getinvoicebycompanyid.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.success = action.payload.success
+            state.data = action.payload.data
+        })
+        .addCase(getinvoicebycompanyid.rejected, (state, action) => {
+            state.status = "failed"
+            state.error = action.payload as string
+        })
+        .addCase(underreviewbycompanyid.pending, (state) => {
+            state.status = "loading"
+        })
+        .addCase(underreviewbycompanyid.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.success = action.payload.success
+            state.data = action.payload.data
+        })
+        .addCase(underreviewbycompanyid.rejected, (state, action) => {
+            state.status = "failed"
+            state.error = action.payload as string
+        })
+        .addCase(rejectedbycompanyid.pending, (state) => {
+            state.status = "loading"
+        })
+        .addCase(rejectedbycompanyid.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.success = action.payload.success
+            state.data = action.payload.data
+        })
+        .addCase(rejectedbycompanyid.rejected, (state, action) => {
+            state.status = "failed"
+            state.error = action.payload as string
+        })
+        .addCase(completedbycompanyid.pending, (state) => {
+            state.status = "loading"
+        
+        })
+        .addCase(completedbycompanyid.fulfilled, (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+            state.success = action.payload.success
+            state.data = action.payload.data
+        })
+        .addCase(completedbycompanyid.rejected, (state, action) => {
             state.status = "failed"
             state.error = action.payload as string
         })

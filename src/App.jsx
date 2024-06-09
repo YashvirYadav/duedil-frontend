@@ -57,6 +57,8 @@ import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table"
 import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action"
 import ViewInvice from "./scenes/admin/vendoradmin/dashboard/view.invoice"
 import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard"
+import Clientadmintable from "./scenes/admin/cadminhome/cadmin.table"
+import {AdminInviceView} from "./scenes/admin/cadminhome/AdminInviceView"
 
 
 function App() {
@@ -105,6 +107,12 @@ function App() {
 
           <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<ClientAdminashboard />} />
+
+
+            <Route path="invoice/:typeaction?" element={<AdminInviceView />}>
+              <Route path="" element={<Clientadmintable />} />
+              <Route path="viewinvoice/:id?" element={<ViewInvice />} />
+            </Route>
 
             <Route path="user" element={<UserContener />}>
               <Route path="" element={<Users />} />
