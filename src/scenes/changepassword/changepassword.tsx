@@ -83,7 +83,7 @@ import { loading, message } from "../user/authSlice/auth.selector";
       <>
         <Box m="20px">
           {/* HEADER */}
-          <Header title="Category User" subtitle="Welcome to your dashboard" />
+          <Header title="Category User" subtitle="" />
   
          <Box display="flex" justifyContent="end" mt="20px">
             <Button

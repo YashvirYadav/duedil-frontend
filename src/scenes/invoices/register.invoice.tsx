@@ -150,7 +150,7 @@ if(!attachments)
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Post Invoice" subtitle="Welcome to your Post Invoice" />
+        <Header title="Post Invoice" subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => navigate(-1)}

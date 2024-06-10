@@ -221,7 +221,7 @@ const RegisterCompany = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Register company" subtitle="Welcome to your dashboard" />
+        <Header title="Register company" subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
               <Button onClick={() => navigate(-1) }color="secondary" variant="contained"
                  sx={{ textTransform: 'none' }}>

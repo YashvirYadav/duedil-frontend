@@ -117,7 +117,7 @@ const WorkflowRagistar = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Workflow Setting" subtitle="Welcome to your dashboard" />
+        <Header title="Workflow Setting" subtitle="" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button

@@ -58,7 +58,7 @@ const RegisterDepatrment = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="depatrment User" subtitle="Welcome to your dashboard" />
+        <Header title="depatrment User" subtitle="" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button

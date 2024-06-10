@@ -36,6 +36,7 @@ import {
 } from "@mui/x-data-grid";
 import { Toast } from "../../../../components/Toast";
 import { Loader } from "../../../../components/Lodar";
+import { formatNumberIndian } from "../../../../utils/utils";
 
 const DashboardVendor = () => {
   const theme = useTheme();
@@ -208,7 +209,7 @@ const DashboardVendor = () => {
           
         >
           <StatBox
-            title={data.totalAmount}
+            title={formatNumberIndian(data.totalAmount)}
             subtitle="Total invoice"
             progress="0.75"
             increase={data.totalInvoice}
@@ -235,7 +236,7 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={data.newInvoiceAmount}
+            title={formatNumberIndian(data.newInvoiceAmount)}
             subtitle="New Invoice"
             progress="0.50"
             increase={data.newInvoice}
@@ -262,7 +263,7 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={data.wipInvoiceAmount} // Amount
+            title={formatNumberIndian(data.wipInvoiceAmount)} // Amount
             subtitle="Under approval"
             progress="0.30"
             increase={data.wipInvoice} // count
@@ -288,7 +289,7 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={data.paidInvoice}
+            title={formatNumberIndian(data.paidInvoice)}
             subtitle="Paid invoice"
             progress="0.80"
             increase={data.paidInvoiceAmount}

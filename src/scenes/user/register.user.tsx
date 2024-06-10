@@ -107,7 +107,7 @@ const RegisterCompany = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Register User" subtitle="Welcome to your dashboard" />
+        <Header title="Register User" subtitle="" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button

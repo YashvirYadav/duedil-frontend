@@ -64,7 +64,7 @@ import {
       <>
         <Box m="20px">
           {/* HEADER */}
-          <Header title="Bank" subtitle="Welcome to banking form" />
+          <Header title="Bank" subtitle="" />
   
           <Box display="flex" justifyContent="end" mt="20px">
             <Button

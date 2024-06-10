@@ -23,6 +23,7 @@ import { Toast } from "../../../components/Toast";
 import { loading, message, invoiceData } from "./needtoact/needtoact.selector";
 import { useNavigate } from "react-router-dom";
 import { getNeedtoact, getuserinvoicesbyhistoryapproved, getuserinvoicesbyhistoryrejected, getuserinvoicesbyhistorywip } from "./needtoact/needtoact.slice";
+import { formatNumberIndian } from "../../../utils/utils";
 
 const DashboardUser = () => {
   const theme = useTheme();
@@ -189,7 +190,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={data.needtoacttotal}
+            title={formatNumberIndian(data.needtoacttotal)}
             subtitle="Need to action"
             progress="0.75"
             increase={data.needtoact}
@@ -215,7 +216,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={data.invoiceWipAmount}
+            title={formatNumberIndian(data.invoiceWipAmount)}
             subtitle="Under approval"
             progress="0.50"
             increase={data.invoiceWip}
@@ -242,7 +243,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={data.invoiceRejectedAmount} // Amount
+            title={formatNumberIndian(data.invoiceRejectedAmount)} // Amount
             subtitle="Rejected invoice"
             progress="0.30"
             increase={data.invoiceRejected} // count
@@ -268,7 +269,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={data.invoiceCompletedAmount}
+            title={formatNumberIndian(data.invoiceCompletedAmount)}
             subtitle="Paid invoice"
             progress="0.80"
             increase={data.invoiceCompleted}

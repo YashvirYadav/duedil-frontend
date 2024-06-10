@@ -59,7 +59,7 @@ const RegisterRole = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Role User" subtitle="Welcome to your dashboard" />
+        <Header title="Role User" subtitle="" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
