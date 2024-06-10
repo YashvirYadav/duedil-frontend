@@ -140,6 +140,7 @@ const TableRole = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New role
           </Button>

@@ -192,6 +192,7 @@ const Vendor = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New vendor
           </Button>

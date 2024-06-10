@@ -140,6 +140,7 @@ const TableWorflow = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New workflow
           </Button>

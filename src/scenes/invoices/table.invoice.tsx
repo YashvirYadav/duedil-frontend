@@ -145,6 +145,7 @@ const InvoiceTable = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New invoice
           </Button>

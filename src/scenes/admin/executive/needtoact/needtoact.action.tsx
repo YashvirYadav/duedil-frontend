@@ -255,6 +255,7 @@ const NeedToactAction = () => {
               color="inherit"
               variant="contained"
               startIcon={<KeyboardBackspaceIcon />}
+              sx={{ textTransform: 'none' }}
             >
               Back to list
             </Button>
@@ -266,6 +267,7 @@ const NeedToactAction = () => {
                 variant="contained"
                 onClick={() => setShowGrn(!showGrn)}
                 startIcon={<LayersIcon />}
+                sx={{ textTransform: 'none' }}
               >
                 GRN items
               </Button>
@@ -278,6 +280,7 @@ const NeedToactAction = () => {
                 color="info"
                 variant="contained"
                 startIcon={<LayersIcon />}
+                sx={{ textTransform: 'none' }}
               >
                 Add TDS details
               </Button>
@@ -293,6 +296,7 @@ const NeedToactAction = () => {
               color="error"
               variant="contained"
               startIcon={<ThumbDownIcon />}
+              sx={{ textTransform: 'none' }}
             >
               Reject
             </Button>
@@ -306,6 +310,7 @@ const NeedToactAction = () => {
               color="secondary"
               variant="contained"
               startIcon={<ThumbUpAltIcon />}
+              sx={{ textTransform: 'none' }}
             >
               Approve
             </Button>
@@ -657,6 +662,7 @@ const NeedToactAction = () => {
                     color="secondary"
                     variant="contained"
                     startIcon={<DownloadIcon />}
+                    sx={{ textTransform: 'none' }}
                   >
                     Download Attachment
                   </Button>
@@ -818,6 +824,7 @@ const NeedToactAction = () => {
             color="info"
             startIcon={<CloseIcon />}
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Cancel
           </Button>
@@ -827,8 +834,10 @@ const NeedToactAction = () => {
             startIcon={<DoneAllIcon />}
             variant="contained"
             autoFocus
+            sx={{ textTransform: 'none' }}
           >
             {actionType === "approve" ? "Approve" : "Reject"}
+           
           </Button>
         </DialogActions>
       </Dialog>
@@ -919,6 +928,7 @@ const NeedToactAction = () => {
             color="info"
             startIcon={<CloseIcon />}
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Cancel
           </Button>
@@ -929,6 +939,7 @@ const NeedToactAction = () => {
             variant="contained"
             autoFocus
             onClick={saveGRN}
+            sx={{ textTransform: 'none' }}
           >
             Add Grn
           </Button>

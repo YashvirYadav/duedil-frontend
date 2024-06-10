@@ -90,6 +90,7 @@ import { loading, message } from "../user/authSlice/auth.selector";
           
               color="secondary"
               variant="contained"
+              sx={{ textTransform: 'none' }}
             >
               Back to Desbord
             </Button>

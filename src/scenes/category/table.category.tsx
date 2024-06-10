@@ -166,6 +166,7 @@ const TableCategory = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New Category
           </Button>

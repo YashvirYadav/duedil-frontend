@@ -153,6 +153,7 @@ const Users = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New User
           </Button>

@@ -160,6 +160,7 @@ const Tabledepatrment = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New depatrment
           </Button>

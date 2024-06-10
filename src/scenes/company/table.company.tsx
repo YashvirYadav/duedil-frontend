@@ -195,6 +195,7 @@ const Contacts = () => {
             }}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Create New Company
           </Button>

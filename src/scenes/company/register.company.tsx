@@ -223,7 +223,8 @@ const RegisterCompany = () => {
         {/* HEADER */}
         <Header title="Register company" subtitle="Welcome to your dashboard" />
         <Box display="flex" justifyContent="end" mt="20px">
-              <Button onClick={() => navigate(-1) }color="secondary" variant="contained">
+              <Button onClick={() => navigate(-1) }color="secondary" variant="contained"
+                 sx={{ textTransform: 'none' }}>
                 Back to list
               </Button>
             </Box>

@@ -65,6 +65,7 @@ const RegisterDepatrment = () => {
             onClick={() => navigate(-1)}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
             Back to list
           </Button>
