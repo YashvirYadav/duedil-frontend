@@ -18,6 +18,7 @@ import { dashboard, dashboarddataSLA, chartdata } from "./cadminslice/cadmin.sel
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import { useNavigate } from "react-router-dom";
+import { formatNumberIndian } from "../../../utils/utils";
 
 import {
   getdashboardforclientadmin,
@@ -29,7 +30,7 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 const ClientAdminashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [action, setAction] = useState<string>("totalInvoice");
+  const [action, setAction] = useState<string>("");
 
   const dashboardData = useSelector(dashboard);
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const ClientAdminashboard = () => {
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
     
-    navigate(`invoice/Total Invoice`);
+    navigate(`invoice/Total Invoices`);
   };
   const actionunderReview = () => {
     setAction("underReview");
@@ -50,11 +51,11 @@ const ClientAdminashboard = () => {
   };
   const actionRejected = () => {
     setAction("rejected");
-    navigate(`invoice/Rejected Invoice`);
+    navigate(`invoice/Rejected Invoices`);
   };
   const actionPaid = () => {
     setAction("paid");
-    navigate(`invoice/Paid Invoice`);
+    navigate(`invoice/Paid Invoices`);
   };
 
   const {
@@ -86,14 +87,16 @@ const ClientAdminashboard = () => {
 
   console.log("chartValue=>", chartValue);
 
+  
+
   return (
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="Dashboard" subtitle="Welcome to your dashboard" />
 
         <Box>
-          <Button
+          {/* <Button
             sx={{
               backgroundColor: colors.blueAccent[700],
               color: colors.grey[100],
@@ -104,7 +107,7 @@ const ClientAdminashboard = () => {
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Reports
-          </Button>
+          </Button> */}
         </Box>
       </Box>
       {/* GRID & CHARTS */}
@@ -135,7 +138,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={totalAmount}
+            title={formatNumberIndian(totalAmount)}
             subtitle="Total Invoices"
             progress="0.70"
             increase={totalInvoicecount}
@@ -164,8 +167,8 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={newandwipAmount}
-            subtitle="Under process"
+            title={formatNumberIndian(newandwipAmount)}
+            subtitle="Under Processes"
             progress="0.50"
             increase={newandwipInvoicecount}
             icon={
@@ -193,7 +196,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={rejectedAmount}
+            title={formatNumberIndian(rejectedAmount)}
             subtitle="Rejected Invoices"
             progress="0.30"
             increase={rejectedInvoicecount}
@@ -222,7 +225,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={paidAmount}
+            title={formatNumberIndian(paidAmount)}
             subtitle="Completed Invoices"
             progress="0.80"
             increase={paidInvoicecount}
@@ -260,11 +263,11 @@ const ClientAdminashboard = () => {
               </Typography>
             </Box>
             <Box>
-              <IconButton>
+              {/* <IconButton>
                 <DownloadOutlinedIcon
                   sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
                 />
-              </IconButton>
+              </IconButton> */}
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
@@ -330,9 +333,19 @@ const ClientAdminashboard = () => {
                 bgcolor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
+                onClick={() => {
+                  navigate(`viewexsla/${invoice._id}`);
+                }}
+                sx={{
+                  transition: "background-color 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: colors.greenAccent[800], // replace 'yourHoverColor' with your desired hover color
+                  },
+                  cursor: "pointer",
+                }}
               >
                 
-                {/* ${invoice.totalamount} */}
+                {/* ${invoice.totalamount}  */}
                 view
               </Box>
             </Box>
@@ -343,5 +356,7 @@ const ClientAdminashboard = () => {
     </Box>
   );
 };
+
+
 
 export default ClientAdminashboard;

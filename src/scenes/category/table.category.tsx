@@ -222,6 +222,9 @@ const TableCategory = () => {
             fontSize: "16px", // Change this value to your desired font size
           },
         }}
+
+        
+        density="compact"
             // checkboxSelection
             rows={Array.isArray(category) ? category : []} // Ensure that company is an array
             columns={columns}

@@ -249,6 +249,8 @@ const Vendor = () => {
                 fontSize: "16px", // Change this value to your desired font size
               },
             }}
+           
+            density="compact"
             rows={Array.isArray(vendor) ? vendor : []} // Ensure that vendor is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}

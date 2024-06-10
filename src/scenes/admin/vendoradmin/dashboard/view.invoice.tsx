@@ -200,6 +200,7 @@ const ViewInvice = () => {
               color="inherit"
               variant="contained"
               startIcon={<KeyboardBackspaceIcon />}
+              sx={{ textTransform: 'none' }}
             >
               Back to list
             </Button>
@@ -533,9 +534,9 @@ const ViewInvice = () => {
                 gridColumn="span 3"
               >
                 <Box>
-                  <DownloadIcon
+                  {/* <DownloadIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DownloadIcon>{" "}
+                  ></DownloadIcon>{" "} */}
                 </Box>
                 <Box p="5px">
                   <Typography
@@ -633,6 +634,12 @@ const ViewInvice = () => {
             Movement details
           </Typography>
           <DataGrid
+          sx={{
+            "& .MuiDataGrid-cell": {
+              fontSize: "14px", // Change this value to your desired font size
+            },
+          }}
+          density="compact"
             // checkboxSelection
             rows={Array.isArray(invoicemovement) ? invoicemovement : []} // Ensure that invoice is an array
             columns={columns}

@@ -211,7 +211,12 @@ const Tabledepatrment = () => {
           ) : null}
 
           <DataGrid
-         
+         sx={{
+          "& .MuiDataGrid-cell": {
+            fontSize: "14px", // Change this value to your desired font size
+          },
+        }}
+        density="compact"
             // checkboxSelection
             rows={Array.isArray(depatrment) ? depatrment : []} // Ensure that company is an array
             columns={columns}

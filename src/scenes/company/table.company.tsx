@@ -251,6 +251,8 @@ const Contacts = () => {
               fontSize: "16px", // Change this value to your desired font size
             },
           }}
+          
+          density="compact"
             // checkboxSelection
             rows={Array.isArray(company) ? company : []} // Ensure that company is an array
             columns={columns}

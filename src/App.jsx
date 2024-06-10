@@ -53,13 +53,13 @@ import DashboardVendor from "./scenes/admin/vendoradmin/dashboard/dashboard";
 import ExecutiveHome from "./scenes/admin/executive/executive";
 import DashboardUser from "./scenes/admin/executive/executiveDashbord";
 import { Needtoact } from "./scenes/admin/executive/needtoact/needtoact";
-import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table"
-import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action"
-import ViewInvice from "./scenes/admin/vendoradmin/dashboard/view.invoice"
-import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard"
-import Clientadmintable from "./scenes/admin/cadminhome/cadmin.table"
-import {AdminInviceView} from "./scenes/admin/cadminhome/AdminInviceView"
-
+import NeedtoactTable from "./scenes/admin/executive/needtoact/needtoact.table";
+import NeedToactAction from "./scenes/admin/executive/needtoact/needtoact.action";
+import ViewInvice from "./scenes/admin/vendoradmin/dashboard/view.invoice";
+import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard";
+import Clientadmintable from "./scenes/admin/cadminhome/cadmin.table";
+import { AdminInviceView } from "./scenes/admin/cadminhome/AdminInviceView";
+import { ViewExSla } from "./scenes/admin/cadminhome/ViewExSla";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -108,6 +108,9 @@ function App() {
           <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<ClientAdminashboard />} />
 
+            <Route path="viewexsla/:id?" element={<ViewExSla />}>
+              <Route path="" element={<ViewInvice />} />
+            </Route>
 
             <Route path="invoice/:typeaction?" element={<AdminInviceView />}>
               <Route path="" element={<Clientadmintable />} />

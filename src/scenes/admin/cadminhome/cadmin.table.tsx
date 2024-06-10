@@ -41,13 +41,13 @@ const Clientadmintable = () => {
   const { typeaction } = useParams<{ typeaction?: string }>();
 
   useEffect(() => {
-    if (typeaction === "Total Invoice") {
+    if (typeaction === "Total Invoices") {
       dispatch(getinvoicebycompanyid());
     } else if (typeaction === "Under Review") {
       dispatch(underreviewbycompanyid());
-    } else if(typeaction === "Rejected Invoice"){
+    } else if(typeaction === "Rejected Invoices"){
         dispatch(rejectedbycompanyid());
-    } else if(typeaction === "Paid Invoice"){
+    } else if(typeaction === "Paid Invoices"){
        dispatch(completedbycompanyid());
     }
   }, [dispatch, typeaction]);
@@ -66,11 +66,17 @@ const Clientadmintable = () => {
       field: "invoicedate",
       headerName: "Invoice date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.invoicedate && params.row.invoicedate.split("T")[0],
+    
+    
     },
     {
       field: "duedate",
       headerName: "Due Date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.duedate && params.row.duedate.split("T")[0],  
     },
 
     {
@@ -129,14 +135,13 @@ const Clientadmintable = () => {
       <Box m="20px">
         <Header title={typeaction} subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
-          <Button
-            onClick={() => {
-              navigate("addUser");
-            }}
+        <Button
+            onClick={() => navigate(-1)}
             color="secondary"
             variant="contained"
+            sx={{ textTransform: 'none' }}
           >
-            Create New User
+            Back to dashboard
           </Button>
         </Box>
         <Box
@@ -177,6 +182,8 @@ const Clientadmintable = () => {
                 fontSize: "14px", // Change this value to your desired font size
               },
             }}
+            
+              density="compact"
             // checkboxSelection
             rows={Array.isArray(invoiceData) ? invoiceData : []} // Ensure that company is an array
             columns={columns}

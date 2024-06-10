@@ -91,6 +91,12 @@ const Contacts = () => {
         }}
       >
         <DataGrid
+        sx={{
+          "& .MuiDataGrid-cell": {
+            fontSize: "14px", // Change this value to your desired font size
+          },
+        }}
+        density="compact"
           rows={mockDataContacts}
           columns={columns}
           components={{ Toolbar: GridToolbar }}

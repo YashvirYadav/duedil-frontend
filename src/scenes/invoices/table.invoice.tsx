@@ -196,6 +196,12 @@ const InvoiceTable = () => {
           ) : null}
 
           <DataGrid
+          sx={{
+            "& .MuiDataGrid-cell": {
+              fontSize: "14px", // Change this value to your desired font size
+            },
+          }}
+          density="compact"
             // checkboxSelection
             rows={Array.isArray(invoice) ? invoice : []} // Ensure that invoice is an array
             columns={columns}
