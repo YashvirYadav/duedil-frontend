@@ -27,6 +27,7 @@ import {
 } from "./cadminslice/cadminslice";
 import { invoice } from "./cadminslice/cadmin.selector";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { formatNumberIndian } from "../../../utils/utils";
 
 const Clientadmintable = () => {
   const theme = useTheme();
@@ -83,17 +84,23 @@ const Clientadmintable = () => {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.amount && formatNumberIndian(params.row.amount),
     },
     {
       field: "gstamount",
       headerName: "GST Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.gstamount && formatNumberIndian(params.row.gstamount),
     },
 
     {
       field: "totalamount",
       headerName: "Total Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.totalamount && formatNumberIndian(params.row.totalamount),
     },
     {
       field: "purchaseordernumber",

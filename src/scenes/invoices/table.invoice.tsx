@@ -21,6 +21,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { registerInvoice, getallInvoice, deleteInvoice } from "./invoiceSlice/invoice.slice";
+import { formatNumberIndian } from "../../utils/utils";
 
 const InvoiceTable = () => {
   const theme = useTheme();
@@ -55,17 +56,23 @@ const InvoiceTable = () => {
       field: "invoicedate",
       headerName: "Invoice date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.invoicedate && params.row.invoicedate.split("T")[0],
     },
     {
       field: "duedate",
       headerName: "Due Date",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.duedate && params.row.duedate.split("T")[0],
     },
 
     {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.amount && formatNumberIndian(params.row.amount),
     },
     {
       field: "gstamount",
@@ -104,7 +111,9 @@ const InvoiceTable = () => {
         const onClickDelete = () => {
           const id = params.id.toString();
 
-          dispatch(deleteInvoice(id));
+          dispatch(deleteInvoice(id)).then(()=>{
+            dispatch(getallInvoice());
+          });
 
           // handle delete operation here
         };
@@ -116,9 +125,7 @@ const InvoiceTable = () => {
 
         return (
           <div>
-            <IconButton color="primary" onClick={onClickEdit}>
-              <EditIcon />
-            </IconButton>
+            
             <IconButton color="secondary" onClick={onClickDelete}>
               <DeleteIcon />
             </IconButton>

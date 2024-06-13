@@ -21,6 +21,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../../../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { getNeedtoact } from "./needtoact.slice";
+import { formatNumberIndian } from "../../../../utils/utils";
 
 const NeedtoactTable = () => {
   const theme = useTheme();
@@ -70,17 +71,24 @@ const NeedtoactTable = () => {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.amount && formatNumberIndian(params.row.amount),
     },
     {
       field: "gstamount",
       headerName: "GST Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.gstamount && formatNumberIndian(params.row.gstamount),
+
     },
 
     {
       field: "totalamount",
       headerName: "Total Amount",
       flex: 1,
+      valueGetter: (params) =>
+        params.row.totalamount && formatNumberIndian(params.row.totalamount),
     },
     {
       field: "purchaseordernumber",

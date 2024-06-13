@@ -40,6 +40,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import LayersIcon from "@mui/icons-material/Layers";
 import { Iinvoicemovement } from "../../executive/needtoact/needtoact.type";
 import PersonIcon from '@mui/icons-material/Person';
+import { formatNumberIndian } from "../../../../utils/utils";
 
 const ViewInvice = () => {
   const theme = useTheme();
@@ -459,7 +460,7 @@ const ViewInvice = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {amount}
+                    {formatNumberIndian(amount)}
                   </Typography>
                 </Box>
               </Box>
@@ -487,7 +488,7 @@ const ViewInvice = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {gstamount}
+                    {formatNumberIndian(Number(gstamount))}
                   </Typography>
                 </Box>
               </Box>
@@ -523,7 +524,7 @@ const ViewInvice = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {totalamount}
+                    {formatNumberIndian(totalamount)}
                   </Typography>
                 </Box>
               </Box>

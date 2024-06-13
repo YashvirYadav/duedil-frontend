@@ -344,15 +344,15 @@ const ClientAdminashboard = () => {
                   cursor: "pointer",
                 }}
               >
-                
-                {/* ${invoice.totalamount}  */}
                 view
               </Box>
             </Box>
           ))}
         </Box>
       </Box>
+      <Box>
       <Outlet></Outlet>
+      </Box>
     </Box>
   );
 };

@@ -19,7 +19,6 @@ export const getratecard = (id: string) => createSelector(companyData, categoryD
 
   const comapny = companydata?.find((item) =>  item._id === id);
 
-  console.log("filter => ", comapny?.category);
 
   return comapny?.category || [];
 });

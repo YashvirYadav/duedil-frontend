@@ -27,13 +27,12 @@ export const registerInvoice = createAsyncThunk<IRegisterInvoiceResponce, FormDa
 export const getallInvoice = createAsyncThunk<IRegisterInvoiceResponce>(
     "invoice/getallInvoice",async(_, {rejectWithValue})=>{
         try {
-        const response = await service.getCall("invoice/getallInvoice");
+        const response = await service.getCall("invoice/getallInvoice/"+sessionStorage.getItem("userId")?.toString());
         return response.data;
         } catch (error) {
         return rejectWithValue(error);
         }
     }
-    
 );
 
 // deleteInvoice
@@ -41,7 +40,11 @@ export const getallInvoice = createAsyncThunk<IRegisterInvoiceResponce>(
 export const deleteInvoice = createAsyncThunk<IRegisterInvoiceResponce, string>(
     "invoice/deleteInvoice",async(id,{rejectWithValue})=>{
         try {
-        const response = await service.deleteCall(`invoice/deleteInvoice/${id}`);
+        const response = await service.postCall(`invoice/deleteInvoice`
+        ,{ 
+          invoiceId :id,
+          userid: sessionStorage.getItem("userId")?.toString() || ""
+        });
         return response.data;
         } catch (error) {
         return rejectWithValue(error);

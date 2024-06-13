@@ -68,17 +68,26 @@ const DashboardUser = () => {
       field: "amount",
       headerName: "Amount",
       flex: 1,
+      valueFormatter: (params) => {
+        return formatNumberIndian(params.value);
+      }
     },
     {
       field: "gstamount",
       headerName: "GST Amount",
       flex: 1,
+      valueFormatter: (params) => {
+        return formatNumberIndian(params.value);
+      }
     },
 
     {
       field: "totalamount",
       headerName: "Total Amount",
       flex: 1,
+      valueFormatter: (params) => {
+        return formatNumberIndian(params.value);
+      }
     },
     {
       field: "purchaseordernumber",

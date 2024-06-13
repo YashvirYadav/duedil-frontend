@@ -42,6 +42,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import { formatNumberIndian } from "../../../../utils/utils";
 
 // import Textarea from '@mui/joy/Textarea';
 
@@ -569,7 +570,7 @@ const NeedToactAction = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {amount}
+                    {formatNumberIndian(amount)}
                   </Typography>
                 </Box>
               </Box>
@@ -597,7 +598,7 @@ const NeedToactAction = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {gstamount}
+                    {formatNumberIndian(Number(gstamount))}
                   </Typography>
                 </Box>
               </Box>
@@ -633,7 +634,7 @@ const NeedToactAction = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {totalamount}
+                    {formatNumberIndian(totalamount)}
                   </Typography>
                 </Box>
               </Box>
@@ -643,11 +644,11 @@ const NeedToactAction = () => {
                 mt="20px"
                 gridColumn="span 3"
               >
-                <Box>
+                {/* <Box>
                   <DownloadIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
                   ></DownloadIcon>{" "}
-                </Box>
+                </Box> */}
                 <Box p="5px">
                   <Typography
                     variant="h5"
