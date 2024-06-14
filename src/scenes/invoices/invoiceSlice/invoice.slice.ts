@@ -1,5 +1,5 @@
 
-import { IInvoice, IRegisterInvoiceResponce } from "./invoice.type";
+import { IRegisterInvoiceResponce } from "./invoice.type";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { service } from "../../../services/ApiServices";
 
@@ -36,7 +36,6 @@ export const getallInvoice = createAsyncThunk<IRegisterInvoiceResponce>(
 );
 
 // deleteInvoice
-
 export const deleteInvoice = createAsyncThunk<IRegisterInvoiceResponce, string>(
     "invoice/deleteInvoice",async(id,{rejectWithValue})=>{
         try {
