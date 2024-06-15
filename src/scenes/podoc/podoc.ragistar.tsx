@@ -21,9 +21,14 @@ import { Loader } from "../../components/Lodar";
 import { Toast } from "../../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { useNavigate } from "react-router-dom";
-import { getvenderName, loading, message } from "./pocSlice/po.selector";
-import { getVendor } from "./pocSlice/po.slice";
+import { useNavigate, useParams } from "react-router-dom";
+import { getvenderName, loading, message, getPo } from "./pocSlice/po.selector";
+import {
+  getPobyid,
+  getVendor,
+  registerPo,
+  updatePo,
+} from "./pocSlice/po.slice";
 import { IVendor } from "./pocSlice/po.type";
 
 const PoRagistar = () => {
@@ -34,6 +39,23 @@ const PoRagistar = () => {
 
   const [vendor, setVendor] = useState<IVendor[]>([]);
   const [attachments, setattachments] = useState<File>();
+  const [vendorname, setVendorname] = useState<string>("");
+  const [ponumber, setPonumber] = useState<string>("");
+  const getPoData = useSelector(getPo);
+
+  const currentDate = new Date();
+  //done
+  const formattedDate = `${currentDate.getFullYear()}
+  -${String(currentDate.getMonth() + 1).padStart(2, "0")}-
+  ${String(currentDate.getDate()).padStart(2, "0")}`.replace(/\s+/g, "");
+
+  const [podate, setPodate] = useState<string>(formattedDate);
+
+  const [expireDate, setExpireDate] = useState<string>(formattedDate);
+  const [openAmount, setOpenAmount] = useState<number>(0);
+  const [poValue, setPoValue] = useState<string>("");
+  const [consumedAmount, setConsumedAmount] = useState<string>("");
+  const [poNature, setPoNature] = useState<string>("");
 
   const lodingState = useSelector(loading);
   const getMessage = useSelector(message);
@@ -53,11 +75,67 @@ const PoRagistar = () => {
     }
   }, [lodingState]);
 
+  const { id } = useParams<{ id?: string }>();
+
+  useEffect(() => {
+    if (id) {
+      // If an ID was passed, fetch the company data and set it in the state
+      dispatch(getPobyid(id));
+    } else {
+      // If no ID was passed, initialize the state with default values
+      // initializeState();
+    }
+  }, [id]);
+
   useEffect(() => {
     dispatch(getVendor());
   }, []);
 
-  const ragisterBankSubmit = () => {};
+  useEffect(() => {
+    if (id && getPoData) {
+      setVendorname(getPoData.venderid);
+      setPonumber(getPoData.ponumber);
+      setPodate(getPoData.podate);
+      setExpireDate(getPoData.poexpirydate);
+      setOpenAmount(getPoData.openamout);
+      setPoValue(getPoData.povalue);
+      setConsumedAmount(getPoData.consumeamout);
+      setPoNature(getPoData.ponature);
+      setStatus(getPoData.isactive);
+    }
+  }, [getPoData]);
+
+  const ragisterPoSubmit = () => {
+    console.log("venderid", vendorname);
+    console.log("ponumber", ponumber);
+    console.log("podate", podate);
+    console.log("poexpirydate", expireDate);
+    console.log("openamout", openAmount.toString());
+    console.log("povalue", poValue);
+    console.log("consumeamout", consumedAmount);
+    console.log("ponature", poNature);
+    console.log("attachments", attachments as Blob);
+    console.log("isactive", Status.toString());
+    //console.log("attachments", );
+
+    const formdata = new FormData();
+    formdata.append("venderid", vendorname);
+    formdata.append("ponumber", ponumber);
+    formdata.append("podate", podate);
+    formdata.append("poexpirydate", expireDate);
+    formdata.append("openamout", openAmount.toString());
+    formdata.append("povalue", poValue);
+    formdata.append("consumeamout", consumedAmount);
+    formdata.append("ponature", poNature);
+    formdata.append("attachments", attachments as Blob);
+    formdata.append("isactive", Status.toString());
+    formdata.append("companyId", sessionStorage.getItem("companyId") as string);
+    if (id) {
+      dispatch(updatePo({ formdata, id }));
+    } else {
+      dispatch(registerPo(formdata));
+    }
+  };
 
   const MenuItemVender = vendor.map((item, index) => {
     console.log("item", item);
@@ -119,7 +197,9 @@ const PoRagistar = () => {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Country"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setVendorname(e.target.value as string);
+              }}
             >
               {MenuItemVender}
             </Select>
@@ -130,6 +210,10 @@ const PoRagistar = () => {
               type="text"
               label="PO Number"
               name="Ponumber"
+              value={ponumber}
+              onChange={(e) => {
+                setPonumber(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
@@ -137,12 +221,20 @@ const PoRagistar = () => {
               label="Po Date"
               type="date"
               variant="outlined"
+              value={podate}
+              onChange={(e) => {
+                setPodate(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
               id="expireDate"
               label="expire Date"
               type="date"
+              value={expireDate}
+              onChange={(e) => {
+                setExpireDate(e.target.value);
+              }}
               variant="outlined"
               sx={{ gridColumn: "span 12" }}
             />
@@ -173,18 +265,26 @@ const PoRagistar = () => {
             <TextField
               fullWidth
               variant="outlined"
-              type="number"
-              label="Open Amount"
-              name="OpenAmount"
+              type="text"
+              label="PO Value"
+              name="PO Value"
+              value={poValue}
+              onChange={(e) => {
+                setPoValue(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
             <TextField
               fullWidth
               variant="outlined"
-              type="text"
-              label="PO Value"
-              name="PO Value"
+              type="number"
+              label="Open Amount"
+              name="OpenAmount"
+              value={openAmount}
+              onChange={(e) => {
+                setOpenAmount(parseInt(e.target.value));
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -194,15 +294,23 @@ const PoRagistar = () => {
               type="text"
               label="Consumed Amount"
               name="ConsumedAmount"
+              value={consumedAmount}
+              onChange={(e) => {
+                setConsumedAmount(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
             <TextField
               fullWidth
               variant="outlined"
-              type="number"
+              type="text"
               label="Po Nature"
               name="ponature"
+              value={poNature}
+              onChange={(e) => {
+                setPoNature(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -229,7 +337,7 @@ const PoRagistar = () => {
           <Button
             variant="contained"
             onClick={() => {
-              ragisterBankSubmit();
+              ragisterPoSubmit();
             }}
           >
             Save

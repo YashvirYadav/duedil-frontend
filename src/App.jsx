@@ -62,6 +62,7 @@ import { AdminInviceView } from "./scenes/admin/cadminhome/AdminInviceView";
 import { ViewExSla } from "./scenes/admin/cadminhome/ViewExSla";
 import {Podoc} from "./scenes/podoc/Podoc"
 import PoRagistar from "./scenes/podoc/podoc.ragistar"
+import TablePO from "./scenes/podoc/podoc.table"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -120,7 +121,8 @@ function App() {
             </Route>
 
             <Route path="podoce" element={<Podoc />} >
-              <Route path="" element={< PoRagistar/>} />
+              <Route path="" element={<TablePO/>} />
+              <Route path="addpo/:id?" element={< PoRagistar/>} />
             </Route>
 
             <Route path="user" element={<UserContener />}>
