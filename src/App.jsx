@@ -60,6 +60,8 @@ import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard";
 import Clientadmintable from "./scenes/admin/cadminhome/cadmin.table";
 import { AdminInviceView } from "./scenes/admin/cadminhome/AdminInviceView";
 import { ViewExSla } from "./scenes/admin/cadminhome/ViewExSla";
+import {Podoc} from "./scenes/podoc/Podoc"
+import PoRagistar from "./scenes/podoc/podoc.ragistar"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -115,6 +117,10 @@ function App() {
             <Route path="invoice/:typeaction?" element={<AdminInviceView />}>
               <Route path="" element={<Clientadmintable />} />
               <Route path="viewinvoice/:id?" element={<ViewInvice />} />
+            </Route>
+
+            <Route path="podoce" element={<Podoc />} >
+              <Route path="" element={< PoRagistar/>} />
             </Route>
 
             <Route path="user" element={<UserContener />}>

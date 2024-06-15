@@ -13,6 +13,7 @@ import  workflowSlice  from '../scenes/worlflow/workfowslice/workflowslice';
 import venderdashbord from '../scenes/admin/vendoradmin/dashboard/dashboardslice';
 import needtoactSlice from '../scenes/admin/executive/needtoact/needtoact.slice';
 import cadminslice from '../scenes/admin/cadminhome/cadminslice/cadminslice';
+import poSlice from '../scenes/podoc/pocSlice/po.slice';
 
 export const store = configureStore({
   reducer: {
@@ -29,7 +30,8 @@ export const store = configureStore({
     workflow: workflowSlice,
     vendorDashboardSlice:venderdashbord,
     needtoact : needtoactSlice,
-    clientadmin:cadminslice
+    clientadmin:cadminslice,
+    poslice: poSlice,
   },
 });
 
