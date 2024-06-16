@@ -22,7 +22,7 @@ const ExecutiveHome = () => {
     <div>
       <div className="app">
         <Sidebar />
-        <main className="content">
+        <main className="content" >
           <Topbar />
 
           <Outlet />

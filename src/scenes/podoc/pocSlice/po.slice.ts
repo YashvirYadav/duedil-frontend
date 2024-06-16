@@ -2,7 +2,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IPOResponce } from "./po.type";
 import { service } from "../../../services/ApiServices";
 
-
 const initialState: IPOResponce = {
     statusCode: 0,
     status: "idle",
