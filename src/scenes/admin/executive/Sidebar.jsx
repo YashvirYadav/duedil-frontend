@@ -74,7 +74,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  {sessionStorage.getItem("role")}
+                  {/* {sessionStorage.getItem("role")} */}
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -104,7 +104,7 @@ const Sidebar = () => {
                   {sessionStorage.getItem("name")}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {sessionStorage.getItem("role")}
                 </Typography>
               </Box>
             </Box>
