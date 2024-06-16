@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
-import { getWorkflow } from "./workfowslice/workflowslice";
+import { deleteWorkflow, getWorkflow } from "./workfowslice/workflowslice";
 
 const TableWorflow = () => {
   const theme = useTheme();
@@ -91,35 +91,24 @@ const TableWorflow = () => {
       // from the object literal
       // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
       renderCell: (params: GridRenderCellParams) => {
-        const onClickEdit = () => {
-          const id = params.id;
-          // handle edit operation here
-          console.log("id => ", id);
-
-        };
+       
 
         const onClickDelete = () => {
           const id = params.id.toString();
-          
+          dispatch(deleteWorkflow(id)).then(() => 
+            dispatch(getWorkflow(sessionStorage.getItem("companyId") ?? "")));
 
         };
 
-        const onClickView = () => {
-          // const id = params.id;
-          // handle view operation here
-        };
+      
 
         return (
           <div>
-            <IconButton color="primary" onClick={onClickEdit}>
-              <EditIcon />
-            </IconButton>
+           
             <IconButton color="secondary" onClick={onClickDelete}>
               <DeleteIcon />
             </IconButton>
-            <IconButton onClick={onClickView}>
-              <VisibilityIcon />
-            </IconButton>
+           
           </div>
         );
       },

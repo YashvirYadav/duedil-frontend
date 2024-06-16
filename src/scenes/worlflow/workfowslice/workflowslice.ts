@@ -40,6 +40,19 @@ export const getWorkflow = createAsyncThunk<IRegisterWorkflowResponce, string>(
 
 );
 
+// delete workflow
+export const deleteWorkflow = createAsyncThunk<IRegisterWorkflowResponce, string>(
+    "workflow/deleteWorkflow",
+    async (id: string, { rejectWithValue }) => {
+    try {
+        const responce = await service.deleteCall(`workflow/deleteworkflow/${id}`);
+        return responce.data;
+    } catch (error) {
+        return rejectWithValue(error);
+    }
+    }
+);
+
 export const workflowSlice = createSlice({
     name: "workflow",
     initialState,
@@ -76,6 +89,19 @@ export const workflowSlice = createSlice({
             state.success = action.payload.success;
         })
         .addCase(getWorkflow.rejected, (state, action: PayloadAction<any>) => {
+            state.status = "failed";
+            state.error = action.payload as string;
+        })
+        .addCase(deleteWorkflow.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(deleteWorkflow.fulfilled, (state, action: PayloadAction<IRegisterWorkflowResponce>) => {
+            state.status = "succeeded";
+            state.data = action.payload.data;
+            state.message = action.payload.message;
+            state.success = action.payload.success;
+        })
+        .addCase(deleteWorkflow.rejected, (state, action: PayloadAction<any>) => {
             state.status = "failed";
             state.error = action.payload as string;
         });

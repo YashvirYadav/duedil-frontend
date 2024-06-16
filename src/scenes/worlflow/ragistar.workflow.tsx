@@ -35,14 +35,14 @@ const WorkflowRagistar = () => {
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [roleType, setRoleType] = useState<string>("");
-  const [roleName, setRoleName] = useState<string>("");
   const [minimumAmount, setMinimumAmount] = useState<string>("");
   const [maximumAmount, setMaximumAmount] = useState<string>("");
   const [TAT, setTAT] = useState<string>("");
+  const [departmentName, setDepartmentName] = useState<string>("");
 
   const [rolearray, setRoleArray] = useState<IRole[]>([]);
   const [roleSelect, setRoleSelect] = useState<IRole>();
+
   const [depatrmentarray, setDepartmentArray] = useState<IDepartment[]>([]);
   const lodingState = useSelector(loading);
   const getMessage = useSelector(message);
@@ -52,7 +52,7 @@ const WorkflowRagistar = () => {
   const [sequence , setSequence] = useState<number>(0)
   const depatrment = useSelector(depatmentData);
 
-  console.log("roleType=>",   roleType);
+ 
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -89,7 +89,7 @@ const WorkflowRagistar = () => {
         registerWorkflow({
           rolename: roleSelect.rolename,
           roletype: roleSelect.roletype,
-          departmentname: roleType,
+          departmentname: departmentName,
           minamount: minimumAmount,
           maxamount: maximumAmount,
           tat: TAT,
@@ -187,9 +187,9 @@ const WorkflowRagistar = () => {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
               label="Role"
-              value={roleType}
+              value={departmentName}
               onChange={(e) => {
-                setRoleType(e.target.value);
+                setDepartmentName(e.target.value);
               }}
             >
               <MenuItem value="Normal">All department</MenuItem>
