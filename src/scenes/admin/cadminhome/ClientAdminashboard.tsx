@@ -11,8 +11,6 @@ import LineChart from "../../../components/LineChart";
 import StatBox from "../../../components/StatBox";
 import { Outlet } from "react-router-dom";
 import {
-  dashboard,
-  dashboarddataSLA,
   chartdata,
   selectorsearchDashboardBydate,
 } from "./cadminslice/cadmin.selector";
@@ -26,9 +24,6 @@ import dayjs,{ Dayjs } from "dayjs";
 
 
 import {
-  getdashboardforclientadmin,
-  getslaexpiry,
-  charRoleWice,
   getdashboardreportbydate,
 } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -182,6 +177,40 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
             }
           />
         </Box>
+
+        <Box
+          onClick={actiontotalInvoice}
+          gridColumn="span 3"
+          bgcolor={
+            action === "totalInvoice"
+              ? colors.primary[800]
+              : colors.primary[400]
+          }
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            transition: "background-color 0.3s ease",
+            "&:hover": {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+            cursor: "pointer",
+          }}
+        >
+          <StatBox
+            title={formatNumberIndian(totalAmount)}
+            subtitle="New Invoices"
+            progress="0.70"
+            increase={totalInvoicecount}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+
+
         <Box
           onClick={actionunderReview}
           gridColumn="span 3"

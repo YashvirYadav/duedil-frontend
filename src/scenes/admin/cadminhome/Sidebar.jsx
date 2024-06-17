@@ -104,7 +104,7 @@ const Sidebar = () => {
                   {sessionStorage.getItem("name")}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                 {sessionStorage.getItem("role")}
+                  {sessionStorage.getItem("role")}
                 </Typography>
               </Box>
             </Box>
@@ -180,15 +180,39 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
+              Reports
+            </Typography>
+
+            <Item
+              title="Pending invoice"
+              to="pendinginvoice"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Aging reports"
+              to="agingreports"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
               Pages
             </Typography>
-            <Item
+            {/* <Item
               title="Profile Form"
               to="form"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Item
               title="Change Password"

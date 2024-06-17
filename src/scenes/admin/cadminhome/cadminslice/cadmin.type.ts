@@ -9,6 +9,8 @@ export interface IClientAdminResponce {
   chartdata: Ichartdata[];
   sla: IInvoice[];
   searchDashboardBydate: Iserchdashboard ;
+  Pendinginvoice: IPendinginvoice[];
+  AagingReports: IagingReports[];
 }
 
 export interface IInvoice {
@@ -72,3 +74,30 @@ export interface ILineData {
   id: string;
   color: string;
 }
+
+
+export interface IPendinginvoice{
+  vendorname: string;
+  VHD: number;
+  Approver: number;
+  GRN: number;
+  Reviewer: number;
+  Finance: number;
+  API: number;
+  Paid: number;
+  total: number;
+} 
+// "vendorname": "oswal clothing supplier",
+// "invoices0to30": 1,
+// "invoices31to60": 0,
+// "invoices61to90": 0,
+// "invoices91to120": 0,
+// "invoices121next": 0
+export interface IagingReports{
+  vendorname: string;
+  invoices0to30: number;
+  invoices31to60: number;
+  invoices61to90: number;
+  invoices91to120: number;
+  invoices121next: number;
+} 

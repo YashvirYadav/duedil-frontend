@@ -63,6 +63,8 @@ import { ViewExSla } from "./scenes/admin/cadminhome/ViewExSla";
 import {Podoc} from "./scenes/podoc/Podoc"
 import PoRagistar from "./scenes/podoc/podoc.ragistar"
 import TablePO from "./scenes/podoc/podoc.table"
+import Pendinginvoice from "./scenes/admin/cadminhome/reports/pendinginvoice"
+import AgingReports from "./scenes/admin/cadminhome/reports/agingreport"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -88,6 +90,7 @@ function App() {
             <Route path="geography" element={<Geography />} />
             <Route path="changepassword" element={<ChangePassword />} />
 
+
             <Route path="company" element={<Company />}>
               <Route path="" element={<TableCompany />} />
               <Route path="addcmapany/:id?" element={<RegisterCompany />} />
@@ -110,6 +113,10 @@ function App() {
 
           <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<ClientAdminashboard />} />
+            <Route path="pendinginvoice" element={<Pendinginvoice/>}/>
+            <Route path="agingreports" element={<AgingReports/>}/>
+
+            
 
             <Route path="viewexsla/:id?" element={<ViewExSla />}>
               <Route path="" element={<ViewInvice />} />

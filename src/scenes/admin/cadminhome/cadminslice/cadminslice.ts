@@ -32,6 +32,8 @@ const initialState: IClientAdminResponce = {
     paidAmount: 0,
     lineData: [],
   },
+  Pendinginvoice: [],
+  AagingReports: []
 };
 
 export const charRoleWice = createAsyncThunk<IClientAdminResponce>(
@@ -168,6 +170,44 @@ export const getdashboardreportbydate = createAsyncThunk<
   }
 });
 
+export const pendinginvoicesatusreport = createAsyncThunk<
+  IClientAdminResponce,
+  { startDate: Date; endDate: Date }
+>(
+  "clientadmin/pendinginvoicesatusreport",
+  async (data, { rejectWithValue }) => {
+    try {
+      const responce = await service.postCall(
+        "report/pendinginvoicesatusreport",
+        {
+          companyId: sessionStorage.getItem("companyId"),
+          startDateParam: data.startDate,
+          endDateParam: data.endDate,
+        }
+      );
+      return responce.data;
+    } catch (error) {
+      const err = error as IClientAdminResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
+
+export const agingReports = createAsyncThunk<IClientAdminResponce>(
+  "clientadmin/aginginvoicesatusreport",
+  async (_, { rejectWithValue }) => {
+    try {
+      const responce = await service.getCall(
+        "report/aginginvoicesatusreport/" + sessionStorage.getItem("companyId")
+      );
+      return responce.data;
+    } catch (error) {
+      const err = error as IClientAdminResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
+
 export const cadminSlice = createSlice({
   name: "clientadmin",
   initialState,
@@ -280,6 +320,32 @@ export const cadminSlice = createSlice({
         state.searchDashboardBydate = action.payload.data as any;
       })
       .addCase(getdashboardreportbydate.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(pendinginvoicesatusreport.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(pendinginvoicesatusreport.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.Pendinginvoice = action.payload.data as any;
+      })
+      .addCase(pendinginvoicesatusreport.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(agingReports.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(agingReports.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.AagingReports = action.payload.data as any;
+      })
+      .addCase(agingReports.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

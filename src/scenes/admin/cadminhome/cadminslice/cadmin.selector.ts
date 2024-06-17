@@ -14,6 +14,16 @@ export const invoice = createSelector(clientadmin, (state) => {
 }
 );
 
+export const selectorAagingReports = createSelector(clientadmin, (state) => { 
+  return state.AagingReports;
+} 
+);
+
+export const selectorPendinginvoicesatusreport = createSelector(clientadmin, (state) => {
+  return state.Pendinginvoice;
+}
+);
+
 export const selectorsearchDashboardBydate = createSelector(clientadmin, (state) => {
 
   console.log("selectorsearchDashboardBydate", state.searchDashboardBydate);
