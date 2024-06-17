@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../../../app/store";
+import { Iserchdashboard } from "./cadmin.type";
 
 
 export const clientadmin = (state: RootState) => state.clientadmin;
@@ -12,6 +13,13 @@ export const invoice = createSelector(clientadmin, (state) => {
   return state.data;
 }
 );
+
+export const selectorsearchDashboardBydate = createSelector(clientadmin, (state) => {
+
+  console.log("selectorsearchDashboardBydate", state.searchDashboardBydate);
+
+  return state.searchDashboardBydate;
+});
 
 export const dashboarddataSLA = createSelector(clientadmin, (state) => {
     return state.sla;

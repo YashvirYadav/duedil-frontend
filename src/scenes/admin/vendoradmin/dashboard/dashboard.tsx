@@ -27,7 +27,7 @@ import {
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getCompletedInvoice, getMyInvoice, getMyInvoiceNew, getMyWipInvoice, getVenderDashboard } from "./dashboardslice";
+import { getCompletedInvoice, getMyInvoice, getMyInvoiceNew, getMyPaidInvoice, getMyWipInvoice, getVenderDashboard } from "./dashboardslice";
 import {
   DataGrid,
   GridToolbar,
@@ -52,6 +52,8 @@ const DashboardVendor = () => {
   const [selectedNewInvoice, setselectedNewInvoice] = useState<boolean>(false);
   const [selectedUnderApproval, setselectedUnderApproval] = useState<boolean>(false); 
   const [selectedPaidInvoice, setselectedPaidInvoice] = useState<boolean>(false);
+
+  console.log("invoice", invoice);
 
 
   useEffect(() => {
@@ -157,6 +159,7 @@ const DashboardVendor = () => {
   }
 
   const actionPaidInvoice=()=>{
+
     dispatch(getCompletedInvoice());
     setselectedPaidInvoice(true);
     // other false

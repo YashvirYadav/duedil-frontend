@@ -238,6 +238,22 @@ export const vendorDashboardSlice = createSlice({
       .addCase(getMyWipInvoice.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload.error;
+      })
+      .addCase(getCompletedInvoice.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getCompletedInvoice.fulfilled, (state, action: PayloadAction<any>) => {
+        state.status = "succeeded";
+
+        console.log("action.payload.data", action.payload.data);
+
+        state.invoice = action.payload.data;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+      })
+      .addCase(getCompletedInvoice.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
+        state.error = action.payload.error;
       });
   },
 });

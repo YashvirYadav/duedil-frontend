@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { tokens } from "../../../theme";
-import { mockTransactions } from "../../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../../components/Header";
 import LineChart from "../../../components/LineChart";
-import GeographyChart from "../../../components/GeographyChart";
-import BarChart from "../../../components/BarChart";
 import StatBox from "../../../components/StatBox";
-import ProgressCircle from "../../../components/ProgressCircle";
 import { Outlet } from "react-router-dom";
-import { dashboard, dashboarddataSLA, chartdata } from "./cadminslice/cadmin.selector";
+import {
+  dashboard,
+  dashboarddataSLA,
+  chartdata,
+  selectorsearchDashboardBydate,
+} from "./cadminslice/cadmin.selector";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import { useNavigate } from "react-router-dom";
 import { formatNumberIndian } from "../../../utils/utils";
+import SearchIcon from "@mui/icons-material/Search";
+import BasicDatePicker  from '../../../components/BasicDatePicker';
+import dayjs,{ Dayjs } from "dayjs";
+
 
 import {
   getdashboardforclientadmin,
   getslaexpiry,
   charRoleWice,
+  getdashboardreportbydate,
 } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
@@ -32,22 +38,29 @@ const ClientAdminashboard = () => {
   const colors = tokens(theme.palette.mode);
   const [action, setAction] = useState<string>("");
 
-  const dashboardData = useSelector(dashboard);
+  const dashboardData = useSelector(selectorsearchDashboardBydate);
   const navigate = useNavigate();
 
-  const slaexpiry = useSelector(dashboarddataSLA);
+  //const slaexpiry = useSelector(dashboarddataSLA);
   const chartValue = useSelector(chartdata);
   const dispatch = useDispatch<AppDispatch>();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const currentDate = dayjs().toDate();
+  const tenDaysAgo = dayjs().subtract(10, 'day').toDate();
+
+  console.log(currentDate.toString()); // Current date
+  console.log(tenDaysAgo.toString()); // Date 10 days ago
 
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
-    
+
     navigate(`invoice/Total Invoices`);
   };
   const actionunderReview = () => {
     setAction("underReview");
     navigate(`invoice/Under Review`);
-
   };
   const actionRejected = () => {
     setAction("rejected");
@@ -67,27 +80,45 @@ const ClientAdminashboard = () => {
     rejectedAmount,
     paidInvoicecount,
     paidAmount,
+    lineData
   } = dashboardData;
 
   useEffect(() => {
-    dispatch(getdashboardforclientadmin());
+   // dispatch(getdashboardforclientadmin());
+   dispatch(getdashboardreportbydate({startDate:tenDaysAgo, endDate:currentDate}));
   }, [dispatch]);
   useEffect(() => {
-    dispatch(getslaexpiry());
+   // dispatch(getslaexpiry());
   }, [dispatch]);
   useEffect(() => {
-    dispatch(charRoleWice());
+  //  dispatch(charRoleWice());
   }, [dispatch]);
 
   const dataChart = {
     id: "Progress",
     color: tokens("dark").greenAccent[500],
-    data: chartValue
-  }
+    data: chartValue,
+  };
 
   console.log("chartValue=>", chartValue);
 
-  
+  const searchDeshboard = () => {
+dispatch(getdashboardreportbydate({startDate, endDate}));
+  };
+
+  const satrtDateChange = (date: Dayjs | null) => {
+    if (date) {
+      console.log("satrt date=>", date.date());
+      setStartDate(date.toDate());
+    }
+  }
+
+  const endDateChange = (date: Dayjs | null) => {
+    if (date) {
+      console.log("end date=>", date.toDate().toString());
+      setEndDate(date.toDate());
+    }
+  }
 
   return (
     <Box m="20px">
@@ -95,19 +126,21 @@ const ClientAdminashboard = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="Dashboard" subtitle="Welcome to your dashboard" />
 
-        <Box>
-          {/* <Button
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              color: colors.grey[100],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
+        <Box display="flex" justifyContent="space-between" alignItems="center" gap={2}>
+
+        <BasicDatePicker onDateChange={satrtDateChange} dateLabel="Start date" />
+        <BasicDatePicker onDateChange={endDateChange} dateLabel="End date" />
+          
+          <Button
+            color="secondary"
+            startIcon={<SearchIcon />}
+            variant="contained"
+            autoFocus
+            sx={{ textTransform: "none", width: "200px", height: "50px", marginTop: "3px"}}
+            onClick={searchDeshboard}
           >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
-          </Button> */}
+            Search
+          </Button>
         </Box>
       </Box>
       {/* GRID & CHARTS */}
@@ -226,7 +259,7 @@ const ClientAdminashboard = () => {
         >
           <StatBox
             title={formatNumberIndian(paidAmount)}
-            subtitle="Completed Invoices"
+            subtitle="Paid Invoices"
             progress="0.80"
             increase={paidInvoicecount}
             icon={
@@ -238,7 +271,7 @@ const ClientAdminashboard = () => {
         </Box>
 
         {/* ROW 2 */}
-        <Box gridColumn="span 6" gridRow="span 2" bgcolor={colors.primary[400]}>
+        <Box gridColumn="span 12" gridRow="span 2" bgcolor={colors.primary[400]}>
           <Box
             mt="25px"
             p="0 30px"
@@ -252,7 +285,7 @@ const ClientAdminashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-              Pending invoices with roles
+                Pending invoices with roles
               </Typography>
               <Typography
                 variant="h3"
@@ -270,12 +303,13 @@ const ClientAdminashboard = () => {
               </IconButton> */}
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            
-           { chartValue && <LineChart isDashboard={true} dataValue={[dataChart]} />}
+          <Box padding={2} height="250px" m="0 0 0 0">
+            {chartValue && (
+              <LineChart isDashboard={true} dataValue={lineData} />
+            )}
           </Box>
         </Box>
-        <Box
+        {/* <Box
           gridColumn="span 6"
           gridRow="span 2"
           bgcolor={colors.primary[400]}
@@ -310,23 +344,28 @@ const ClientAdminashboard = () => {
                   {invoice.vendorname}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                <em>Pending with:</em>   {invoice.invoicemovement &&
+                  <em>Pending with:</em>{" "}
+                  {invoice.invoicemovement &&
                     invoice.invoicemovement.length > 0 &&
                     invoice.invoicemovement[invoice.invoicemovement.length - 1]
                       .username}
                 </Typography>
               </Box>
               <Box color={colors.grey[100]}>
-              <Typography  fontWeight="600" color={colors.greenAccent[500]}>
-              <em>TAT:</em>  {invoice.invoicemovement &&
+                <Typography fontWeight="600" color={colors.greenAccent[500]}>
+                  <em>TAT:</em>{" "}
+                  {invoice.invoicemovement &&
                     invoice.invoicemovement.length > 0 &&
                     invoice.invoicemovement[invoice.invoicemovement.length - 1]
                       .tat}
                 </Typography>
-                <em>Pending since:</em> {invoice.invoicemovement &&
+                <em>Pending since:</em>{" "}
+                {invoice.invoicemovement &&
                   invoice.invoicemovement.length > 0 &&
-                  invoice.invoicemovement[invoice.invoicemovement.length - 1]
-                    .indate.toString()
+                  invoice.invoicemovement[
+                    invoice.invoicemovement.length - 1
+                  ].indate
+                    .toString()
                     .split("T")[0]}
               </Box>
               <Box
@@ -348,15 +387,13 @@ const ClientAdminashboard = () => {
               </Box>
             </Box>
           ))}
-        </Box>
+        </Box> */}
       </Box>
       <Box>
-      <Outlet></Outlet>
+        <Outlet></Outlet>
       </Box>
     </Box>
   );
 };
-
-
 
 export default ClientAdminashboard;
