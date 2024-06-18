@@ -234,6 +234,27 @@ export const getinvoicebyvenderRole = createAsyncThunk<
   }
 });
 
+export const singleageinvoiceReport = createAsyncThunk<
+  IClientAdminResponce,
+  {vendorId:string,age:string}
+>("clientadmin/singleageinvoiceReport", async (data, { rejectWithValue }) => {
+  try {
+    const responce = await service.postCall(
+      "report/singleageinvoiceReport",
+
+      {
+        companyId: sessionStorage.getItem("companyId"),
+        vender: data.vendorId,
+        age: data.age,
+      }
+    );
+    return responce.data;
+  } catch (error) {
+    const err = error as IClientAdminResponce;
+    return rejectWithValue(err);
+  }
+});
+
 export const cadminSlice = createSlice({
   name: "clientadmin",
   initialState,
@@ -385,6 +406,19 @@ export const cadminSlice = createSlice({
         state.data = action.payload.data;
       })
       .addCase(getinvoicebyvenderRole.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(singleageinvoiceReport.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(singleageinvoiceReport.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.data = action.payload.data;
+      })
+      .addCase(singleageinvoiceReport.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

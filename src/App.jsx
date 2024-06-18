@@ -64,10 +64,12 @@ import { Podoc } from "./scenes/podoc/Podoc";
 import PoRagistar from "./scenes/podoc/podoc.ragistar";
 import TablePO from "./scenes/podoc/podoc.table";
 import Pendinginvoice from "./scenes/admin/cadminhome/reports/pendinginvoice/pendinginvoice";
-import AgingReports from "./scenes/admin/cadminhome/reports/agingreport";
+import AgingReports from "./scenes/admin/cadminhome/reports/agingreport/agingreport";
 import { PendingInvoiceReport } from "./scenes/admin/cadminhome/reports/pendinginvoice/PendingInvoiceReport";
 import { ViewList } from "./scenes/admin/cadminhome/reports/ViewList";
 import ViewListByRole from "./scenes/admin/cadminhome/reports/pendinginvoice/ViewListByRole";
+import AgingreportviewByAge from "./scenes/admin/cadminhome/reports/agingreport/agingreportview";
+
 function App() {
   const [theme, colorMode] = useMode();
 
@@ -117,14 +119,20 @@ function App() {
 
             {/* <Route path="pendinginvoice" element={<Pendinginvoice/>}/> */}
 
-            <Route path="agingreports" element={<AgingReports />} />
+            <Route path="agingreports" element={<PendingInvoiceReport />}>
+              <Route path="" element={<AgingReports />} />
+              <Route path="viewlist" element={<ViewList />}>
+                <Route path="" element={<AgingreportviewByAge />} />
+                <Route path="viewinvoice/:id?" element={<ViewInvice />} />
+              </Route>
+            </Route>
 
             {/* new */}
             <Route path="pendinginvoice" element={<PendingInvoiceReport />}>
               <Route path="" element={<Pendinginvoice />} />
               <Route path="viewlist" element={<ViewList />}>
                 <Route path="" element={<ViewListByRole />} />
-                <Route path="viewinvoice/:id?" element={<ViewInvice />} /> 
+                <Route path="viewinvoice/:id?" element={<ViewInvice />} />
               </Route>
             </Route>
 

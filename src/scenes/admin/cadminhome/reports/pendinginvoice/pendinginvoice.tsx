@@ -20,7 +20,7 @@ import { pendinginvoicesatusreport } from "../../cadminslice/cadminslice";
 import { Toast } from "../../../../../components/Toast";
 import { Loader } from "../../../../../components/Lodar";
 import { calculatePercentage } from "../../../../../utils/utils";
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 import { stat } from "fs";
 import { role } from "../../../../role/roleSlice/role.selector";

@@ -1,14 +1,14 @@
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
   GridColDef,
 } from "@mui/x-data-grid";
-import { tokens } from "../../../../theme";
-
-import Header from "../../../../components/Header";
+import { tokens } from "../../../../../theme";
+import { useNavigate } from "react-router-dom";
+import Header from "../../../../../components/Header";
 import { useTheme } from "@mui/material";
-import { AppDispatch } from "../../../../app/store";
+import { AppDispatch } from "../../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
@@ -16,21 +16,20 @@ import {
   loading,
   message,
   selectorAagingReports
-} from "../cadminslice/cadmin.selector";
-import { agingReports, pendinginvoicesatusreport } from "../cadminslice/cadminslice";
-import { Toast } from "../../../../components/Toast";
-import { Loader } from "../../../../components/Lodar";
-import { calculatePercentage } from "../../../../utils/utils";
+} from "../../cadminslice/cadmin.selector";
+import { agingReports, pendinginvoicesatusreport } from "../../cadminslice/cadminslice";
+import { Toast } from "../../../../../components/Toast";
+import { Loader } from "../../../../../components/Lodar";
+import { calculatePercentage } from "../../../../../utils/utils";
 
 const AgingReports = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
   const currentDate = dayjs().toDate();
   const tenDaysAgo = dayjs().subtract(10, "day").toDate();
-
+  const navigate = useNavigate();
   console.log(currentDate.toString()); // Current date
   console.log(tenDaysAgo.toString());
   const toastmessage = useSelector(message);
@@ -52,23 +51,6 @@ const AgingReports = () => {
     );
   }, [dispatch]);
 
-  const searchDeshboard = () => {
-    dispatch(pendinginvoicesatusreport({ startDate, endDate }));
-  };
-
-  const satrtDateChange = (date: Dayjs | null) => {
-    if (date) {
-      console.log("satrt date=>", date.date());
-      setStartDate(date.toDate());
-    }
-  };
-
-  const endDateChange = (date: Dayjs | null) => {
-    if (date) {
-      console.log("end date=>", date.toDate().toString());
-      setEndDate(date.toDate());
-    }
-  };
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -80,6 +62,33 @@ const AgingReports = () => {
       flex: 1,
       valueGetter: (params) =>
         `${params.row.invoices0to30 || 0} - ${calculatePercentage(params.row.invoices0to30 || 0, params.row.total || 0)} %`,
+      renderCell: (params) => (
+        <Button
+          onClick={() => {
+            navigate("viewlist", {
+              state: {
+                id: params.id,
+                role: "0to30",
+              },
+            });
+          }}
+          style={{
+            paddingLeft: "0px",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "left",
+            justifyContent: "left",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Typography variant="body1" align="left">
+            {params.value}
+          </Typography>
+        </Button>
+      ),
     },
     {
       field: "invoices31to60",
@@ -87,6 +96,34 @@ const AgingReports = () => {
       flex: 1,
       valueGetter: (params) =>
         `${params.row.invoices31to60 || 0} - ${calculatePercentage(params.row.invoices31to60 || 0, params.row.total || 0)} %`,
+   
+      renderCell: (params) => (
+        <Button
+          onClick={() => {
+            navigate("viewlist", {
+              state: {
+                id: params.id,
+                role: "31to60",
+              },
+            });
+          }}
+          style={{
+            paddingLeft: "0px",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "left",
+            justifyContent: "left",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Typography variant="body1" align="left">
+            {params.value}
+          </Typography>
+        </Button>
+      ),
     },
 
     {
@@ -95,6 +132,34 @@ const AgingReports = () => {
       flex: 1,
       valueGetter: (params) =>
         `${params.row.invoices61to90 || 0} - ${calculatePercentage(params.row.invoices61to90 || 0, params.row.total || 0)} %`,
+   
+      renderCell: (params) => (
+        <Button
+          onClick={() => {
+            navigate("viewlist", {
+              state: {
+                id: params.id,
+                role: "61to90",
+              },
+            });
+          }}
+          style={{
+            paddingLeft: "0px",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "left",
+            justifyContent: "left",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Typography variant="body1" align="left">
+            {params.value}
+          </Typography>
+        </Button>
+      ),
     },
     {
       field: "invoices91to120",
@@ -102,6 +167,34 @@ const AgingReports = () => {
       flex: 1,
       valueGetter: (params) =>
         `${params.row.invoices91to120 || 0} - ${calculatePercentage(params.row.invoices91to120 || 0, params.row.total || 0)} %`,
+      renderCell: (params) => (
+        <Button
+          onClick={() => {
+            navigate("viewlist", {
+              state: {
+                id: params.id,
+                role: "91to120",
+              },
+            });
+          }}
+          style={{
+            paddingLeft: "0px",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "left",
+            justifyContent: "left",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Typography variant="body1" align="left">
+            {params.value}
+          </Typography>
+        </Button>
+      ),
+  
     },
 
     {
@@ -110,6 +203,34 @@ const AgingReports = () => {
       flex: 1,
       valueGetter: (params) =>
         `${params.row.invoices121next || 0} - ${calculatePercentage(params.row.invoices121next || 0, params.row.total || 0)} %`,
+      renderCell: (params) => (
+        <Button
+          onClick={() => {
+            navigate("viewlist", {
+              state: {
+                id: params.id,
+                role: "121next",
+              },
+            });
+          }}
+          style={{
+            paddingLeft: "0px",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "left",
+            justifyContent: "left",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Typography variant="body1" align="left">
+            {params.value}
+          </Typography>
+        </Button>
+      ),
+   
     },
   ];
 
