@@ -23,6 +23,7 @@ import {
 import { agingReports, pendinginvoicesatusreport } from "../cadminslice/cadminslice";
 import { Toast } from "../../../../components/Toast";
 import { Loader } from "../../../../components/Lodar";
+import { calculatePercentage } from "../../../../utils/utils";
 
 const AgingReports = () => {
   const theme = useTheme();
@@ -80,28 +81,38 @@ const AgingReports = () => {
       field: "invoices0to30",
       headerName: "0-30",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.invoices0to30 || 0} - ${calculatePercentage(params.row.invoices0to30 || 0, params.row.total || 0)} %`,
     },
     {
       field: "invoices31to60",
       headerName: "31-60",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.invoices31to60 || 0} - ${calculatePercentage(params.row.invoices31to60 || 0, params.row.total || 0)} %`,
     },
 
     {
       field: "invoices61to90",
       headerName: "61-90",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.invoices61to90 || 0} - ${calculatePercentage(params.row.invoices61to90 || 0, params.row.total || 0)} %`,
     },
     {
       field: "invoices91to120",
       headerName: "91-120",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.invoices91to120 || 0} - ${calculatePercentage(params.row.invoices91to120 || 0, params.row.total || 0)} %`,
     },
 
     {
       field: "invoices121next",
       headerName: "121+",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.invoices121next || 0} - ${calculatePercentage(params.row.invoices121next || 0, params.row.total || 0)} %`,
     },
   ];
 

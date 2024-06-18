@@ -19,6 +19,7 @@ import {
 import { pendinginvoicesatusreport } from "../cadminslice/cadminslice";
 import { Toast } from "../../../../components/Toast";
 import { Loader } from "../../../../components/Lodar";
+import { calculatePercentage } from "../../../../utils/utils";
 
 const Pendinginvoice = () => {
   const theme = useTheme();
@@ -82,38 +83,53 @@ const Pendinginvoice = () => {
       field: "VHD",
       headerName: "VHD",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.VHD || 0} - ${calculatePercentage(params.row.VHD || 0, params.row.total || 0)} %`,
     },
 
     {
       field: "Approver",
       headerName: "Approver",
       flex: 1,
+
+      valueGetter: (params) =>
+        `${params.row.Approver || 0} - ${calculatePercentage(params.row.Approver || 0, params.row.total || 0)} %`,
     },
     {
       field: "GRN",
       headerName: "GRN",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.GRN || 0} - ${calculatePercentage(params.row.GRN || 0, params.row.total || 0)} %`,
     },
 
     {
       field: "Reviewer",
       headerName: "Reviewer",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Reviewer || 0} - ${calculatePercentage(params.row.Reviewer || 0, params.row.total || 0)} %`,
     },
     {
       field: "Finance",
       headerName: "Finance",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Finance || 0} - ${calculatePercentage(params.row.Finance || 0, params.row.total || 0)} %`,
     },
     {
       field: "API",
       headerName: "API",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.API || 0} - ${calculatePercentage(params.row.API || 0, params.row.total || 0)} %`,
     },
     {
       field: "Paid",
       headerName: "Paid",
       flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Paid || 0} - ${calculatePercentage(params.row.Paid || 0, params.row.total || 0)} %`,
     },
   ];
 

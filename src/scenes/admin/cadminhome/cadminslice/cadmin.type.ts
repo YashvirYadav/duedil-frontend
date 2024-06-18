@@ -87,12 +87,7 @@ export interface IPendinginvoice{
   Paid: number;
   total: number;
 } 
-// "vendorname": "oswal clothing supplier",
-// "invoices0to30": 1,
-// "invoices31to60": 0,
-// "invoices61to90": 0,
-// "invoices91to120": 0,
-// "invoices121next": 0
+
 export interface IagingReports{
   vendorname: string;
   invoices0to30: number;
@@ -100,4 +95,5 @@ export interface IagingReports{
   invoices61to90: number;
   invoices91to120: number;
   invoices121next: number;
+  total: number;
 } 
