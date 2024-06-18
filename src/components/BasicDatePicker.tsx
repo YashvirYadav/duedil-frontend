@@ -8,11 +8,18 @@ import { Dayjs } from "dayjs";
 type BasicDatePickerProps = {
   dateLabel: string;
   onDateChange: (date: Dayjs | null) => void;
+  defaultValue?: Dayjs;
 };
 
 export default function BasicDatePicker(props: BasicDatePickerProps) {
   const { dateLabel,onDateChange } = props;
   const [value, setValue] = React.useState<Dayjs | null>();
+
+  React.useEffect(() => {
+    if (props.defaultValue) {
+      setValue(props.defaultValue);
+    }
+  }, []);
 
   const handleDateChange = (newValue: Dayjs | null) => {
     setValue(newValue);

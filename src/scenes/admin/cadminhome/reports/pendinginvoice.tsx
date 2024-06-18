@@ -25,11 +25,15 @@ const Pendinginvoice = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
+  const currentDateJS = dayjs()
+  const tenDaysAgoJS = dayjs().subtract(10, "day");
 
   const currentDate = dayjs().toDate();
   const tenDaysAgo = dayjs().subtract(10, "day").toDate();
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   console.log(currentDate.toString()); // Current date
   console.log(tenDaysAgo.toString());
@@ -151,10 +155,12 @@ const Pendinginvoice = () => {
             <BasicDatePicker
               onDateChange={satrtDateChange}
               dateLabel="Start date"
+              defaultValue={tenDaysAgoJS}
             />
             <BasicDatePicker
               onDateChange={endDateChange}
               dateLabel="End date"
+                defaultValue={currentDateJS}
             />
 
             <Button
