@@ -57,6 +57,12 @@ const AgingReports = () => {
     { field: "vendorname", headerName: "Vendor name",   flex: 2},
 
     {
+      field: "total",
+      headerName: "Total",
+      flex: 1,
+      valueGetter: (params) => `${params.row.total || 0}`,
+    },
+    {
       field: "invoices0to30",
       headerName: "0-30",
       flex: 1,

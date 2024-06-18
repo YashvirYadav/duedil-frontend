@@ -1,4 +1,4 @@
-import { Box, Button, Switch, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
@@ -23,8 +23,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { formatNumberIndian } from "../../../../../utils/utils";
 import { useLocation } from "react-router-dom";
 
-
-
 const AgingreportviewByAge = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -38,15 +36,13 @@ const AgingreportviewByAge = () => {
   const { typeaction } = useParams<{ typeaction?: string }>();
   const location = useLocation();
 
-  const { id, role, startDate, endDate } = location.state || { data: {} };
-
-
+  const { id, role } = location.state || { data: {} };
 
   useEffect(() => {
     dispatch(
       singleageinvoiceReport({
-        vendorId:id,
-        age:role
+        vendorId: id,
+        age: role,
       })
     );
   }, [dispatch, typeaction]);
@@ -138,17 +134,15 @@ const AgingreportviewByAge = () => {
       <Box m="20px">
         <Header title={typeaction} subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
-        <Button
+          <Button
             onClick={() => navigate(-1)}
             color="secondary"
             variant="contained"
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
-            Back to dashboard
-        </Button>
+            Back 
+          </Button>
         </Box>
-
-    
 
         <Box
           m="40px 0 0 0"
