@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IClientAdminResponce } from "./cadmin.type";
 import { service } from "../../../../services/ApiServices";
+import { vendor } from "../../../vendor/venderSlice/vendor.selector";
+import { role } from "../../../role/roleSlice/role.selector";
 
 const initialState: IClientAdminResponce = {
   statusCode: 0,
@@ -33,7 +35,7 @@ const initialState: IClientAdminResponce = {
     lineData: [],
   },
   Pendinginvoice: [],
-  AagingReports: []
+  AagingReports: [],
 };
 
 export const charRoleWice = createAsyncThunk<IClientAdminResponce>(
@@ -208,6 +210,30 @@ export const agingReports = createAsyncThunk<IClientAdminResponce>(
   }
 );
 
+export const getinvoicebyvenderRole = createAsyncThunk<
+  IClientAdminResponce,
+  {
+    id: string;
+    role: string;
+    startDate: string;
+    endDate: string;
+  }
+>("clientadmin/getinvoicebyvenderRole", async (data, { rejectWithValue }) => {
+  try {
+    const responce = await service.postCall("report/getInvoiceByVenderRole", {
+      companyId: sessionStorage.getItem("companyId"),
+      vender: data.id,
+      role: data.role,
+      startDate: data.startDate,
+      endDate: data.endDate,
+    });
+    return responce.data;
+  } catch (error) {
+    const err = error as IClientAdminResponce;
+    return rejectWithValue(err);
+  }
+});
+
 export const cadminSlice = createSlice({
   name: "clientadmin",
   initialState,
@@ -346,6 +372,19 @@ export const cadminSlice = createSlice({
         state.AagingReports = action.payload.data as any;
       })
       .addCase(agingReports.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getinvoicebyvenderRole.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getinvoicebyvenderRole.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.data = action.payload.data;
+      })
+      .addCase(getinvoicebyvenderRole.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

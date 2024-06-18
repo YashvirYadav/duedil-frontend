@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../../theme";
 import Header from "../../../components/Header";
 import LineChart from "../../../components/LineChart";
@@ -19,13 +14,10 @@ import { AppDispatch } from "../../../app/store";
 import { useNavigate } from "react-router-dom";
 import { formatNumberIndian } from "../../../utils/utils";
 import SearchIcon from "@mui/icons-material/Search";
-import BasicDatePicker  from '../../../components/BasicDatePicker';
-import dayjs,{ Dayjs } from "dayjs";
+import BasicDatePicker from "../../../components/BasicDatePicker";
+import dayjs, { Dayjs } from "dayjs";
 
-
-import {
-  getdashboardreportbydate,
-} from "./cadminslice/cadminslice";
+import { getdashboardreportbydate } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 
 const ClientAdminashboard = () => {
@@ -43,7 +35,7 @@ const ClientAdminashboard = () => {
   const [endDate, setEndDate] = useState(new Date());
 
   const currentDate = dayjs().toDate();
-  const tenDaysAgo = dayjs().subtract(10, 'day').toDate();
+  const tenDaysAgo = dayjs().subtract(10, "day").toDate();
 
   console.log(currentDate.toString()); // Current date
   console.log(tenDaysAgo.toString()); // Date 10 days ago
@@ -75,18 +67,20 @@ const ClientAdminashboard = () => {
     rejectedAmount,
     paidInvoicecount,
     paidAmount,
-    lineData
+    lineData,
   } = dashboardData;
 
   useEffect(() => {
-   // dispatch(getdashboardforclientadmin());
-   dispatch(getdashboardreportbydate({startDate:tenDaysAgo, endDate:currentDate}));
+    // dispatch(getdashboardforclientadmin());
+    dispatch(
+      getdashboardreportbydate({ startDate: tenDaysAgo, endDate: currentDate })
+    );
   }, [dispatch]);
   useEffect(() => {
-   // dispatch(getslaexpiry());
+    // dispatch(getslaexpiry());
   }, [dispatch]);
   useEffect(() => {
-  //  dispatch(charRoleWice());
+    //  dispatch(charRoleWice());
   }, [dispatch]);
 
   const dataChart = {
@@ -98,7 +92,7 @@ const ClientAdminashboard = () => {
   console.log("chartValue=>", chartValue);
 
   const searchDeshboard = () => {
-dispatch(getdashboardreportbydate({startDate, endDate}));
+    dispatch(getdashboardreportbydate({ startDate, endDate }));
   };
 
   const satrtDateChange = (date: Dayjs | null) => {
@@ -106,14 +100,14 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
       console.log("satrt date=>", date.date());
       setStartDate(date.toDate());
     }
-  }
+  };
 
   const endDateChange = (date: Dayjs | null) => {
     if (date) {
       console.log("end date=>", date.toDate().toString());
       setEndDate(date.toDate());
     }
-  }
+  };
 
   return (
     <Box m="20px">
@@ -121,17 +115,29 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="Dashboard" subtitle="Welcome to your dashboard" />
 
-        <Box display="flex" justifyContent="space-between" alignItems="center" gap={2}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={2}
+        >
+          <BasicDatePicker
+            onDateChange={satrtDateChange}
+            dateLabel="Start date"
+          />
+          <BasicDatePicker onDateChange={endDateChange} dateLabel="End date" />
 
-        <BasicDatePicker onDateChange={satrtDateChange} dateLabel="Start date" />
-        <BasicDatePicker onDateChange={endDateChange} dateLabel="End date" />
-          
           <Button
             color="secondary"
             startIcon={<SearchIcon />}
             variant="contained"
             autoFocus
-            sx={{ textTransform: "none", width: "200px", height: "50px", marginTop: "3px"}}
+            sx={{
+              textTransform: "none",
+              width: "200px",
+              height: "50px",
+              marginTop: "3px",
+            }}
             onClick={searchDeshboard}
           >
             Search
@@ -148,7 +154,7 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
         {/* ROW 1 */}
         <Box
           onClick={actiontotalInvoice}
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={
             action === "totalInvoice"
               ? colors.primary[800]
@@ -180,7 +186,38 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
 
         <Box
           onClick={actiontotalInvoice}
-          gridColumn="span 3"
+          gridColumn="span 2"
+          bgcolor={
+            action === "totalInvoice"
+              ? colors.primary[800]
+              : colors.primary[400]
+          }
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            transition: "background-color 0.3s ease",
+            "&:hover": {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+            cursor: "pointer",
+          }}
+        >
+          <StatBox
+            title={formatNumberIndian(totalAmount)}
+            subtitle="New Invoices"
+            progress="0.70"
+            increase={totalInvoicecount}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          onClick={actiontotalInvoice}
+          gridColumn="span 2"
           bgcolor={
             action === "totalInvoice"
               ? colors.primary[800]
@@ -210,10 +247,9 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
           />
         </Box>
 
-
         <Box
           onClick={actionunderReview}
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={
             action === "underReview" ? colors.primary[800] : colors.primary[400]
           }
@@ -242,7 +278,7 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
         </Box>
         <Box
           onClick={actionRejected}
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={
             action === "rejected" ? colors.primary[800] : colors.primary[400]
           }
@@ -271,7 +307,7 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
         </Box>
         <Box
           onClick={actionPaid}
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={
             action === "paid" ? colors.primary[800] : colors.primary[400]
           }
@@ -300,7 +336,11 @@ dispatch(getdashboardreportbydate({startDate, endDate}));
         </Box>
 
         {/* ROW 2 */}
-        <Box gridColumn="span 12" gridRow="span 2" bgcolor={colors.primary[400]}>
+        <Box
+          gridColumn="span 12"
+          gridRow="span 2"
+          bgcolor={colors.primary[400]}
+        >
           <Box
             mt="25px"
             p="0 30px"

@@ -60,12 +60,14 @@ import ClientAdminashboard from "./scenes/admin/cadminhome/ClientAdminashboard";
 import Clientadmintable from "./scenes/admin/cadminhome/cadmin.table";
 import { AdminInviceView } from "./scenes/admin/cadminhome/AdminInviceView";
 import { ViewExSla } from "./scenes/admin/cadminhome/ViewExSla";
-import {Podoc} from "./scenes/podoc/Podoc"
-import PoRagistar from "./scenes/podoc/podoc.ragistar"
-import TablePO from "./scenes/podoc/podoc.table"
-import Pendinginvoice from "./scenes/admin/cadminhome/reports/pendinginvoice"
-import AgingReports from "./scenes/admin/cadminhome/reports/agingreport"
-
+import { Podoc } from "./scenes/podoc/Podoc";
+import PoRagistar from "./scenes/podoc/podoc.ragistar";
+import TablePO from "./scenes/podoc/podoc.table";
+import Pendinginvoice from "./scenes/admin/cadminhome/reports/pendinginvoice/pendinginvoice";
+import AgingReports from "./scenes/admin/cadminhome/reports/agingreport";
+import { PendingInvoiceReport } from "./scenes/admin/cadminhome/reports/pendinginvoice/PendingInvoiceReport";
+import { ViewList } from "./scenes/admin/cadminhome/reports/ViewList";
+import ViewListByRole from "./scenes/admin/cadminhome/reports/pendinginvoice/ViewListByRole";
 function App() {
   const [theme, colorMode] = useMode();
 
@@ -90,7 +92,6 @@ function App() {
             <Route path="geography" element={<Geography />} />
             <Route path="changepassword" element={<ChangePassword />} />
 
-
             <Route path="company" element={<Company />}>
               <Route path="" element={<TableCompany />} />
               <Route path="addcmapany/:id?" element={<RegisterCompany />} />
@@ -113,10 +114,19 @@ function App() {
 
           <Route path="clientadmin" element={<CadminHome />}>
             <Route path="" element={<ClientAdminashboard />} />
-            <Route path="pendinginvoice" element={<Pendinginvoice/>}/>
-            <Route path="agingreports" element={<AgingReports/>}/>
 
-            
+            {/* <Route path="pendinginvoice" element={<Pendinginvoice/>}/> */}
+
+            <Route path="agingreports" element={<AgingReports />} />
+
+            {/* new */}
+            <Route path="pendinginvoice" element={<PendingInvoiceReport />}>
+              <Route path="" element={<Pendinginvoice />} />
+              <Route path="viewlist" element={<ViewList />}>
+                <Route path="" element={<ViewListByRole />} />
+                <Route path="viewinvoice/:id?" element={<ViewInvice />} /> 
+              </Route>
+            </Route>
 
             <Route path="viewexsla/:id?" element={<ViewExSla />}>
               <Route path="" element={<ViewInvice />} />
@@ -127,9 +137,9 @@ function App() {
               <Route path="viewinvoice/:id?" element={<ViewInvice />} />
             </Route>
 
-            <Route path="podoce" element={<Podoc />} >
-              <Route path="" element={<TablePO/>} />
-              <Route path="addpo/:id?" element={< PoRagistar/>} />
+            <Route path="podoce" element={<Podoc />}>
+              <Route path="" element={<TablePO />} />
+              <Route path="addpo/:id?" element={<PoRagistar />} />
             </Route>
 
             <Route path="user" element={<UserContener />}>

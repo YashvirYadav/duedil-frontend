@@ -5,31 +5,27 @@ import {
   GridColDef,
   GridRenderCellParams,
 } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
-
-import Header from "../../../components/Header";
+import { tokens } from "../../../../../theme";
+import SearchIcon from "@mui/icons-material/Search";
+import Header from "../../../../../components/Header";
 import { useTheme } from "@mui/material";
-import { AppDispatch } from "../../../app/store";
+import { AppDispatch } from "../../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Loader } from "../../../components/Lodar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Toast } from "../../../components/Toast";
+import { Loader } from "../../../../../components/Lodar";
+
+import { Toast } from "../../../../../components/Toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { loading, message } from "./cadminslice/cadmin.selector";
+import { loading, message, invoice } from "../../cadminslice/cadmin.selector";
 
-import {
-  completedbycompanyid,
-  getinvoicebycompanyid,
-  rejectedbycompanyid,
-  underreviewbycompanyid,
-} from "./cadminslice/cadminslice";
-import { invoice } from "./cadminslice/cadmin.selector";
+import { getinvoicebyvenderRole } from "../../cadminslice/cadminslice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { formatNumberIndian } from "../../../utils/utils";
+import { formatNumberIndian } from "../../../../../utils/utils";
+import { useLocation } from "react-router-dom";
+import BasicDatePicker from "../../../../../components/BasicDatePicker";
+import dayjs, { Dayjs } from "dayjs";
 
-const Clientadmintable = () => {
+const ViewListByRole = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
@@ -40,17 +36,53 @@ const Clientadmintable = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const { typeaction } = useParams<{ typeaction?: string }>();
+  const location = useLocation();
+
+  const { id, role, startDate, endDate } = location.state || { data: {} };
+
+  const currentDateJS = dayjs(endDate);
+  const tenDaysAgoJS = dayjs(startDate);
+
+  const [startDateconst, setStartDate] = useState(startDate);
+  const [endDateconst, setEndDate] = useState(endDate);
+
+  const searchDeshboard = () => {
+    dispatch(
+      getinvoicebyvenderRole({
+        id,
+        role,
+        startDate: startDateconst,
+        endDate: endDateconst,
+      })
+    );
+  };
+
+  const satrtDateChange = (date: Dayjs | null) => {
+    if (date) {
+      console.log("satrt date=>", date.date());
+      setStartDate(date.toDate());
+    }
+  };
+
+  const endDateChange = (date: Dayjs | null) => {
+    if (date) {
+      console.log("end date=>", date.toDate().toString());
+      setEndDate(date.toDate());
+    }
+  };
+
+  console.log("id", id);
+  console.log("role", role);
 
   useEffect(() => {
-    if (typeaction === "Total Invoices") {
-      dispatch(getinvoicebycompanyid());
-    } else if (typeaction === "Under Review") {
-      dispatch(underreviewbycompanyid());
-    } else if(typeaction === "Rejected Invoices"){
-        dispatch(rejectedbycompanyid());
-    } else if(typeaction === "Paid Invoices"){
-       dispatch(completedbycompanyid());
-    }
+    dispatch(
+      getinvoicebyvenderRole({
+        id,
+        role,
+        startDate: startDate,
+        endDate: endDate,
+      })
+    );
   }, [dispatch, typeaction]);
 
   useEffect(() => {
@@ -69,15 +101,13 @@ const Clientadmintable = () => {
       flex: 1,
       valueGetter: (params) =>
         params.row.invoicedate && params.row.invoicedate.split("T")[0],
-    
-    
     },
     {
       field: "duedate",
       headerName: "Due Date",
       flex: 1,
       valueGetter: (params) =>
-        params.row.duedate && params.row.duedate.split("T")[0],  
+        params.row.duedate && params.row.duedate.split("T")[0],
     },
 
     {
@@ -140,7 +170,7 @@ const Clientadmintable = () => {
   return (
     <>
       <Box m="20px">
-        <Header title={typeaction} subtitle="" />
+        {/* <Header title={typeaction} subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
         <Button
             onClick={() => navigate(-1)}
@@ -149,8 +179,61 @@ const Clientadmintable = () => {
             sx={{ textTransform: 'none' }}
           >
             Back to dashboard
-          </Button>
+        </Button>
+        </Box> */}
+
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Header title={role} subtitle="Welcome to your report" />
+
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            gap={2}
+          >
+            <BasicDatePicker
+              onDateChange={satrtDateChange}
+              dateLabel="Start date"
+              defaultValue={tenDaysAgoJS}
+            />
+            <BasicDatePicker
+              onDateChange={endDateChange}
+              dateLabel="End date"
+              defaultValue={currentDateJS}
+            />
+
+            <Button
+              color="secondary"
+              startIcon={<SearchIcon />}
+              variant="contained"
+              autoFocus
+              sx={{
+                textTransform: "none",
+                width: "200px",
+                height: "50px",
+                marginTop: "3px",
+              }}
+              onClick={searchDeshboard}
+            >
+              Search
+            </Button>
+
+            <Button
+              onClick={() => navigate(-1)}
+              color="secondary"
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                width: "200px",
+                height: "50px",
+                marginTop: "3px",
+              }}
+            >
+              Back
+            </Button>
+          </Box>
         </Box>
+
         <Box
           m="40px 0 0 0"
           height="75vh"
@@ -189,8 +272,7 @@ const Clientadmintable = () => {
                 fontSize: "14px", // Change this value to your desired font size
               },
             }}
-            
-              density="compact"
+            density="compact"
             // checkboxSelection
             rows={Array.isArray(invoiceData) ? invoiceData : []} // Ensure that company is an array
             columns={columns}
@@ -216,4 +298,4 @@ const Clientadmintable = () => {
   );
 };
 
-export default Clientadmintable;
+export default ViewListByRole;
