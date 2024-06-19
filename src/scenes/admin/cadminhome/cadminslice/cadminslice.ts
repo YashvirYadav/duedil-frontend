@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IClientAdminResponce } from "./cadmin.type";
 import { service } from "../../../../services/ApiServices";
-
+import { company } from "../../../company/companyRedux/company.selector";
 
 const initialState: IClientAdminResponce = {
   statusCode: 0,
@@ -19,7 +19,7 @@ const initialState: IClientAdminResponce = {
     wipInvoicecount: 0,
     wipAmount: 0,
     newInvoicecount: 0,
-    newInvoiceAmount: 0
+    newInvoiceAmount: 0,
   },
   data: [],
   chartdata: [],
@@ -35,7 +35,7 @@ const initialState: IClientAdminResponce = {
     wipInvoicecount: 0,
     wipAmount: 0,
     newInvoicecount: 0,
-    newInvoiceAmount: 0
+    newInvoiceAmount: 0,
   },
   Pendinginvoice: [],
   AagingReports: [],
@@ -92,42 +92,50 @@ export const getslaexpiry = createAsyncThunk<IClientAdminResponce>(
 );
 
 //getinvoicebycompanyid
-export const getinvoicebycompanyid = createAsyncThunk<IClientAdminResponce>(
-  "clientadmin/getinvoicebycompanyid",
-  async (_, { rejectWithValue }) => {
-    try {
-      const responce = await service.getCall(
-        "invoice/getinvoicebycompanyid/" + sessionStorage.getItem("companyId")
-      );
-      return responce.data;
-    } catch (error) {
-      const err = error as IClientAdminResponce;
-      return rejectWithValue(err);
-    }
+export const getinvoicebycompanyid = createAsyncThunk<
+  IClientAdminResponce,
+  { startDate: string; endDate: string }
+>("clientadmin/getinvoicebycompanyid", async (data, { rejectWithValue }) => {
+  try {
+    const responce = await service.postCall("invoice/getinvoicebycompanyid", {
+      companyId: sessionStorage.getItem("companyId"),
+      startDate: data.startDate,
+      endDate: data.endDate,
+    });
+    return responce.data;
+  } catch (error) {
+    const err = error as IClientAdminResponce;
+    return rejectWithValue(err);
   }
-);
+});
 //underreviewbycompanyid
-export const underreviewbycompanyid = createAsyncThunk<IClientAdminResponce>(
-  "clientadmin/underreviewbycompanyid",
-  async (_, { rejectWithValue }) => {
-    try {
-      const responce = await service.getCall(
-        "invoice/underreviewbycompanyid/" + sessionStorage.getItem("companyId")
-      );
-      return responce.data;
-    } catch (error) {
-      const err = error as IClientAdminResponce;
-      return rejectWithValue(err);
-    }
+export const underreviewbycompanyid = createAsyncThunk<
+  IClientAdminResponce,
+  { startDate: string; endDate: string }
+>("clientadmin/underreviewbycompanyid", async (data, { rejectWithValue }) => {
+  try {
+    const responce = await service.postCall("invoice/underreviewbycompanyid", {
+      companyId: sessionStorage.getItem("companyId"),
+      startDate: data.startDate,
+      endDate: data.endDate,
+    });
+    return responce.data;
+  } catch (error) {
+    const err = error as IClientAdminResponce;
+    return rejectWithValue(err);
   }
-);
+});
 //rejectedbycompanyid
-export const rejectedbycompanyid = createAsyncThunk<IClientAdminResponce>(
+export const rejectedbycompanyid = createAsyncThunk<IClientAdminResponce,{ startDate:string, endDate:string}>(
   "clientadmin/rejectedbycompanyid",
-  async (_, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const responce = await service.getCall(
-        "invoice/rejectedbycompanyid/" + sessionStorage.getItem("companyId")
+      const responce = await service.postCall(
+        "invoice/rejectedbycompanyid",{
+companyId: sessionStorage.getItem("companyId"),
+startDate: data.startDate,
+endDate : data.endDate
+        } 
       );
       return responce.data;
     } catch (error) {
@@ -158,7 +166,8 @@ export const getnewinvoicebycompanyid = createAsyncThunk<IClientAdminResponce>(
   async (_, { rejectWithValue }) => {
     try {
       const responce = await service.getCall(
-        "invoice/getnewinvoicebycompanyid/" + sessionStorage.getItem("companyId")
+        "invoice/getnewinvoicebycompanyid/" +
+          sessionStorage.getItem("companyId")
       );
       return responce.data;
     } catch (error) {
@@ -254,7 +263,7 @@ export const getinvoicebyvenderRole = createAsyncThunk<
 
 export const singleageinvoiceReport = createAsyncThunk<
   IClientAdminResponce,
-  {vendorId:string,age:string}
+  { vendorId: string; age: string }
 >("clientadmin/singleageinvoiceReport", async (data, { rejectWithValue }) => {
   try {
     const responce = await service.postCall(

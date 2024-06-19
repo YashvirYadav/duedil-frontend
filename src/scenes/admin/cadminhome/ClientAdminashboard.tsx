@@ -62,24 +62,64 @@ const ClientAdminashboard = () => {
 
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
-    navigate(`invoice/Total Invoices`);
+    navigate(`invoice/Total Invoices`,
+      {
+        state: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+
+    );
   };
   const actionunderReview = () => {
     setAction("underReview");
-    navigate(`invoice/Under Review`);
+    navigate(`invoice/Under Review`
+      ,
+      {
+        state: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+    );
   };
   const actionRejected = () => {
     setAction("rejected");
-    navigate(`invoice/Rejected Invoices`);
+    navigate(`invoice/Rejected Invoices`
+      ,
+      {
+        state: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+    );
   };
   const actionPaid = () => {
     setAction("paid");
-    navigate(`invoice/Paid Invoices`);
+    navigate(`invoice/Paid Invoices`
+      ,
+      {
+        state: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+    );
   };
 
   const actionNewInvoice = () => {
     setAction("newInvoice");
-    navigate(`invoice/New Invoices`);
+    navigate(`invoice/New Invoices`
+      ,
+      {
+        state: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+    );
   }
 
   const {

@@ -16,7 +16,7 @@ import { Loader } from "../../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Toast } from "../../../components/Toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { loading, message } from "./cadminslice/cadmin.selector";
 
 import {
@@ -41,14 +41,16 @@ const Clientadmintable = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   const { typeaction } = useParams<{ typeaction?: string }>();
+  const location = useLocation();
+  const { startDate, endDate } = location.state || { data: {} };
 
   useEffect(() => {
     if (typeaction === "Total Invoices") {
-      dispatch(getinvoicebycompanyid());
+      dispatch(getinvoicebycompanyid({ startDate, endDate}));
     } else if (typeaction === "Under Review") {
-      dispatch(underreviewbycompanyid());
+      dispatch(underreviewbycompanyid({ startDate, endDate}));
     } else if(typeaction === "Rejected Invoices"){
-        dispatch(rejectedbycompanyid());
+        dispatch(rejectedbycompanyid({ startDate, endDate}));
     } else if(typeaction === "Paid Invoices"){
        dispatch(completedbycompanyid());
     } else if(typeaction === "New Invoices"){
