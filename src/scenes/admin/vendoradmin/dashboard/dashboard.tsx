@@ -27,7 +27,7 @@ import {
 import { useEffect, useState } from "react";
 import { AppDispatch } from "../../../../app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getCompletedInvoice, getMyInvoice, getMyInvoiceNew, getMyPaidInvoice, getMyWipInvoice, getVenderDashboard } from "./dashboardslice";
+import { getCompletedInvoice, getMyInvoice, getMyInvoiceNew, getMyPaidInvoice, getMyRejectedInvoice, getMyWipInvoice, getVenderDashboard } from "./dashboardslice";
 import {
   DataGrid,
   GridToolbar,
@@ -50,6 +50,7 @@ const DashboardVendor = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedTotalInvoice, setselectedTotalInvoice] = useState<boolean>(true);
   const [selectedNewInvoice, setselectedNewInvoice] = useState<boolean>(false);
+  const [selectedRejectedInvoice, setselectedRejectedInvoice] = useState<boolean>(false);
   const [selectedUnderApproval, setselectedUnderApproval] = useState<boolean>(false); 
   const [selectedPaidInvoice, setselectedPaidInvoice] = useState<boolean>(false);
 
@@ -146,7 +147,21 @@ const DashboardVendor = () => {
     setselectedTotalInvoice(false);
     setselectedUnderApproval(false);
     setselectedPaidInvoice(false);
+    setselectedRejectedInvoice(false);
   }
+
+  const actionRejectInvoice=()=>{
+    dispatch(getMyRejectedInvoice());
+    setselectedRejectedInvoice(true);
+    // other false
+    setselectedNewInvoice(false);
+    setselectedTotalInvoice(false);
+    setselectedUnderApproval(false);
+    setselectedPaidInvoice(false);
+
+
+
+    }
 
   const actionUnderApproval=()=>{
     dispatch(getMyWipInvoice());
@@ -155,6 +170,7 @@ const DashboardVendor = () => {
     setselectedNewInvoice(false);
     setselectedTotalInvoice(false);
     setselectedPaidInvoice(false);
+    setselectedRejectedInvoice(false);
 
   }
 
@@ -166,6 +182,7 @@ const DashboardVendor = () => {
     setselectedNewInvoice(false);
     setselectedUnderApproval(false);
     setselectedTotalInvoice(false);
+    setselectedRejectedInvoice(false);
 
   }
 
@@ -176,6 +193,7 @@ const DashboardVendor = () => {
     setselectedNewInvoice(false);
     setselectedUnderApproval(false);
     setselectedPaidInvoice(false);
+    setselectedRejectedInvoice(false);
 
   }
 
@@ -197,7 +215,7 @@ const DashboardVendor = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={selectedTotalInvoice?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -226,7 +244,7 @@ const DashboardVendor = () => {
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={selectedNewInvoice ?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -254,7 +272,35 @@ const DashboardVendor = () => {
         </Box>
 
         <Box
-          gridColumn="span 3"
+          gridColumn="span 2"
+          bgcolor={selectedRejectedInvoice ?colors.primary[800]:colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={actionRejectInvoice}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+            cursor: "pointer",
+          }}
+        >
+          <StatBox
+            title={formatNumberIndian(data.rejectedInvoiceAmount)}
+            subtitle="Rejected Invoice"
+            progress="0.50"
+            increase={data.rejectedInvoice}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+
+        <Box
+          gridColumn="span 2"
           bgcolor={selectedUnderApproval?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -281,7 +327,7 @@ const DashboardVendor = () => {
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn="span 2"
           bgcolor={selectedPaidInvoice?colors.primary[800]:colors.primary[400]}
           display="flex"
           alignItems="center"
@@ -300,6 +346,34 @@ const DashboardVendor = () => {
             subtitle="Paid invoice"
             progress="0.80"
             increase={data.paidInvoiceAmount}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+
+        <Box
+          gridColumn="span 2"
+          bgcolor={selectedPaidInvoice?colors.primary[800]:colors.primary[400]}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={actionPaidInvoice}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+            cursor: "pointer",
+          }}
+        >
+          <StatBox
+            title="0"
+            subtitle="Puchase Order"
+            progress="0.80"
+            increase="0"
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

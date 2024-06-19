@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IClientAdminResponce } from "./cadmin.type";
 import { service } from "../../../../services/ApiServices";
-import { vendor } from "../../../vendor/venderSlice/vendor.selector";
-import { role } from "../../../role/roleSlice/role.selector";
+
 
 const initialState: IClientAdminResponce = {
   statusCode: 0,

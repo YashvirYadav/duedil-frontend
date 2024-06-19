@@ -14,6 +14,8 @@ const initialState: IVendorDashboardResponce = {
     wipInvoiceAmount: 0,
     paidInvoice: 0,
     paidInvoiceAmount: 0,
+    rejectedInvoice: 0,
+    rejectedInvoiceAmount: 0
   },
   message: "",
   success: false,
@@ -86,20 +88,7 @@ export const getMyInvoiceNew = createAsyncThunk<IVendorDashboardResponce>(
 
 
 
-export const getMyRejectedInvoice = createAsyncThunk<IVendorDashboardResponce>(
-  "users/getMyInvoiceRejected",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await service.postCall("users/getmyrejectedinvoicebyvender", {
-        companyId: sessionStorage.getItem("companyId"),
-        userId: sessionStorage.getItem("userId"),
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
+
 
 export const getMyPaidInvoice = createAsyncThunk<IVendorDashboardResponce>(
   "users/getMyInvoicePaid",
@@ -133,6 +122,23 @@ export const getMyWipInvoice = createAsyncThunk<IVendorDashboardResponce>(
     }
   }
 );
+//getMyRejectedInvoice
+export const getMyRejectedInvoice = createAsyncThunk<IVendorDashboardResponce>(
+  "users/getMyInvoiceRejected",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await service.postCall("users/getmyrejectedinvoicebyvender", {
+        companyId: sessionStorage.getItem("companyId"),
+        userId: sessionStorage.getItem("userId"),
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
 //getmycompletedinvoicebyvender
 
 export const getCompletedInvoice = createAsyncThunk<IVendorDashboardResponce>(
