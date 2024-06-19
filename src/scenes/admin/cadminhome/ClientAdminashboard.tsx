@@ -61,6 +61,11 @@ const ClientAdminashboard = () => {
     navigate(`invoice/Paid Invoices`);
   };
 
+  const actionNewInvoice = () => {
+    setAction("newInvoice");
+    navigate(`invoice/New Invoices`);
+  }
+
   const {
     totalInvoicecount,
     totalAmount,
@@ -190,10 +195,10 @@ const ClientAdminashboard = () => {
 
        
         <Box
-          onClick={actiontotalInvoice}
+          onClick={actionNewInvoice}
           gridColumn="span 2"
           bgcolor={
-            action === "totalInvoice"
+            action === "newInvoice"
               ? colors.primary[800]
               : colors.primary[400]
           }

@@ -22,6 +22,7 @@ import { loading, message } from "./cadminslice/cadmin.selector";
 import {
   completedbycompanyid,
   getinvoicebycompanyid,
+  getnewinvoicebycompanyid,
   rejectedbycompanyid,
   underreviewbycompanyid,
 } from "./cadminslice/cadminslice";
@@ -50,6 +51,8 @@ const Clientadmintable = () => {
         dispatch(rejectedbycompanyid());
     } else if(typeaction === "Paid Invoices"){
        dispatch(completedbycompanyid());
+    } else if(typeaction === "New Invoices"){
+      dispatch(getnewinvoicebycompanyid());
     }
   }, [dispatch, typeaction]);
 

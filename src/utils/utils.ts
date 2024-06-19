@@ -12,5 +12,5 @@ export function calculatePercentage(part: number, total: number) {
   if (total === 0) {
     return 0; // To avoid division by zero
   }
-  return (part / total) * 100;
+  return Math.round((part / total) * 100);
 }

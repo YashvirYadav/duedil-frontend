@@ -154,6 +154,21 @@ export const completedbycompanyid = createAsyncThunk<IClientAdminResponce>(
   }
 );
 
+export const getnewinvoicebycompanyid = createAsyncThunk<IClientAdminResponce>(
+  "clientadmin/getnewinvoicebycompanyid",
+  async (_, { rejectWithValue }) => {
+    try {
+      const responce = await service.getCall(
+        "invoice/getnewinvoicebycompanyid/" + sessionStorage.getItem("companyId")
+      );
+      return responce.data;
+    } catch (error) {
+      const err = error as IClientAdminResponce;
+      return rejectWithValue(err);
+    }
+  }
+);
+
 //get dashboer report by date and cpmpany id
 
 export const getdashboardreportbydate = createAsyncThunk<
@@ -423,6 +438,19 @@ export const cadminSlice = createSlice({
         state.data = action.payload.data;
       })
       .addCase(singleageinvoiceReport.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(getnewinvoicebycompanyid.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getnewinvoicebycompanyid.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.data = action.payload.data;
+      })
+      .addCase(getnewinvoicebycompanyid.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });
