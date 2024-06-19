@@ -375,7 +375,11 @@ const ClientAdminashboard = () => {
         <Box
         
           gridColumn="span 2"
-         
+          bgcolor={
+            
+           
+              colors.primary[400]
+          }
           display="flex"
           alignItems="center"
           justifyContent="center"
