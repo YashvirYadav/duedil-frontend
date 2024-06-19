@@ -19,6 +19,22 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { getdashboardreportbydate } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import PaidIcon from '@mui/icons-material/Paid';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+
+
+
+
+
+
+
+
+
+
+
 
 const ClientAdminashboard = () => {
   const theme = useTheme();
@@ -219,7 +235,7 @@ const ClientAdminashboard = () => {
             progress="0.70"
             increase={dashboardData.newInvoicecount}
             icon={
-              <ReceiptIcon
+              <FiberNewIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -249,7 +265,7 @@ const ClientAdminashboard = () => {
             progress="0.50"
             increase={dashboardData.wipInvoicecount}
             icon={
-              <ReceiptIcon
+              <PublishedWithChangesIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -278,7 +294,7 @@ const ClientAdminashboard = () => {
             progress="0.30"
             increase={rejectedInvoicecount}
             icon={
-              <ReceiptIcon
+              <ThumbDownAltIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -307,7 +323,7 @@ const ClientAdminashboard = () => {
             progress="0.80"
             increase={paidInvoicecount}
             icon={
-              <ReceiptIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -338,7 +354,7 @@ const ClientAdminashboard = () => {
             progress="0.70"
             increase="0"
             icon={
-              <ReceiptIcon
+              <ShoppingBagIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }

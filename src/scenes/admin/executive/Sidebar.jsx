@@ -10,6 +10,13 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import PasswordIcon from '@mui/icons-material/Password';
+
+
+
+
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -130,7 +137,7 @@ const Sidebar = () => {
             <Item
               title="Need to act"
               to="neetoact"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<NewReleasesIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -153,7 +160,7 @@ const Sidebar = () => {
             <Item
               title="Change Password"
               to="changepassword"
-              icon={<PersonOutlinedIcon />}
+              icon={<PasswordIcon />}
               selected={selected}
               setSelected={setSelected}
             />

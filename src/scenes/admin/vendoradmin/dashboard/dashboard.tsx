@@ -37,6 +37,17 @@ import {
 import { Toast } from "../../../../components/Toast";
 import { Loader } from "../../../../components/Lodar";
 import { formatNumberIndian } from "../../../../utils/utils";
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import PaidIcon from '@mui/icons-material/Paid';
+import WalletIcon from '@mui/icons-material/Wallet';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+
+
+
+
+
 
 const DashboardVendor = () => {
   const theme = useTheme();
@@ -237,7 +248,7 @@ const DashboardVendor = () => {
             increase={data.totalInvoice}
            
             icon={
-              <ReceiptIcon
+              <WalletIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -264,7 +275,7 @@ const DashboardVendor = () => {
             progress="0.50"
             increase={data.newInvoice}
             icon={
-              <ReceiptIcon
+              <FiberNewIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -292,7 +303,7 @@ const DashboardVendor = () => {
             progress="0.50"
             increase={data.rejectedInvoice}
             icon={
-              <ReceiptIcon
+              <ThumbDownAltIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -320,7 +331,7 @@ const DashboardVendor = () => {
             progress="0.30"
             increase={data.wipInvoice} // count
             icon={
-              <ReceiptIcon
+              <PublishedWithChangesIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -347,7 +358,7 @@ const DashboardVendor = () => {
             progress="0.80"
             increase={data.paidInvoiceAmount}
             icon={
-              <ReceiptIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -375,7 +386,7 @@ const DashboardVendor = () => {
             progress="0.80"
             increase="0"
             icon={
-              <ReceiptIcon
+              <FileCopyIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }

@@ -10,6 +10,18 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import PasswordIcon from '@mui/icons-material/Password';
+
+
+
+
+
+
+
+
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -130,7 +142,7 @@ const Sidebar = () => {
             <Item
               title="Post Invoice"
               to="invoice"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<PostAddIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -146,7 +158,7 @@ const Sidebar = () => {
             <Item
               title="Bank"
               to="bank"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<AccountBalanceIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -169,7 +181,7 @@ const Sidebar = () => {
             <Item
               title="Change Password"
               to="changepassword"
-              icon={<PersonOutlinedIcon />}
+              icon={<PasswordIcon />}
               selected={selected}
               setSelected={setSelected}
             />

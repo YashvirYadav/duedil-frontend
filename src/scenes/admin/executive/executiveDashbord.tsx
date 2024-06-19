@@ -24,6 +24,20 @@ import { loading, message, invoiceData } from "./needtoact/needtoact.selector";
 import { useNavigate } from "react-router-dom";
 import { getNeedtoact, getuserinvoicesbyhistoryapproved, getuserinvoicesbyhistoryrejected, getuserinvoicesbyhistorywip } from "./needtoact/needtoact.slice";
 import { formatNumberIndian } from "../../../utils/utils";
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import PaidIcon from '@mui/icons-material/Paid';
+
+
+
+
+
+
+
+
+
+
 
 const DashboardUser = () => {
   const theme = useTheme();
@@ -200,11 +214,11 @@ const DashboardUser = () => {
         >
           <StatBox
             title={formatNumberIndian(data.needtoacttotal)}
-            subtitle="Need to action"
+            subtitle="Need to act"
             progress="0.75"
             increase={data.needtoact}
             icon={
-              <ReceiptIcon
+              <NewReleasesIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -222,6 +236,7 @@ const DashboardUser = () => {
             "&:hover": {
               backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
             },
+            cursor: "pointer",
           }}
         >
           <StatBox
@@ -230,7 +245,7 @@ const DashboardUser = () => {
             progress="0.50"
             increase={data.invoiceWip}
             icon={
-              <ReceiptIcon
+              <TimelineIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -249,6 +264,7 @@ const DashboardUser = () => {
             "&:hover": {
               backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
             },
+            cursor: "pointer",
           }}
         >
           <StatBox
@@ -257,7 +273,7 @@ const DashboardUser = () => {
             progress="0.30"
             increase={data.invoiceRejected} // count
             icon={
-              <ReceiptIcon
+              <ThumbDownAltIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -275,6 +291,7 @@ const DashboardUser = () => {
             "&:hover": {
               backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
             },
+            cursor: "pointer",
           }}
         >
           <StatBox
@@ -283,7 +300,7 @@ const DashboardUser = () => {
             progress="0.80"
             increase={data.invoiceCompleted}
             icon={
-              <ReceiptIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }

@@ -10,6 +10,29 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle';
+import PersonIcon from '@mui/icons-material/Person';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import Diversity2Icon from '@mui/icons-material/Diversity2';
+import PasswordIcon from '@mui/icons-material/Password';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -130,7 +153,7 @@ const Sidebar = () => {
             <Item
               title="User"
               to="user"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<PersonIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -138,7 +161,7 @@ const Sidebar = () => {
             <Item
               title="Vendor"
               to="vendor"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<ContactsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -146,7 +169,7 @@ const Sidebar = () => {
             <Item
               title="Department"
               to="department"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<ManageAccountsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -154,7 +177,7 @@ const Sidebar = () => {
             <Item
               title="Role"
               to="role"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<PersonPinCircleIcon />}
               selected={selected}
               setSelected={setSelected}
             ></Item>
@@ -162,7 +185,7 @@ const Sidebar = () => {
             <Item
               title="Workflow"
               to="workflow"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<Diversity2Icon />}
               selected={selected}
               setSelected={setSelected}
             ></Item>
@@ -170,7 +193,7 @@ const Sidebar = () => {
             <Item
               title="PO Doc"
               to="podoce"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<FileCopyIcon />}
               selected={selected}
               setSelected={setSelected}
             ></Item>
@@ -186,7 +209,7 @@ const Sidebar = () => {
             <Item
               title="Pending invoice"
               to="pendinginvoice"
-              icon={<PersonOutlinedIcon />}
+              icon={<PendingActionsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -194,7 +217,7 @@ const Sidebar = () => {
             <Item
               title="Aging reports"
               to="agingreports"
-              icon={<PersonOutlinedIcon />}
+              icon={<PendingActionsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -217,7 +240,7 @@ const Sidebar = () => {
             <Item
               title="Change Password"
               to="changepassword"
-              icon={<PersonOutlinedIcon />}
+              icon={<PasswordIcon />}
               selected={selected}
               setSelected={setSelected}
             />
