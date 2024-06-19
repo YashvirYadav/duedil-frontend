@@ -373,13 +373,9 @@ const ClientAdminashboard = () => {
           />
         </Box>
         <Box
-          onClick={actiontotalInvoice}
+        
           gridColumn="span 2"
-          bgcolor={
-            action === "totalInvoice"
-              ? colors.primary[800]
-              : colors.primary[400]
-          }
+         
           display="flex"
           alignItems="center"
           justifyContent="center"
