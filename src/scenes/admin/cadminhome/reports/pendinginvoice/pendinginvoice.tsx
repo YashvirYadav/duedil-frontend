@@ -370,8 +370,8 @@ const Pendinginvoice = () => {
       headerName: "Paid",
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.Paid || 0} - ${calculatePercentage(
-          params.row.Paid || 0,
+        `${params.row.Archive || 0} - ${calculatePercentage(
+          params.row.Archive || 0,
           params.row.total || 0
         )} %`,
       renderCell: (params) => (
