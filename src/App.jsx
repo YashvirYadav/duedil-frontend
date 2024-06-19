@@ -121,7 +121,7 @@ function App() {
 
             <Route path="agingreports" element={<PendingInvoiceReport />}>
               <Route path="" element={<AgingReports />} />
-              <Route path="viewlist" element={<ViewList />}>
+              <Route path="viewlist" element={<PendingInvoiceReport />}>
                 <Route path="" element={<AgingreportviewByAge />} />
                 <Route path="viewinvoice/:id?" element={<ViewInvice />} />
               </Route>

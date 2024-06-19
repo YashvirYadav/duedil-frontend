@@ -31,18 +31,21 @@ const ClientAdminashboard = () => {
   //const slaexpiry = useSelector(dashboarddataSLA);
   const chartValue = useSelector(chartdata);
   const dispatch = useDispatch<AppDispatch>();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
+  const currentDateJS = dayjs()
+  const tenDaysAgoJS = dayjs().subtract(30, "day")
 
   const currentDate = dayjs().toDate();
-  const tenDaysAgo = dayjs().subtract(10, "day").toDate();
+  const tenDaysAgo =  dayjs().subtract(30, "day").toDate();
 
-  console.log(currentDate.toString()); // Current date
-  console.log(tenDaysAgo.toString()); // Date 10 days ago
+  const [startDate, setStartDate] = useState(tenDaysAgo);
+  const [endDate, setEndDate] = useState(currentDate);
+
+  console.log(startDate.toString()); // Current date
+  console.log(endDate.toString()); // Date 10 days ago
 
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
-
     navigate(`invoice/Total Invoices`);
   };
   const actionunderReview = () => {
@@ -61,8 +64,7 @@ const ClientAdminashboard = () => {
   const {
     totalInvoicecount,
     totalAmount,
-    newandwipInvoicecount,
-    newandwipAmount,
+  
     rejectedInvoicecount,
     rejectedAmount,
     paidInvoicecount,
@@ -73,7 +75,7 @@ const ClientAdminashboard = () => {
   useEffect(() => {
     // dispatch(getdashboardforclientadmin());
     dispatch(
-      getdashboardreportbydate({ startDate: tenDaysAgo, endDate: currentDate })
+      getdashboardreportbydate({ startDate: startDate, endDate: endDate })
     );
   }, [dispatch]);
   useEffect(() => {
@@ -124,8 +126,10 @@ const ClientAdminashboard = () => {
           <BasicDatePicker
             onDateChange={satrtDateChange}
             dateLabel="Start date"
+            defaultValue={tenDaysAgoJS}
           />
-          <BasicDatePicker onDateChange={endDateChange} dateLabel="End date" />
+          <BasicDatePicker onDateChange={endDateChange} dateLabel="End date"
+          defaultValue={currentDateJS} />
 
           <Button
             color="secondary"
@@ -184,6 +188,7 @@ const ClientAdminashboard = () => {
           />
         </Box>
 
+       
         <Box
           onClick={actiontotalInvoice}
           gridColumn="span 2"
@@ -204,41 +209,10 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(totalAmount)}
+            title={formatNumberIndian(dashboardData.newInvoiceAmount)}
             subtitle="New Invoices"
             progress="0.70"
-            increase={totalInvoicecount}
-            icon={
-              <ReceiptIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
-        </Box>
-        <Box
-          onClick={actiontotalInvoice}
-          gridColumn="span 2"
-          bgcolor={
-            action === "totalInvoice"
-              ? colors.primary[800]
-              : colors.primary[400]
-          }
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            transition: "background-color 0.3s ease",
-            "&:hover": {
-              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
-            },
-            cursor: "pointer",
-          }}
-        >
-          <StatBox
-            title={formatNumberIndian(totalAmount)}
-            subtitle="New Invoices"
-            progress="0.70"
-            increase={totalInvoicecount}
+            increase={dashboardData.newInvoicecount}
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -265,10 +239,10 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(newandwipAmount)}
+            title={formatNumberIndian(dashboardData.wipAmount)}
             subtitle="Under Processes"
             progress="0.50"
-            increase={newandwipInvoicecount}
+            increase={dashboardData.wipInvoicecount}
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -327,6 +301,37 @@ const ClientAdminashboard = () => {
             subtitle="Paid Invoices"
             progress="0.80"
             increase={paidInvoicecount}
+            icon={
+              <ReceiptIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+          />
+        </Box>
+        <Box
+          onClick={actiontotalInvoice}
+          gridColumn="span 2"
+          bgcolor={
+            action === "totalInvoice"
+              ? colors.primary[800]
+              : colors.primary[400]
+          }
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            transition: "background-color 0.3s ease",
+            "&:hover": {
+              backgroundColor: colors.primary[800], // replace 'yourHoverColor' with your desired hover color
+            },
+            cursor: "pointer",
+          }}
+        >
+          <StatBox
+            title="0"
+            subtitle="Purchase Orders"
+            progress="0.70"
+            increase="0"
             icon={
               <ReceiptIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

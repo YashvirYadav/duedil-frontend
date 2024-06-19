@@ -31,10 +31,10 @@ const Pendinginvoice = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const currentDateJS = dayjs();
-  const tenDaysAgoJS = dayjs().subtract(10, "day");
+  const tenDaysAgoJS = dayjs().subtract(30, "day");
 
   const currentDate = dayjs().toDate();
-  const tenDaysAgo = dayjs().subtract(10, "day").toDate();
+  const tenDaysAgo = dayjs().subtract(30, "day").toDate();
 
   const [startDate, setStartDate] = useState(tenDaysAgoJS.toDate());
   const [endDate, setEndDate] = useState(currentDateJS.toDate());

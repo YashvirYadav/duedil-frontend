@@ -49,8 +49,10 @@ export interface Iinvoicemovement {
 export interface dashboard {
   totalInvoicecount: number;
   totalAmount: number;
-  newandwipInvoicecount: number;
-  newandwipAmount: number;
+  wipInvoicecount: number;
+  wipAmount: number;
+  newInvoicecount : number;
+  newInvoiceAmount : number;
   rejectedInvoicecount: number;
   rejectedAmount: number;
   paidInvoicecount: number;
@@ -60,8 +62,12 @@ export interface dashboard {
 export interface Iserchdashboard {
   totalInvoicecount: number;
   totalAmount: number;
-  newandwipInvoicecount: number;
-  newandwipAmount: number;
+
+  wipInvoicecount: number;
+  wipAmount: number;
+  newInvoicecount : number;
+  newInvoiceAmount : number;
+
   rejectedInvoicecount: number;
   rejectedAmount: number;
   paidInvoicecount: number;
