@@ -146,12 +146,16 @@ endDate : data.endDate
 );
 
 //completedbycompanyid
-export const completedbycompanyid = createAsyncThunk<IClientAdminResponce>(
+export const completedbycompanyid = createAsyncThunk<IClientAdminResponce , { startDate:string, endDate:string}>(
   "clientadmin/completedbycompanyid",
-  async (_, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const responce = await service.getCall(
-        "invoice/completedbycompanyid/" + sessionStorage.getItem("companyId")
+      const responce = await service.postCall(
+        "invoice/completedbycompanyid" ,{
+          companyId: sessionStorage.getItem("companyId"),
+          startDate: data.startDate,
+          endDate : data.endDate
+                  } 
       );
       return responce.data;
     } catch (error) {
@@ -161,13 +165,18 @@ export const completedbycompanyid = createAsyncThunk<IClientAdminResponce>(
   }
 );
 
-export const getnewinvoicebycompanyid = createAsyncThunk<IClientAdminResponce>(
+export const getnewinvoicebycompanyid = createAsyncThunk<IClientAdminResponce,{ startDate:string, endDate:string}>(
   "clientadmin/getnewinvoicebycompanyid",
-  async (_, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const responce = await service.getCall(
-        "invoice/getnewinvoicebycompanyid/" +
-          sessionStorage.getItem("companyId")
+      const responce = await service.postCall(
+        "invoice/getnewinvoicebycompanyid/", {
+          companyId: sessionStorage.getItem("companyId"),
+          startDate: data.startDate,
+          endDate : data.endDate
+                  } 
+
+          
       );
       return responce.data;
     } catch (error) {

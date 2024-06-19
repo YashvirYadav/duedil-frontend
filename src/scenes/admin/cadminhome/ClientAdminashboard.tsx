@@ -8,6 +8,8 @@ import { Outlet } from "react-router-dom";
 import {
   chartdata,
   selectorsearchDashboardBydate,
+  loading,
+  message,
 } from "./cadminslice/cadmin.selector";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
@@ -24,15 +26,8 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import PaidIcon from '@mui/icons-material/Paid';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
-
-
-
-
-
-
-
-
-
+import { Toast } from "../../../components/Toast";
+import { Loader } from "../../../components/Lodar";
 
 
 
@@ -47,7 +42,9 @@ const ClientAdminashboard = () => {
   //const slaexpiry = useSelector(dashboarddataSLA);
   const chartValue = useSelector(chartdata);
   const dispatch = useDispatch<AppDispatch>();
-
+  const lodingState = useSelector(loading);
+  const toastmessage = useSelector(message);
+  const [open, setOpen] = useState<boolean>(false);
   const currentDateJS = dayjs()
   const tenDaysAgoJS = dayjs().subtract(30, "day")
 
@@ -132,6 +129,12 @@ const ClientAdminashboard = () => {
     paidAmount,
     lineData,
   } = dashboardData;
+
+  useEffect(() => {
+    if (lodingState === "failed" || lodingState === "succeeded") {
+      setOpen(true);
+    }
+  }, [lodingState]);
 
   useEffect(() => {
     // dispatch(getdashboardforclientadmin());
@@ -527,6 +530,19 @@ const ClientAdminashboard = () => {
       <Box>
         <Outlet></Outlet>
       </Box>
+      {lodingState ? (
+        lodingState !== "idle" && lodingState !== "loading" ? (
+          <Toast
+            open={open}
+            handleClose={() => {}}
+            setShowToast={setOpen}
+            message={toastmessage}
+            severity="error"
+          />
+        ) : lodingState === "loading" ? (
+          <Loader />
+        ) : null
+      ) : null}
     </Box>
   );
 };

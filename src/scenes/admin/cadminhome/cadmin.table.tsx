@@ -52,9 +52,9 @@ const Clientadmintable = () => {
     } else if(typeaction === "Rejected Invoices"){
         dispatch(rejectedbycompanyid({ startDate, endDate}));
     } else if(typeaction === "Paid Invoices"){
-       dispatch(completedbycompanyid());
+       dispatch(completedbycompanyid({ startDate, endDate}));
     } else if(typeaction === "New Invoices"){
-      dispatch(getnewinvoicebycompanyid());
+      dispatch(getnewinvoicebycompanyid({ startDate, endDate}));
     }
   }, [dispatch, typeaction]);
 
