@@ -3,7 +3,10 @@ import { IKeyValue } from "./Api.type";
 
 const authToken = () => sessionStorage.getItem("token");
 const defaultContentType = "application/json";
-const baseURL = "http://localhost:8000/api/v1/";
+// const LocbaseURL = "http://localhost:8000/api/v1/";
+const LivebaseURL = "http://45.64.8.186:8000/api/v1/";
+
+const baseURL = LivebaseURL
 
 const makeHeader = (
   header: IKeyValue<string | number | boolean> = {},
