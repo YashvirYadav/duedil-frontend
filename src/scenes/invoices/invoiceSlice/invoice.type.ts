@@ -6,6 +6,7 @@ export interface IRegisterInvoiceResponce {
   message: string;
   success: boolean;
   error: string | null;
+  OCR :ocrinvoice;
 }
 
 export interface IInvoice {
@@ -21,3 +22,23 @@ export interface IInvoice {
   vendorId?: string;
   vendorname? : string;
 }
+
+export interface ocrinvoice {
+  tax_amount: string;
+  total_amount : string;
+  main_amount : string;
+  invoice_number : string;
+  invoice_eway : string;
+  invoice_date : string;
+}
+
+export interface item 
+  {
+    _id: string;
+    item: string;
+    quantity: number;
+    rate: string;
+    amount: string;
+  }
+
+

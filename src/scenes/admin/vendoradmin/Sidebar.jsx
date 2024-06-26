@@ -10,18 +10,9 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PasswordIcon from '@mui/icons-material/Password';
-
-
-
-
-
-
-
-
-
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import PasswordIcon from "@mui/icons-material/Password";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -150,6 +141,14 @@ const Sidebar = () => {
             <Item
               title="Generate invoice"
               to="generateinvoice"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="OCR invoice"
+              to="invoiceocr"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

@@ -69,6 +69,8 @@ import { PendingInvoiceReport } from "./scenes/admin/cadminhome/reports/pendingi
 import { ViewList } from "./scenes/admin/cadminhome/reports/ViewList";
 import ViewListByRole from "./scenes/admin/cadminhome/reports/pendinginvoice/ViewListByRole";
 import AgingreportviewByAge from "./scenes/admin/cadminhome/reports/agingreport/agingreportview";
+// import { InvoiceOCR } from "./scenes/invoices/InvoiceOCR";
+// import ViewOcrInvice from "./scenes/invoices/ocr.invoice";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -191,6 +193,11 @@ function App() {
               <Route path="" element={<InvoiceTable />} />
               <Route path="addinvoice" element={<RegisterInvoice />} />
             </Route>
+{/* 
+            <Route path="invoiceocr" element={<InvoiceOCR />}>
+              <Route path="" element={<ViewOcrInvice />} />
+              <Route path="test" element={<ViewOcrInvice />} />
+            </Route> */}
 
             <Route path="bank" element={<BankDetails />}>
               <Route path="" element={<TableBank />} />

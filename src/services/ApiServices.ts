@@ -3,8 +3,8 @@ import { IKeyValue } from "./Api.type";
 
 const authToken = () => sessionStorage.getItem("token");
 const defaultContentType = "application/json";
-//const url = "http://localhost:8000/api/v1/";
-const url = "http://45.64.8.186:8000/api/v1/";
+const url = "http://localhost:8000/api/v1/";
+//const url = "http://45.64.8.186:8000/api/v1/";
 
 const baseURL = url
 

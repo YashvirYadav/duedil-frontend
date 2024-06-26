@@ -8,6 +8,10 @@ export const invoiceData = createSelector(invoice, (state) => {
   return state.data;
 });
 
+export const ocrData = createSelector(invoice, (state) => {
+  return state.OCR;
+}
+);
 
 
 export const invoiceDataById = (id: string) => createSelector(invoiceData, (invoicedata) => {

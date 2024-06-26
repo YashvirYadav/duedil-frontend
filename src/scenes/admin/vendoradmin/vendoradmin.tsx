@@ -2,6 +2,8 @@ import { Navigate, Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Topbar from "../../global/Topbar";
 import { useEffect, useState } from "react";
+import { Box } from "@mui/material"
+
 
 const VendorHome = () => {
   const [isAuth,setIsAuth] = useState<boolean>(true)

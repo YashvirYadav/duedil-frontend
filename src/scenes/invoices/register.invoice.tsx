@@ -17,10 +17,10 @@ import { useEffect, useState } from "react";
 import { Loader } from "../../components/Lodar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { loading, message } from "./invoiceSlice/invoice.selector";
+import { loading, message, ocrData } from "./invoiceSlice/invoice.selector";
 import { Toast } from "../../components/Toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { registerInvoice } from "./invoiceSlice/invoice.slice";
+import { getInvoiceData, registerInvoice } from "./invoiceSlice/invoice.slice";
 import { IInvoice } from "./invoiceSlice/invoice.type";
 import { user } from "../user/authSlice/auth.selector";
 import { userID } from "../../utils/utils";
@@ -50,15 +50,13 @@ const RegisterInvoice = () => {
 
   const [duedate, setduedate] = useState<string>(formattedDate);
   const [errorDueDate, setErrorDueDate] = useState<boolean>(false);
- 
+
   const [amount, setamount] = useState<number>(0);
   const [errorAmount, setErrorAmount] = useState<boolean>(false);
 
-
   const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-  const [errorPurchaseOrderNumber, setErrorPurchaseOrderNumber] = useState<
-    boolean
-  >(false);
+  const [errorPurchaseOrderNumber, setErrorPurchaseOrderNumber] =
+    useState<boolean>(false);
   const [gstamount, setgstamount] = useState<number>(0);
   const [errorGstAmount, setErrorGstAmount] = useState<boolean>(false);
   const [attachments, setattachments] = useState<File>();
@@ -67,13 +65,23 @@ const RegisterInvoice = () => {
 
   const [open, setOpen] = useState<boolean>(false);
 
- 
-
   const { id } = useParams<{ id?: string }>();
+  const invoiceDataOCR = useSelector(ocrData);
 
-useEffect(() => {
+  useEffect(() => {
+
+    setinvoicedate(invoiceDataOCR.invoice_date);
+    setinvoicenumber(invoiceDataOCR.invoice_number);
+    setamount(parseInt(invoiceDataOCR.main_amount));
+    setgstamount(parseInt(invoiceDataOCR.tax_amount));
+    settotalamount(parseInt(invoiceDataOCR.total_amount));
+    
+  }, [invoiceDataOCR]);
+
+
+  useEffect(() => {
     settotalamount(amount + gstamount);
-}, [gstamount, amount]);
+  }, [gstamount, amount]);
 
   useEffect(() => {
     if (id) {
@@ -95,6 +103,10 @@ useEffect(() => {
       console.log(event.target.files[0]);
 
       setattachments(event.target.files[0]);
+      const formData = new FormData();
+      formData.append("attachments", event.target.files[0] as Blob);
+
+      dispatch(getInvoiceData(formData));
     }
   };
 
@@ -119,15 +131,14 @@ useEffect(() => {
       setErrorGstAmount(true);
       return;
     }
-if(!purchaseordernumber){
-  setErrorPurchaseOrderNumber(true);
-  return;
-}
-if(!attachments)
-  {
-    setOpen(true);
-    return;
-  }
+    if (!purchaseordernumber) {
+      setErrorPurchaseOrderNumber(true);
+      return;
+    }
+    if (!attachments) {
+      setOpen(true);
+      return;
+    }
 
     const formData = new FormData();
     formData.append("attachments", attachments as Blob);
@@ -142,9 +153,8 @@ if(!attachments)
     formData.append("companyid", sessionStorage.getItem("companyId") as string);
     formData.append("vendorname", sessionStorage.getItem("name") as string);
 
-
     dispatch(registerInvoice(formData));
-  }
+  };
 
   return (
     <>
@@ -156,7 +166,7 @@ if(!attachments)
             onClick={() => navigate(-1)}
             color="secondary"
             variant="contained"
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
             Back to list
           </Button>
@@ -189,9 +199,11 @@ if(!attachments)
               value={invoicenumber}
               onChange={(e) => {
                 setErrorInviceNumber(false);
-                setinvoicenumber(e.target.value)
+                setinvoicenumber(e.target.value);
               }}
-              helperText={errorInvoiceNumber ? "Please enter invoice number" : ""}
+              helperText={
+                errorInvoiceNumber ? "Please enter invoice number" : ""
+              }
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
@@ -202,9 +214,8 @@ if(!attachments)
               value={invoicedate}
               onChange={(e) => {
                 setErrorInvoiceDate(false);
-                setinvoicedate(e.target.value)
+                setinvoicedate(e.target.value);
               }}
-
               sx={{ gridColumn: "span 12" }}
             />
             <TextField
@@ -215,7 +226,7 @@ if(!attachments)
               value={duedate}
               onChange={(e) => {
                 setErrorDueDate(false);
-                setduedate(e.target.value)
+                setduedate(e.target.value);
               }}
               sx={{ gridColumn: "span 12" }}
             />
@@ -229,7 +240,8 @@ if(!attachments)
               value={purchaseordernumber}
               onChange={(e) => {
                 setErrorPurchaseOrderNumber(false);
-                setpurchaseordernumber(e.target.value)}}
+                setpurchaseordernumber(e.target.value);
+              }}
               sx={{ gridColumn: "span 12" }}
             />
           </Box>
@@ -255,7 +267,8 @@ if(!attachments)
               value={amount}
               onChange={(e) => {
                 setErrorAmount(false);
-                setamount(parseInt(e.target.value))}}
+                setamount(parseInt(e.target.value));
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -268,7 +281,8 @@ if(!attachments)
               value={gstamount}
               onChange={(e) => {
                 setErrorGstAmount(false);
-                setgstamount(parseInt(e.target.value))}}
+                setgstamount(parseInt(e.target.value));
+              }}
               sx={{ gridColumn: "span 12" }}
             />
 
@@ -280,7 +294,6 @@ if(!attachments)
               name="totalamount"
               disabled
               value={totalamount}
-              
               sx={{ gridColumn: "span 12" }}
             />
             <Typography variant="h6" fontWeight="200" color={colors.grey[100]}>

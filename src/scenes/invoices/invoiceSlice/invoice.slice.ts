@@ -10,6 +10,15 @@ const initialState: IRegisterInvoiceResponce = {
   message: "",
   success: false,
   error: null,
+  OCR: {
+    tax_amount: "",
+    total_amount: "",
+    main_amount: "",
+    invoice_number: "",
+    invoice_eway: "",
+    invoice_date: ""
+  },
+  
 };
 
 export const registerInvoice = createAsyncThunk<IRegisterInvoiceResponce, FormData>
@@ -50,6 +59,20 @@ export const deleteInvoice = createAsyncThunk<IRegisterInvoiceResponce, string>(
         }
     }
 );
+
+// file upload get data
+
+export const getInvoiceData = createAsyncThunk<IRegisterInvoiceResponce, FormData>(
+  "invoice/getInvoiceData",async(data,{rejectWithValue})=>{
+    try {
+      const response = await service.postCallBlob("ocr/uploadinvoice",data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }  
+);
+
 
 const invoiceSlice = createSlice({
   name: "invoice",
@@ -95,6 +118,18 @@ const invoiceSlice = createSlice({
       state.error = null;
     })
     .addCase(deleteInvoice.rejected, (state, action: PayloadAction<any>) => {
+      state.status = "failed";
+      state.message = action.payload.message;
+    })
+    .addCase(getInvoiceData.pending, (state) => {
+      state.status = "loading";
+    })
+    .addCase(getInvoiceData.fulfilled, (state, action: PayloadAction<IRegisterInvoiceResponce>) => {
+      state.status = "succeeded";
+      state.OCR = action.payload.data as any;
+      state.error = null;
+    })
+    .addCase(getInvoiceData.rejected, (state, action: PayloadAction<any>) => {
       state.status = "failed";
       state.message = action.payload.message;
     });
