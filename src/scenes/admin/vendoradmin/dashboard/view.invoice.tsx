@@ -103,19 +103,9 @@ const ViewInvice = () => {
 
   useEffect(() => {
     if (invoice) {
-      setinvoicenumber(invoice.invoicenumber);
-      setinvoicedate(
-        invoice.invoicedate ? invoice.invoicedate.toString() : formattedDate
-      );
-      setduedate(invoice.duedate ? invoice.duedate.toString() : formattedDate);
-      setamount(invoice.amount);
-      setpurchaseordernumber(invoice.purchaseordernumber || "");
-      setgstamount(invoice.gstamount || 0);
-      settotalamount(invoice.totalamount || 0);
-      setinvoicemovement(invoice.invoicemovement || []);
-      setattachments(invoice.attachments || "");
-      setCurrentUser(invoice.invoicemovement && invoice.invoicemovement[invoice.invoicemovement?.length-1].username || "");
-      setVendorName(invoice.vendorname || "")
+     
+      setCurrentUser(invoice.workflowemovement && invoice.workflowemovement[invoice.workflowemovement?.length-1].username || "");
+     
     }
   }, [invoice]);
 

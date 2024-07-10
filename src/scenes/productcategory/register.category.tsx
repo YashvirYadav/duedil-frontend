@@ -17,22 +17,26 @@ import Header from "../../components/Header";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Loader } from "../../components/Lodar";
-import { loading, message } from "./roleSlice/role.selector";
+import { loading, message } from "./categorySlice/category.selector";
 import { Toast } from "../../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { useNavigate } from "react-router-dom";
-import { registerRole } from "./roleSlice/role.slice";
+import { registerCategory } from "./categorySlice/categorySlice";
 
-const RegisterRole = () => {
+const RegisterCategory = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
-  const [roletype, setRoleType] = useState<string>("");
-  const [roleName, setRoleName] = useState<string>("");
-  const [Description, setDescription] = useState<string>("");
+
 
   const [Status, setStatus] = useState<boolean>(false);
+  const [productCategoryName, setProductCategoryName] = useState<string>("");
+  const [rate, setRate] = useState<string>("");
+  const [minTat, setMinTat] = useState<string>("");
+  const [maxTat, setMaxTat] = useState<string>("");
+  const [productNames, setProductNames] = useState<string>("");
+ 
 
   const lodingState = useSelector(loading);
   const getMessage = useSelector(message);
@@ -47,26 +51,30 @@ const RegisterRole = () => {
   }, [lodingState]);
 
   const ragisterUserSubmit = () => {
-    dispatch(registerRole({
-        rolename: roleName,
-        description: Description,
-        isactive: Status,
-        roletype: roletype 
-      }));
+   dispatch(
+      registerCategory({
+        categoryproduct: productCategoryName,
+        productname: productNames,
+        rate: +rate,
+        status: Status,
+        minimumtat: +minTat,
+        maximumtat: +maxTat,
+        
+      })
+   );
   };
 
   return (
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Role User" subtitle="" />
+        <Header title="Category User" subtitle="Welcome to your dashboard" />
 
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => navigate(-1)}
             color="secondary"
             variant="contained"
-            sx={{ textTransform: 'none' }}
           >
             Back to list
           </Button>
@@ -87,18 +95,47 @@ const RegisterRole = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Role Detail
+              Product
             </Typography>
+
+            <InputLabel id="demo-simple-select-helper-label">Product category</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              label="Product category"
+              value={productCategoryName}
+             onChange={(e) => setProductCategoryName(e.target.value)}
+            >
+              <MenuItem value="Employee verification">Employee verification</MenuItem>
+              <MenuItem value="Company Verification">Company Verification</MenuItem>
+              <MenuItem value="Property verification">Property verification</MenuItem>
+            </Select>
+
             <TextField
               fullWidth
               variant="outlined"
               type="text"
-              label="Role Name*"
-              name="role Name*"
-              value={roleName}
-              onChange={(e) => setRoleName(e.target.value)}
+              label="Product Name"
+              name="Product"
+             value={productNames}
+              onChange={(e) => setProductNames(e.target.value)}
+           
               sx={{ gridColumn: "span 12" }}
             />
+
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="number"
+              label="Rate"
+              name="rate"
+              value={rate}
+              onChange={(e) => setRate(e.target.value)}
+             
+              sx={{ gridColumn: "span 12" }}
+            />
+
+            
 
             <FormControlLabel
               control={
@@ -120,39 +157,34 @@ const RegisterRole = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Other details
+              TAT
             </Typography>
 
             <TextField
               fullWidth
               variant="outlined"
-              type="Description"
-              label="Description"
-              name="Description"
-              value={Description}
-              onChange={(e) => setDescription(e.target.value)}
+              type="number"
+              label="Minimum Tat"
+              name="Minimum Tat"
+              value={minTat}
+              onChange={(e) => setMinTat(e.target.value)}
+             
               sx={{ gridColumn: "span 12" }}
             />
-
-            <InputLabel id="demo-simple-select-helper-label">
-              Role type
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              label="Country"
-              value={roletype}
-              onChange={(e) => {
-                setRoleType(e.target.value as string);
-              }}
-            >
+            <TextField
+              fullWidth
+              variant="outlined"
+              type="number"
+              label="Maximum Tat"
+              name="Maximum Tat"
+              value={maxTat}
+              onChange={(e) => setMaxTat(e.target.value)}
               
-              <MenuItem value="Normal">Normal</MenuItem>
-              <MenuItem value="Salesmanager">Sales manager</MenuItem>
-              <MenuItem value="Projectmanager">Project manager</MenuItem>
-              <MenuItem value="executive">Executive</MenuItem>
-             
-            </Select>
+              sx={{ gridColumn: "span 12" }}
+            />
+            
+
+           
           </Box>
         </Box>
         <Box
@@ -196,4 +228,4 @@ const RegisterRole = () => {
   );
 };
 
-export default RegisterRole;
+export default RegisterCategory;

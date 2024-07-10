@@ -1,29 +1,38 @@
 import {
-  TextField,
   useTheme,
-  FormControlLabel,
-  Switch,
-  Select,
   Typography,
   Button,
+  Grid,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../theme";
-import InputLabel from "@mui/material/InputLabel";
 import Header from "../../components/Header";
-import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 
 import { Loader } from "../../components/Lodar";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { loading, message, ocrData } from "./invoiceSlice/invoice.selector";
+import { loading, message } from "./invoiceSlice/invoice.selector";
 import { Toast } from "../../components/Toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getInvoiceData, registerInvoice } from "./invoiceSlice/invoice.slice";
-import { IInvoice } from "./invoiceSlice/invoice.type";
-import { user } from "../user/authSlice/auth.selector";
 import { userID } from "../../utils/utils";
+import { getproductbycategory } from "../category/categorySlice/categorySlice";
+import { categoryData } from "../productcategory/categorySlice/category.selector";
+import FormGroup from "@mui/material/FormGroup";
+import dayjs from "dayjs";
+
+type product = {
+  id: string;
+  productname: string;
+  maximumtat: number;
+  duedate: string;
+};
 
 const RegisterInvoice = () => {
   const theme = useTheme();
@@ -32,65 +41,21 @@ const RegisterInvoice = () => {
   const lodingState = useSelector(loading);
   const getMessage = useSelector(message);
   const navigate = useNavigate();
+  const categoryProduct = useSelector(categoryData);
 
-  const currentDate = new Date();
-  const formattedDate = `${String(currentDate.getDate()).padStart(
-    2,
-    "0"
-  )}-${String(currentDate.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}-${currentDate.getFullYear()}`;
+  const [productname, setproductname] = useState<product[]>([]);
 
-  const [invoicenumber, setinvoicenumber] = useState<string>("");
-  const [errorInvoiceNumber, setErrorInviceNumber] = useState<boolean>(false);
+  const [biodata, setBiodata] = useState<File>();
+  const [concentdoc, setconcentdoc] = useState<File>();
 
-  const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
-  const [errorInvoiceDate, setErrorInvoiceDate] = useState<boolean>(false);
-
-  const [duedate, setduedate] = useState<string>(formattedDate);
-  const [errorDueDate, setErrorDueDate] = useState<boolean>(false);
-
-  const [amount, setamount] = useState<number>(0);
-  const [errorAmount, setErrorAmount] = useState<boolean>(false);
-
-  const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-  const [errorPurchaseOrderNumber, setErrorPurchaseOrderNumber] =
-    useState<boolean>(false);
-  const [gstamount, setgstamount] = useState<number>(0);
-  const [errorGstAmount, setErrorGstAmount] = useState<boolean>(false);
-  const [attachments, setattachments] = useState<File>();
-
-  const [totalamount, settotalamount] = useState<number>(0);
+  const [productCategoryName, setProductCategoryName] = useState<string>("");
 
   const [open, setOpen] = useState<boolean>(false);
+  const [maxTat, setMaxTat] = useState<number>(0);
+  const currentDateJS = dayjs().toDate();
+  const LAST = dayjs().subtract(10, "day").toDate();
 
-  const { id } = useParams<{ id?: string }>();
-  const invoiceDataOCR = useSelector(ocrData);
-
-  useEffect(() => {
-
-    setinvoicedate(invoiceDataOCR.invoice_date);
-    setinvoicenumber(invoiceDataOCR.invoice_number);
-    setamount(parseInt(invoiceDataOCR.main_amount));
-    setgstamount(parseInt(invoiceDataOCR.tax_amount));
-    settotalamount(parseInt(invoiceDataOCR.total_amount));
-    
-  }, [invoiceDataOCR]);
-
-
-  useEffect(() => {
-    settotalamount(amount + gstamount);
-  }, [gstamount, amount]);
-
-  useEffect(() => {
-    if (id) {
-      // If an ID was passed, fetch the Vendor data and set it in the state
-    } else {
-      // If no ID was passed, initialize the state with default values
-      // initializeState();
-    }
-  }, [id]);
+  console.log("LAST => ", LAST);
 
   useEffect(() => {
     if (lodingState === "failed" || lodingState === "succeeded") {
@@ -98,69 +63,88 @@ const RegisterInvoice = () => {
     }
   }, [lodingState]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const biodataFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      console.log(event.target.files[0]);
+      setBiodata(event.target.files[0]);
+    }
+  };
 
-      setattachments(event.target.files[0]);
-      const formData = new FormData();
-      formData.append("attachments", event.target.files[0] as Blob);
-
-      dispatch(getInvoiceData(formData));
+  const consentFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setconcentdoc(event.target.files[0]);
     }
   };
 
   const submitInvoice = () => {
-    if (!invoicenumber) {
-      setErrorInviceNumber(true);
-      return;
-    }
-    if (!invoicedate) {
-      setErrorInvoiceDate(true);
-      return;
-    }
-    if (!duedate) {
-      setErrorDueDate(true);
-      return;
-    }
-    if (!amount) {
-      setErrorAmount(true);
-      return;
-    }
-    if (!gstamount) {
-      setErrorGstAmount(true);
-      return;
-    }
-    if (!purchaseordernumber) {
-      setErrorPurchaseOrderNumber(true);
-      return;
-    }
-    if (!attachments) {
-      setOpen(true);
-      return;
-    }
-
     const formData = new FormData();
-    formData.append("attachments", attachments as Blob);
-    formData.append("invoicenumber", invoicenumber);
-    formData.append("invoicedate", invoicedate);
-    formData.append("duedate", duedate);
-    formData.append("amount", amount.toString());
-    formData.append("purchaseordernumber", purchaseordernumber);
-    formData.append("gstamount", gstamount.toString());
-    formData.append("totalamount", totalamount.toString());
-    formData.append("vendorId", userID() as string);
+    formData.append("productrequest", JSON.stringify(productname));
+    formData.append("productcategory", productCategoryName);
+    formData.append("concentdoc", concentdoc as Blob);
+
+    formData.append("biodata", biodata as Blob);
+    formData.append("clientid", userID() as string);
     formData.append("companyid", sessionStorage.getItem("companyId") as string);
-    formData.append("vendorname", sessionStorage.getItem("name") as string);
+    formData.append("clientname", sessionStorage.getItem("name") as string);
+    formData.append("requestdate", currentDateJS.toDateString());
+    formData.append("duedate", dayjs().subtract(-maxTat, "day").toDate().toDateString());
+    formData.append("progressstepscount", productname.length.toString());
+    formData.append("progressstepsdone", "0");
+    formData.append("movementstatus", "new");
 
     dispatch(registerInvoice(formData));
   };
 
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // You can access the checkbox value, checked state, or use a custom attribute to identify the checkbox
+
+    if (event.target.checked) {
+      console.log("index =>  check",);
+      const index = categoryProduct.findIndex(
+        (item) => item._id === event.target.value
+      );
+      console.log("index => ", index);
+      const value = categoryProduct[index].productname
+      setproductname([
+        ...productname,
+        { 
+          id: event.target.value, 
+          productname: value,
+          maximumtat: categoryProduct[index].maximumtat,
+          duedate : dayjs().subtract(-categoryProduct[index].maximumtat, "day").toDate().toDateString()
+        }
+      ]);
+    } else {
+      const index = productname.findIndex(
+        (item) => item.id === event.target.value
+      );
+      const newProductname = [...productname];
+      newProductname.splice(index, 1);
+      setproductname(newProductname);
+    }
+
+    // Add your logic here to handle the change
+  };
+
+  console.log("productname => ", productname);
+
+  const checkBoxnodeList = categoryProduct.map((item) => {
+    if(item.maximumtat>maxTat){
+      setMaxTat(item.maximumtat)
+    }
+    return(
+    <Grid item key={item._id} xs={4}>
+      <FormControlLabel
+        control={<Checkbox onChange={handleCheckboxChange} value={item._id} />}
+        label={item.productname}
+      />
+    </Grid>
+  )});
+
   return (
-    <>
+    <>``
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Post Invoice" subtitle="" />
+        <Header title="Due diligence Request" subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => navigate(-1)}
@@ -180,7 +164,7 @@ const RegisterInvoice = () => {
         >
           <Box
             flexDirection="column"
-            gridColumn="span 6"
+            gridColumn="span 12"
             bgcolor={colors.primary[400]}
             display="flex"
             p="10px"
@@ -190,116 +174,71 @@ const RegisterInvoice = () => {
               Invoice Detail
             </Typography>
 
-            <TextField
-              id="invoicenumber"
-              variant="outlined"
-              type="text"
-              label="Invoice Number"
-              name="invoicenumber"
-              value={invoicenumber}
-              onChange={(e) => {
-                setErrorInviceNumber(false);
-                setinvoicenumber(e.target.value);
-              }}
-              helperText={
-                errorInvoiceNumber ? "Please enter invoice number" : ""
-              }
-              sx={{ gridColumn: "span 12" }}
-            />
-            <TextField
-              id="date"
-              label="invoice Date"
-              type="date"
-              variant="outlined"
-              value={invoicedate}
-              onChange={(e) => {
-                setErrorInvoiceDate(false);
-                setinvoicedate(e.target.value);
-              }}
-              sx={{ gridColumn: "span 12" }}
-            />
-            <TextField
-              id="date"
-              label="due Date"
-              type="date"
-              variant="outlined"
-              value={duedate}
-              onChange={(e) => {
-                setErrorDueDate(false);
-                setduedate(e.target.value);
-              }}
-              sx={{ gridColumn: "span 12" }}
-            />
-
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="text"
-              label="Purchase Order Number"
-              name="purchaseordernumber"
-              value={purchaseordernumber}
-              onChange={(e) => {
-                setErrorPurchaseOrderNumber(false);
-                setpurchaseordernumber(e.target.value);
-              }}
-              sx={{ gridColumn: "span 12" }}
-            />
-          </Box>
-
-          <Box
-            flexDirection="column"
-            gridColumn="span 6"
-            bgcolor={colors.primary[400]}
-            display="flex"
-            p="10px"
-            gap="10px"
-          >
-            <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Other invoice Detail
-            </Typography>
-
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="number"
-              label="Amount"
-              name="amount"
-              value={amount}
-              onChange={(e) => {
-                setErrorAmount(false);
-                setamount(parseInt(e.target.value));
-              }}
-              sx={{ gridColumn: "span 12" }}
-            />
-
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="number"
-              label="GST Amount"
-              name="gstnumber"
-              value={gstamount}
-              onChange={(e) => {
-                setErrorGstAmount(false);
-                setgstamount(parseInt(e.target.value));
-              }}
-              sx={{ gridColumn: "span 12" }}
-            />
-
-            <TextField
-              fullWidth
-              variant="outlined"
-              type="number"
-              label="Total Amount"
-              name="totalamount"
-              disabled
-              value={totalamount}
-              sx={{ gridColumn: "span 12" }}
-            />
-            <Typography variant="h6" fontWeight="200" color={colors.grey[100]}>
-              Attachment
-            </Typography>
-            <input type="file" accept="pdf/*" onChange={handleFileChange} />
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
+                <InputLabel id="demo-simple-select-helper-label">
+                  Product category
+                </InputLabel>
+                <Select
+                  fullWidth
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  label="Product category"
+                  value={productCategoryName}
+                  onChange={(e) => {
+                    dispatch(
+                      getproductbycategory({
+                        category: e.target.value as string,
+                      })
+                    );
+                    setProductCategoryName(e.target.value);
+                  }}
+                >
+                  <MenuItem value="Employee verification">
+                    Employee verification
+                  </MenuItem>
+                  <MenuItem value="Company Verification">
+                    Company Verification
+                  </MenuItem>
+                  <MenuItem value="Property verification">
+                    Property verification
+                  </MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography
+                  variant="h6"
+                  fontWeight="200"
+                  color={colors.grey[100]}
+                >
+                  Upload biodata/cv
+                </Typography>
+                <input
+                  type="file"
+                  accept="pdf/*"
+                  onChange={biodataFileChange}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Typography
+                  variant="h6"
+                  fontWeight="200"
+                  color={colors.grey[100]}
+                >
+                  Upload consent letter
+                </Typography>
+                <input
+                  type="file"
+                  accept="pdf/*"
+                  onChange={consentFileChange}
+                />
+              </Grid>
+            </Grid>
+            <FormGroup>
+              <Grid container spacing={2}>
+                {checkBoxnodeList}
+              </Grid>
+            </FormGroup>
           </Box>
         </Box>
         <Box

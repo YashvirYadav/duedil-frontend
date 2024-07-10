@@ -13,7 +13,11 @@ import { AppDispatch } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import { loading, categoryData, message } from "./categorySlice/category.selector";
+import {
+  loading,
+  categoryData,
+  message,
+} from "./categorySlice/category.selector";
 import { Loader } from "../../components/Lodar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,7 +27,6 @@ import { useNavigate } from "react-router-dom";
 import { deleteCategory, getCategory } from "./categorySlice/categorySlice";
 
 const TableCategory = () => {
-  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dispatch = useDispatch<AppDispatch>();
@@ -49,35 +52,31 @@ const TableCategory = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "name", headerName: "Category Name",  flex: 1 },
+    { field: "categoryproduct", headerName: "Category Product", flex: 1 },
 
     {
-      field: "code",
-      headerName: "Code",
-     
+      field: "productname",
+      headerName: "Product Name",
+
       flex: 1,
     },
-    
+
     {
-      field: "description",
-      headerName: "Description",
+      field: "rate",
+      headerName: "Rate",
       flex: 1,
-    }, 
-    {
-      field: "c0to100",
-      headerName: "0 to 100"
     },
+
     {
-      field: "c101to500",
-      headerName: "101 to 500"
+      field: "minimumtat",
+      headerName: "Minimum TAT",
+      flex: 1,
     },
+
     {
-      field: "c501to1000",
-      headerName: "501 to 1000"
-    },
-    {
-      field: "c1001plus",
-      headerName: "1001+"
+      field: "maximumtat",
+      headerName: "Maximum TAT",
+      flex: 1,
     },
 
     {
@@ -125,9 +124,9 @@ const TableCategory = () => {
         const onClickDelete = () => {
           const id = params.id.toString();
 
-            dispatch(deleteCategory({ id: id })).then(() => {
-              dispatch(getCategory());
-            });
+          dispatch(deleteCategory({ id: id })).then(() => {
+            dispatch(getCategory());
+          });
         };
 
         const onClickView = () => {
@@ -166,7 +165,6 @@ const TableCategory = () => {
             }}
             color="secondary"
             variant="contained"
-            sx={{ textTransform: 'none' }}
           >
             Create New Category
           </Button>
@@ -218,17 +216,10 @@ const TableCategory = () => {
           ) : null}
 
           <DataGrid
-         sx={{
-          "& .MuiDataGrid-cell": {
-            fontSize: "16px", // Change this value to your desired font size
-          },
-        }}
-
-        
-        density="compact"
             // checkboxSelection
             rows={Array.isArray(category) ? category : []} // Ensure that company is an array
             columns={columns}
+            density="compact"
             components={{ Toolbar: GridToolbar }}
             getRowId={(row) => row._id} // Use the `_id` field as the unique id
           />

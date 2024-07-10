@@ -11,17 +11,29 @@ export interface INeedtoactResponce {
   
   export interface IInvoice {
     _id?: string;
-    invoicenumber: string;
-    invoicedate?: Date;
-    duedate?: Date;
-    amount: number;
-    purchaseordernumber?: string;
-    gstamount?: string | number;
-    attachments?: string;
-    totalamount?: number;
-    vendorId?: string;
-    vendorname?: string;
-    invoicemovement?: Iinvoicemovement[];
+    productcategory:string;
+    concentdoc : string;
+    biodata : string;
+    clientid :string;
+    clientname : string;
+   
+    productrequest :Iproductrequest[]
+    workflowemovement?: Iinvoicemovement[];
+    movementstatus: string;
+     requestdate?: Date;
+     duedate?: Date;
+     progressstepsdone: number;
+     progressstepscount: number;
+  }
+
+  export interface Iproductrequest{
+    productname :string
+    finaldocument : string
+    remark : string[]
+    status : string
+    duedate: Date
+    maximumtat: number
+    _id : string 
   }
 
   export interface Iinvoicemovement {
@@ -36,3 +48,5 @@ export interface INeedtoactResponce {
     status: string;
     _id: string;
     }
+
+

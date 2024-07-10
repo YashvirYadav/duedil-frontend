@@ -2,13 +2,15 @@ import {
   useTheme,
   Typography,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContentText,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   DialogContent,
   DialogActions,
   TextField,
-  Input,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../../../theme";
@@ -19,30 +21,30 @@ import { Loader } from "../../../../components/Lodar";
 import { loading, message, currentInvoice } from "./needtoact.selector";
 import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import LinearProgress, {
+  LinearProgressProps,
+} from "@mui/material/LinearProgress";
+
 import {
-  addgrnitems,
+  addRemarks,
   getAttachment,
   getInvoiceById,
-  userapprove,
-  userreject,
+  setproductstatusdone,
 } from "./needtoact.slice";
 import { Iinvoicemovement } from "./needtoact.type";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DownloadIcon from "@mui/icons-material/Download";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
+import dayjs from "dayjs";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import DownloadIcon from "@mui/icons-material/Download";
-import LayersIcon from "@mui/icons-material/Layers";
-import PersonIcon from "@mui/icons-material/Person";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import { formatNumberIndian } from "../../../../utils/utils";
+import ProgressCircle from "../../../../components/ProgressCircle";
+import LinearProgressWithLabel from "../../../../components/LinearProgressWithLabel";
+import CommentIcon from "@mui/icons-material/Comment";
 
 // import Textarea from '@mui/joy/Textarea';
 
@@ -54,85 +56,69 @@ const NeedToactAction = () => {
 
   const getMessage = useSelector(message);
   const invoice = useSelector(currentInvoice);
-  console.log("=>>", invoice);
-  const navigate = useNavigate();
+  const currentDateJS = dayjs().toDate();
 
-  const currentDate = new Date();
-  const formattedDate = `${String(currentDate.getDate()).padStart(
-    2,
-    "0"
-  )}-${String(currentDate.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}-${currentDate.getFullYear()}`;
+  const navigate = useNavigate();
+  const [actionType, setActionType] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [remarkOpen, setRemarkOpen] = useState<boolean>(false);
+  const [remark, setRemark] = useState<string>("");
+  const [remarksid, setRemarksid] = useState<string>("");
+  const [completedkOpen, setCompletedOpen] = useState<boolean>(false);
+  const [doneProduct, setDoneProduct] = useState<File>();
 
   const { id } = useParams<{ id?: string }>();
+  const doneproductFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      setDoneProduct(event.target.files[0]);
+    }
+  };
 
+  const submitProductDone = () => {
+    //{ id: id, productid: remarksid, remark: currentDateJS+"::"+remark }
+    const dateandremark = currentDateJS.toDateString() + "::" + remark;
+    if (id) {
+      const formData = new FormData();
+      formData.append("attachments", doneProduct as Blob);
+      formData.append("remark", remark);
+      formData.append("productid", remarksid);
+      formData.append("id", id);
+      formData.append("remark", dateandremark);
+      dispatch(setproductstatusdone({ fromData: formData })).then(() =>
+        dispatch(getInvoiceById(id))
+      );
+      setCompletedOpen(false);
+    }
+  };
   useEffect(() => {
     if (id) {
       dispatch(getInvoiceById(id));
     }
   }, [dispatch]);
 
-  const [invoicenumber, setinvoicenumber] = useState<string>("");
-
   const [invoicemovement, setinvoicemovement] = useState<Iinvoicemovement[]>(
     []
   );
 
-  const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
-
-  const [duedate, setduedate] = useState<string>(formattedDate);
-
-  const [amount, setamount] = useState<number>(0);
-
-  const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-
-  const [gstamount, setgstamount] = useState<number | string>(0);
-
-  const [attachments, setattachments] = useState<string>();
-
-  const [totalamount, settotalamount] = useState<number>(0);
+  const submitRemark = () => {
+    id &&
+      dispatch(
+        addRemarks({
+          id: id,
+          productid: remarksid,
+          remark: currentDateJS + "::" + remark,
+        })
+      ).then(() => dispatch(getInvoiceById(id)));
+    setRemarkOpen(false);
+  };
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const [commentEmapty, setCommentEmpty] = useState<boolean>(false);
-
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [comment, setComment] = useState<string>("");
-  const [actionType, setActionType] = useState<string>("");
-  const [currentuser, setCurrentUser] = useState<string>("");
-  const [vendorName, setVendorName] = useState<string>("");
-  const [showGrn, setShowGrn] = useState<boolean>(false);
-  const [noteType, setNoteType] = useState<string>("Credit note");
-  const [noteAmount, setNoteAmount] = useState<number>(0);
-  const [grnNoteComment, setGrnNoteComment] = useState<string>("");
-  const [grnattachments, setgrnattachments] = useState<File>();
-
-  useEffect(() => {
-    settotalamount(Number(amount) + Number(gstamount));
-  }, [gstamount, amount]);
-
   useEffect(() => {
     if (invoice) {
-      setinvoicenumber(invoice.invoicenumber);
-      setinvoicedate(
-        invoice.invoicedate ? invoice.invoicedate.toString() : formattedDate
-      );
-      setduedate(invoice.duedate ? invoice.duedate.toString() : formattedDate);
-      setamount(invoice.amount);
-      setpurchaseordernumber(invoice.purchaseordernumber || "");
-      setgstamount(invoice.gstamount || 0);
-      settotalamount(invoice.totalamount || 0);
-      setinvoicemovement(invoice.invoicemovement || []);
-      setattachments(invoice.attachments || "");
-      setCurrentUser(
-        (invoice.invoicemovement &&
-          invoice.invoicemovement[invoice.invoicemovement?.length - 1]
-            .username) ||
-          ""
-      );
-      setVendorName(invoice.vendorname || "");
+      setinvoicemovement(invoice?.workflowemovement || []);
     }
   }, [invoice]);
 
@@ -151,19 +137,21 @@ const NeedToactAction = () => {
     }
   }, [lodingState]);
 
-  const saveGRN = () => {
-    
-    const data = new FormData();
-    data.append("attachments", grnattachments as Blob);
-    data.append("id", id || "");
-    data.append("notetype", noteType);
-    data.append("noteamount", noteAmount.toString());
-    data.append("noteremark", grnNoteComment);
-    dispatch(addgrnitems(data))
+  const handleClose = () => {
+    setDialogOpen(!dialogOpen);
+  };
 
-    setShowGrn(!showGrn)
+  const handleRemarkClose = () => {
+    setRemarkOpen(!remarkOpen);
+  };
 
-  }
+  const handleApprove = () => {
+    if (actionType === "approve") {
+    } else if (actionType === "reject") {
+    }
+
+    setDialogOpen(!dialogOpen);
+  };
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
@@ -209,40 +197,104 @@ const NeedToactAction = () => {
     },
   ];
 
-  const handleApprove = () => {
-    if (actionType === "approve") {
-      id &&
-        dispatch(userapprove({ id: id, comment: comment })).then(() => {
-          dispatch(getInvoiceById(id));
-        });
-    } else if (actionType === "reject") {
-      if (comment.length < 3) {
-        setCommentEmpty(true);
-        return;
-      }
+  const actionSteps = invoice?.productrequest.map((item) => (
+    <Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+          sx={{
+            backgroundColor:
+              item.status !== "Done"
+                ? colors.primary[800]
+                : colors.primary[400],
+          }}
+        >
+          <Box display="flex" alignItems="center" gap="10px">
+            {item.productname} : Due Date
+            <Typography
+              sx={{ textDecoration: "underline" }}
+              variant="h5"
+              fontWeight="600"
+              color={colors.greenAccent[300]}
+            >
+              {item.duedate.toString().split("T")[0]}
+            </Typography>
+          </Box>
 
-      id &&
-        dispatch(userreject({ id: id, comment: comment })).then(() => {
-          dispatch(getInvoiceById(id));
-        });
-    }
+          {/* {item.productname} : Due Date  
+              <Typography
+                sx={{ textDecoration: "underline" }}
+                variant="h5"
+                fontWeight="600"
+                color={colors.greenAccent[300]}
+              >
+                {item.duedate.toString().split("T")[0]}
+              </Typography> */}
+        </AccordionSummary>
+        <AccordionDetails sx={{ backgroundColor: "#080b12" }}>
+          {item.remark.map((action, index) => (
+            <Box display="flex" justifyContent="left" mt="20px">
+              <Typography
+                sx={{ textDecoration: "underline" }}
+                variant="h5"
+                fontWeight="600"
+                color={colors.greenAccent[300]}
+              >
+                {new Date(action.split("::")[0]).toDateString()}
+              </Typography>
+              - {action.split("::")[1]}
+              {item.status === "Done" && index === item.remark.length - 1 ? (
+                <Box sx={{ cursor: "pointer" }}>
+                  <DownloadIcon
+                    onClick={() => {
+                      console.log("Add remark", item.finaldocument);
+                      item.finaldocument &&  dispatch(getAttachment(item.finaldocument));
+                    }}
+                  ></DownloadIcon>{" "}
+                </Box>
+              ) : null}
+            </Box>
+          ))}
 
-    setDialogOpen(!dialogOpen);
-  };
-  const handleClose = () => {
-    setDialogOpen(!dialogOpen);
-  };
-
-  console.log("showGrn=>", showGrn);
- 
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      console.log(event.target.files[0]);
-
-      setgrnattachments(event.target.files[0]);
-    }
-  };
+          {item.status !== "Done" ? (
+            <Box display="flex" justifyContent="end">
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    console.log("Add remark", item._id);
+                    setRemarksid(item._id);
+                    setRemarkOpen(true);
+                  }}
+                  color="error"
+                  variant="contained"
+                  startIcon={<CommentIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Add remark
+                </Button>
+              </Box>
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    setRemarksid(item._id);
+                    setCompletedOpen(true);
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DoneAllIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Completed
+                </Button>
+              </Box>
+            </Box>
+          ) : null}
+        </AccordionDetails>
+      </Accordion>
+    </Box>
+  ));
 
   return (
     <>
@@ -256,38 +308,11 @@ const NeedToactAction = () => {
               color="inherit"
               variant="contained"
               startIcon={<KeyboardBackspaceIcon />}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Back to list
             </Button>
           </Box>
-          {sessionStorage.getItem("userrole") === "GRN" && (
-            <Box m="10px">
-              <Button
-                color="info"
-                variant="contained"
-                onClick={() => setShowGrn(!showGrn)}
-                startIcon={<LayersIcon />}
-                sx={{ textTransform: 'none' }}
-              >
-                GRN items
-              </Button>
-            </Box>
-          )}
-
-          {sessionStorage.getItem("userrole") === "Finance" && (
-            <Box m="10px">
-              <Button
-                color="info"
-                variant="contained"
-                startIcon={<LayersIcon />}
-                sx={{ textTransform: 'none' }}
-              >
-                Add TDS details
-              </Button>
-            </Box>
-          )}
-
           <Box m="10px">
             <Button
               onClick={() => {
@@ -297,11 +322,12 @@ const NeedToactAction = () => {
               color="error"
               variant="contained"
               startIcon={<ThumbDownIcon />}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Reject
             </Button>
           </Box>
+
           <Box m="10px">
             <Button
               onClick={() => {
@@ -311,7 +337,7 @@ const NeedToactAction = () => {
               color="secondary"
               variant="contained"
               startIcon={<ThumbUpAltIcon />}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Approve
             </Button>
@@ -333,7 +359,7 @@ const NeedToactAction = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Invoice Detail
+              Request Detail
             </Typography>
             <Box
               m="0px 0 0 0"
@@ -358,14 +384,14 @@ const NeedToactAction = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Invoice Number
+                    Client name
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {invoicenumber}
+                    {invoice?.clientname}
                   </Typography>
                 </Box>
               </Box>
@@ -386,14 +412,14 @@ const NeedToactAction = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Purchase Order Number
+                    Sataus
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {purchaseordernumber}
+                    {invoice?.movementstatus}
                   </Typography>
                 </Box>
               </Box>
@@ -412,24 +438,24 @@ const NeedToactAction = () => {
                 gridColumn="span 3"
               >
                 <Box>
-                  <DateRangeIcon
+                  <NumbersIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DateRangeIcon>{" "}
+                  ></NumbersIcon>{" "}
                 </Box>
-                <Box p="5px">
+                <Box>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Invoice Date
+                    Request date
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {invoicedate.split("T")[0]}
+                    {invoice?.requestdate?.toString().split("T")[0]}
                   </Typography>
                 </Box>
               </Box>
@@ -440,90 +466,79 @@ const NeedToactAction = () => {
                 gridColumn="span 3"
               >
                 <Box>
-                  <DateRangeIcon
+                  <NumbersIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DateRangeIcon>{" "}
+                  ></NumbersIcon>{" "}
                 </Box>
-                <Box p="5px">
+                <Box>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Due Date
+                    Due date
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {duedate.split("T")[0]}
+                    {invoice?.duedate?.toString().toString().split("T")[0]}
                   </Typography>
                 </Box>
               </Box>
             </Box>
 
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <PersonIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></PersonIcon>{" "}
-                </Box>
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Vender Name
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {vendorName}
-                  </Typography>
-                </Box>
+            <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
+              Progress bar
+            </Typography>
+
+            {/* <ProgressCircle size="50" /> */}
+            <Box sx={{ width: "100%" }}>
+              <LinearProgressWithLabel
+                value={
+                  invoice &&
+                  (invoice.movementstatus === "wip" ||
+                    invoice.movementstatus === "completed")
+                    ? (invoice?.progressstepsdone /
+                        invoice?.progressstepscount) *
+                      100
+                    : 0
+                }
+              />
+            </Box>
+
+            <Box display="flex" justifyContent="center" mt="20px">
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    // setActionType("reject");
+                    // setDialogOpen(!dialogOpen);
+                    invoice?.biodata &&  dispatch(getAttachment(invoice?.biodata));
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Download biodata
+                </Button>
               </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <PersonIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></PersonIcon>{" "}
-                </Box>
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Current User
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {currentuser}
-                  </Typography>
-                </Box>
+
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    // setActionType("approve");
+                    // setDialogOpen(!dialogOpen);
+                    invoice?.concentdoc &&  dispatch(getAttachment(invoice?.concentdoc));
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Download consent letter
+                </Button>
               </Box>
             </Box>
           </Box>
@@ -537,181 +552,10 @@ const NeedToactAction = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Other invoice Detail
+              Requested Products
             </Typography>
 
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(amount)}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    GST Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(Number(gstamount))}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Total Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(totalamount)}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                {/* <Box>
-                  <DownloadIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DownloadIcon>{" "}
-                </Box> */}
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  ></Typography>
-
-                  <Button
-                    onClick={() => {
-                      attachments && dispatch(getAttachment(attachments));
-                    }}
-                    color="secondary"
-                    variant="contained"
-                    startIcon={<DownloadIcon />}
-                    sx={{ textTransform: 'none' }}
-                  >
-                    Download Attachment
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Credit/Debit Note
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    XXXXXXX
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              ></Box>
-            </Box>
+            {actionSteps}
           </Box>
         </Box>
 
@@ -771,7 +615,6 @@ const NeedToactAction = () => {
           <Loader />
         ) : null
       ) : null}
-
       <Dialog
         sx={{
           borderRadius: "20px",
@@ -809,13 +652,6 @@ const NeedToactAction = () => {
             rows={4}
             placeholder="Enter your comment here"
             maxRows={12}
-            value={comment}
-            error={commentEmapty}
-            helperText={commentEmapty ? "Comment is required" : ""}
-            onChange={(e) => {
-              setCommentEmpty(false);
-              setComment(e.target.value);
-            }}
             sx={{ gridColumn: "span 12", marginTop: "12px" }}
           />
         </DialogContent>
@@ -825,7 +661,7 @@ const NeedToactAction = () => {
             color="info"
             startIcon={<CloseIcon />}
             variant="contained"
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
             Cancel
           </Button>
@@ -835,16 +671,14 @@ const NeedToactAction = () => {
             startIcon={<DoneAllIcon />}
             variant="contained"
             autoFocus
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
             {actionType === "approve" ? "Approve" : "Reject"}
-           
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* dilog fro GRN */}
-
+      {/* add Remark */}
       <Dialog
         sx={{
           borderRadius: "20px",
@@ -852,55 +686,21 @@ const NeedToactAction = () => {
             borderRadius: "10px",
             backgroundColor: colors.primary[500],
             color: colors.grey[100],
-            height: "400px",
+            height: "300px",
             WebkitAlignContent: "center",
             width: "400px",
           },
         }}
-        open={showGrn}
+        open={remarkOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          Add GRN credit/debit note
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">Action</DialogTitle>
         <DialogContent>
-          <RadioGroup
-            row
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="Credit note"
-            name="radio-buttons-group"
-            onChange={(e) => {
-              setNoteType(e.target.value);
-              console.log("e=>", e.target.value);
-            }}
-          >
-            <FormControlLabel
-              value="Credit note"
-              control={<Radio />}
-              label="Credit note"
-            />
-            <FormControlLabel
-              value="Debit note"
-              control={<Radio />}
-              label="Debit note"
-            />
-          </RadioGroup>
-
-          <TextField
-            fullWidth
-            id="amount"
-            label={noteType+" Amount"}
-            type="number"
-            variant="outlined"
-            value={noteAmount}
-            onChange={(e) => {
-              setNoteAmount(Number(e.target.value));
-            }}
-            sx={{ gridColumn: "span 12" }}
-          />
-
+          <DialogContentText id="alert-dialog-description">
+            Add today's remark
+          </DialogContentText>
           <TextField
             fullWidth
             id="invoicenumber"
@@ -912,37 +712,95 @@ const NeedToactAction = () => {
             rows={4}
             placeholder="Enter your comment here"
             maxRows={12}
-            value={grnNoteComment}
-            error={commentEmapty}
-            helperText={commentEmapty ? "Comment is required" : ""}
-            onChange={(e) => {
-            //  setCommentEmpty(false);
-            setGrnNoteComment(e.target.value);
-            }}
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
             sx={{ gridColumn: "span 12", marginTop: "12px" }}
           />
-          <input type="file" accept="pdf/*" style={{ marginTop: "20px" }} onChange={handleFileChange} />
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={()=>setShowGrn(false)}
+            onClick={handleRemarkClose}
             color="info"
             startIcon={<CloseIcon />}
             variant="contained"
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
             Cancel
           </Button>
           <Button
-           
+            onClick={submitRemark}
             color="secondary"
             startIcon={<DoneAllIcon />}
             variant="contained"
             autoFocus
-            onClick={saveGRN}
-            sx={{ textTransform: 'none' }}
+            sx={{ textTransform: "none" }}
           >
-            Add Grn
+            Add Remark
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* add Done Action */}
+      <Dialog
+        sx={{
+          borderRadius: "20px",
+          "& .MuiDialog-paper": {
+            borderRadius: "10px",
+            backgroundColor: colors.primary[500],
+            color: colors.grey[100],
+            height: "300px",
+            WebkitAlignContent: "center",
+            width: "400px",
+          },
+        }}
+        open={completedkOpen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Action</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Upload document
+          </DialogContentText>
+          <input type="file" accept="pdf/*" onChange={doneproductFileChange} />
+          <TextField
+            fullWidth
+            id="invoicenumber"
+            variant="outlined"
+            type="text"
+            label="Remaks"
+            name="Remaks"
+            multiline
+            rows={4}
+            placeholder="Enter your comment here"
+            maxRows={12}
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
+            sx={{ gridColumn: "span 12", marginTop: "12px" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setCompletedOpen(false);
+            }}
+            color="info"
+            startIcon={<CloseIcon />}
+            variant="contained"
+            sx={{ textTransform: "none" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={submitProductDone}
+            color="secondary"
+            startIcon={<DoneAllIcon />}
+            variant="contained"
+            autoFocus
+            sx={{ textTransform: "none" }}
+          >
+            Mark completed
           </Button>
         </DialogActions>
       </Dialog>

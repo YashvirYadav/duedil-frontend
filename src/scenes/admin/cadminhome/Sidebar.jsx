@@ -6,33 +6,16 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import ContactsIcon from '@mui/icons-material/Contacts';
-import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle';
-import PersonIcon from '@mui/icons-material/Person';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
-import Diversity2Icon from '@mui/icons-material/Diversity2';
-import PasswordIcon from '@mui/icons-material/Password';
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ContactsIcon from "@mui/icons-material/Contacts";
+import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
+import PersonIcon from "@mui/icons-material/Person";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import Diversity2Icon from "@mui/icons-material/Diversity2";
+import PasswordIcon from "@mui/icons-material/Password";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -159,20 +142,22 @@ const Sidebar = () => {
             />
 
             <Item
-              title="Vendor"
-              to="vendor"
+              title="Client"
+              to="client"
               icon={<ContactsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
 
             <Item
-              title="Department"
-              to="department"
-              icon={<ManageAccountsIcon />}
+              title="Product catalogue"
+              to="productcatalogue"
+              icon={<ContactsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
+
+            
 
             <Item
               title="Role"
@@ -190,14 +175,6 @@ const Sidebar = () => {
               setSelected={setSelected}
             ></Item>
 
-            <Item
-              title="PO Doc"
-              to="podoce"
-              icon={<FileCopyIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            ></Item>
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -207,7 +184,7 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Pending invoice"
+              title="Pending requests"
               to="pendinginvoice"
               icon={<PendingActionsIcon />}
               selected={selected}

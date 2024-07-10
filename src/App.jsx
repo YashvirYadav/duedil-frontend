@@ -26,8 +26,8 @@ import { UserContener } from "./scenes/user/user";
 import { Category } from "./scenes/category/category";
 import { VendorContainer } from "./scenes/vendor/vendor";
 import { DepartmentContainer } from "./scenes/department/depatment";
-import TableCategory from "./scenes/category/table.category";
-import RegisterCategory from "./scenes/category/register.category";
+
+
 import RegisterRatecard from "./scenes/ratecard/register.ratecard";
 import ChangePassword from "./scenes/changepassword/changepassword";
 import Vendor from "./scenes/vendor/table.vendor";
@@ -69,8 +69,10 @@ import { PendingInvoiceReport } from "./scenes/admin/cadminhome/reports/pendingi
 import { ViewList } from "./scenes/admin/cadminhome/reports/ViewList";
 import ViewListByRole from "./scenes/admin/cadminhome/reports/pendinginvoice/ViewListByRole";
 import AgingreportviewByAge from "./scenes/admin/cadminhome/reports/agingreport/agingreportview";
-// import { InvoiceOCR } from "./scenes/invoices/InvoiceOCR";
-// import ViewOcrInvice from "./scenes/invoices/ocr.invoice";
+import { ProductCategory} from "./scenes/productcategory/productcategory";
+import RegisterCategory from "./scenes/productcategory/register.category";
+import TableCategory from "./scenes/productcategory/table.category";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -106,10 +108,10 @@ function App() {
               <Route path="addUser" element={<Registeruser />} />
             </Route>
 
-            <Route path="category" element={<Category />}>
+            {/* <Route path="category" element={<Category />}>
               <Route path="" element={<TableCategory />} />
               <Route path="addCategory" element={<RegisterCategory />} />
-            </Route>
+            </Route> */}
 
             <Route path="ratecard" element={<Category />}>
               <Route path="" element={<RegisterRatecard />} />
@@ -157,9 +159,14 @@ function App() {
               <Route path="addUser" element={<Registeruser />} />
             </Route>
 
-            <Route path="vendor" element={<VendorContainer />}>
+            <Route path="client" element={<VendorContainer />}>
               <Route path="" element={<Vendor />} />
-              <Route path="addVendor" element={<RegisterVendor />} />
+              <Route path="addClient" element={<RegisterVendor />} />
+            </Route>
+{/* new */}
+            <Route path="productcatalogue" element={<ProductCategory />}>
+              <Route path="" element={<TableCategory />} />
+              <Route path="addProduct" element={<RegisterCategory />} />
             </Route>
 
             <Route path="department" element={<DepartmentContainer />}>

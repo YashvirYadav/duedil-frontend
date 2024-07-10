@@ -131,7 +131,7 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Post Invoice"
+              title="Post diligence request"
               to="invoice"
               icon={<PostAddIcon />}
               selected={selected}

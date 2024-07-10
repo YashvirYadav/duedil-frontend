@@ -21,6 +21,11 @@ export interface IInvoice {
   totalamount?: number;
   vendorId?: string;
   vendorname? : string;
+  movementstatus?: string;
+  requestdate?: Date;
+ 
+  progressstepsdone: number;
+  progressstepscount: number;
 }
 
 export interface ocrinvoice {

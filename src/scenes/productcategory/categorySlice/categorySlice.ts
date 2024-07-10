@@ -1,7 +1,7 @@
 // add
 
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ICategory, IRegisterCategoryResponce } from "./type.category";
+import { IProductCategory, IRegisterCategoryResponce } from "./type.category";
 import { service } from "../../../services/ApiServices";
 
 const initialState: IRegisterCategoryResponce = {
@@ -16,7 +16,7 @@ const initialState: IRegisterCategoryResponce = {
 //
 export const registerCategory = createAsyncThunk<
   IRegisterCategoryResponce,
-  ICategory
+  IProductCategory
 >("register/category", async (category, { rejectWithValue }) => {
   try {
     const { _id, ...rest } = category;
@@ -79,21 +79,6 @@ export const getCategory = createAsyncThunk<IRegisterCategoryResponce>(
     }
   }
 );
-//
-
-export const getproductbycategory = createAsyncThunk<IRegisterCategoryResponce,{category:string}>(
-  "get/productbycategory",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await service.getCall("category/getproductbycategory/"+data.category);
-      return response.data;
-    } catch (error) {
-      const err = error as IRegisterCategoryResponce;
-      return rejectWithValue(err);
-    }
-  }
-);
-
 
 export const getCategoryById = createAsyncThunk<
   IRegisterCategoryResponce,
@@ -164,18 +149,6 @@ export const categorySlice = createSlice({
       }).addCase(getCategoryById.pending, (state) => {}).addCase(getCategoryById.fulfilled, (state, action: PayloadAction<IRegisterCategoryResponce>) => {
         state.data = action.payload.data;
       }).addCase(getCategoryById.rejected, (state, action: PayloadAction<any>) => {
-        state.error = action.payload.response.data.message || "Something went wrong";
-      })
-      .addCase(getproductbycategory.pending, (state) => {
-        state.status = "loading";
-        state.error = "";
-      })
-      .addCase(getproductbycategory.fulfilled, (state, action: PayloadAction<IRegisterCategoryResponce>) => {
-        state.status = "succeeded";
-        state.data = action.payload.data;
-      })
-      .addCase(getproductbycategory.rejected, (state, action: PayloadAction<any>) => {
-        state.status = "failed";
         state.error = action.payload.response.data.message || "Something went wrong";
       });
   },

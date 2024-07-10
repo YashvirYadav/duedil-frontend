@@ -35,9 +35,12 @@ export const getuserinvoicesbyhistorywip = createAsyncThunk<INeedtoactResponce>(
   "users/getuserinvoicesbyhistorywip",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await service.postCall("users/getuserinvoicesbyhistorywip", {
-        userId: sessionStorage.getItem("userId"),
-      });
+      const response = await service.postCall(
+        "users/getuserinvoicesbyhistorywip",
+        {
+          userId: sessionStorage.getItem("userId"),
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -46,70 +49,78 @@ export const getuserinvoicesbyhistorywip = createAsyncThunk<INeedtoactResponce>(
 );
 
 //getuserinvoicesbyhistoryrejected
-export const getuserinvoicesbyhistoryrejected = createAsyncThunk<INeedtoactResponce>(
-  "users/getuserinvoicesbyhistoryrejected",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await service.postCall("users/getuserinvoicesbyhistoryrejected", {
-        userId: sessionStorage.getItem("userId"),
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
+export const getuserinvoicesbyhistoryrejected =
+  createAsyncThunk<INeedtoactResponce>(
+    "users/getuserinvoicesbyhistoryrejected",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await service.postCall(
+          "users/getuserinvoicesbyhistoryrejected",
+          {
+            userId: sessionStorage.getItem("userId"),
+          }
+        );
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error);
+      }
     }
-  }
-);
+  );
 
 //getuserinvoicesbyhistoryapproved
 
-export const getuserinvoicesbyhistoryapproved = createAsyncThunk<INeedtoactResponce>(
-  "users/getuserinvoicesbyhistorycompleted",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await service.postCall("users/getuserinvoicesbyhistorycompleted", {
-        userId: sessionStorage.getItem("userId"),
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
+export const getuserinvoicesbyhistoryapproved =
+  createAsyncThunk<INeedtoactResponce>(
+    "users/getuserinvoicesbyhistorycompleted",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await service.postCall(
+          "users/getuserinvoicesbyhistorycompleted",
+          {
+            userId: sessionStorage.getItem("userId"),
+          }
+        );
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error);
+      }
     }
-  }
-);
+  );
 
-export const userapprove = createAsyncThunk<INeedtoactResponce, {id:string,comment:string}>(
-  "users/userapprove",
-  async (data, { rejectWithValue }) => {
-    try {
-      console.log("id", data.id);
-      const response = await service.postCall("users/userapprove", {
-        invoiceId: data.id,
-        userId: sessionStorage.getItem("userId"),
-        companyId: sessionStorage.getItem("companyId"),
-        comment: data.comment,
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+export const userapprove = createAsyncThunk<
+  INeedtoactResponce,
+  { id: string; comment: string }
+>("users/userapprove", async (data, { rejectWithValue }) => {
+  try {
+    console.log("id", data.id);
+    const response = await service.postCall("users/userapprove", {
+      invoiceId: data.id,
+      userId: sessionStorage.getItem("userId"),
+      companyId: sessionStorage.getItem("companyId"),
+      comment: data.comment,
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
   }
-);
+});
 
-export const userreject = createAsyncThunk<INeedtoactResponce, {id:string,comment:string}>(
-  "users/userreject",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await service.postCall("users/userrejectinvoice", {
-        invoiceId: data.id,
-        userId: sessionStorage.getItem("userId"),
-        companyId: sessionStorage.getItem("companyId"),
-        comment: data.comment,
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+export const userreject = createAsyncThunk<
+  INeedtoactResponce,
+  { id: string; comment: string }
+>("users/userreject", async (data, { rejectWithValue }) => {
+  try {
+    const response = await service.postCall("users/userrejectinvoice", {
+      invoiceId: data.id,
+      userId: sessionStorage.getItem("userId"),
+      companyId: sessionStorage.getItem("companyId"),
+      comment: data.comment,
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
   }
-);
+});
 
 export const getInvoiceById = createAsyncThunk<INeedtoactResponce, string>(
   "users/getInvoiceById",
@@ -122,17 +133,50 @@ export const getInvoiceById = createAsyncThunk<INeedtoactResponce, string>(
     }
   }
 );
+// add remarks
+export const addRemarks = createAsyncThunk<
+  INeedtoactResponce,
+  { id: string; productid: string; remark: string }
+>("users/addRemarks", async (data, { rejectWithValue }) => {
+  try {
+    const response = await service.postCall("invoice/addRemark", {
+      id: data.id,
+      productid: data.productid,
+      remark: data.remark,
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+//setproductstatusdone
+export const setproductstatusdone = createAsyncThunk<
+  INeedtoactResponce,
+  { fromData: FormData }
+>("users/setproductstatusdone", async (data, { rejectWithValue }) => {
+  try {
+    const response = await service.postCallBlob(
+      "invoice/setproductstatusdone",
+      data.fromData
+    );
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
 // get attachment
 
 export const getAttachment = createAsyncThunk<File, string>(
   "users/getAttachment",
   async (filename, { rejectWithValue }) => {
     try {
+      const file = filename.split("/")[2];
 
-      const file = filename.split("/")[2]
+      console.log("file", file);
 
       const response = await axios.get(
-        "http://localhost:8000/api/v1/invoice/getattachment/"+file,
+        "http://localhost:8000/api/v1/invoice/getattachment/" + file,
         {
           responseType: "blob", // Important for handling binary data
           headers: {

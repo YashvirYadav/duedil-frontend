@@ -61,17 +61,11 @@ export interface dashboard {
 
 export interface Iserchdashboard {
   totalInvoicecount: number;
-  totalAmount: number;
-
   wipInvoicecount: number;
-  wipAmount: number;
   newInvoicecount : number;
-  newInvoiceAmount : number;
-
   rejectedInvoicecount: number;
-  rejectedAmount: number;
   paidInvoicecount: number;
-  paidAmount: number;
+  clinet : number;
   lineData: ILineData[];
 }
 

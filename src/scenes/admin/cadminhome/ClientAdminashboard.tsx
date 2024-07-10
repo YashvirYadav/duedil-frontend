@@ -21,15 +21,13 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { getdashboardreportbydate } from "./cadminslice/cadminslice";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import PaidIcon from '@mui/icons-material/Paid';
-import FiberNewIcon from '@mui/icons-material/FiberNew';
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import PaidIcon from "@mui/icons-material/Paid";
+import FiberNewIcon from "@mui/icons-material/FiberNew";
 import { Toast } from "../../../components/Toast";
 import { Loader } from "../../../components/Lodar";
-
-
 
 const ClientAdminashboard = () => {
   const theme = useTheme();
@@ -45,11 +43,11 @@ const ClientAdminashboard = () => {
   const lodingState = useSelector(loading);
   const toastmessage = useSelector(message);
   const [open, setOpen] = useState<boolean>(false);
-  const currentDateJS = dayjs()
-  const tenDaysAgoJS = dayjs().subtract(30, "day")
+  const currentDateJS = dayjs();
+  const tenDaysAgoJS = dayjs().subtract(30, "day");
 
   const currentDate = dayjs().toDate();
-  const tenDaysAgo =  dayjs().subtract(30, "day").toDate();
+  const tenDaysAgo = dayjs().subtract(30, "day").toDate();
 
   const [startDate, setStartDate] = useState(tenDaysAgo);
   const [endDate, setEndDate] = useState(currentDate);
@@ -59,75 +57,57 @@ const ClientAdminashboard = () => {
 
   const actiontotalInvoice = () => {
     setAction("totalInvoice");
-    navigate(`invoice/Total Invoices`,
-      {
-        state: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      }
-
-    );
+    navigate(`invoice/Total Invoices`, {
+      state: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
   const actionunderReview = () => {
     setAction("underReview");
-    navigate(`invoice/Under Review`
-      ,
-      {
-        state: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      }
-    );
+    navigate(`invoice/Under Review`, {
+      state: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
   const actionRejected = () => {
     setAction("rejected");
-    navigate(`invoice/Rejected Invoices`
-      ,
-      {
-        state: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      }
-    );
+    navigate(`invoice/Rejected Invoices`, {
+      state: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
   const actionPaid = () => {
     setAction("paid");
-    navigate(`invoice/Paid Invoices`
-      ,
-      {
-        state: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      }
-    );
+    navigate(`invoice/Paid Invoices`, {
+      state: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
 
   const actionNewInvoice = () => {
     setAction("newInvoice");
-    navigate(`invoice/New Invoices`
-      ,
-      {
-        state: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      }
-    );
-  }
+    navigate(`invoice/New Invoices`, {
+      state: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
+  };
 
   const {
     totalInvoicecount,
-    totalAmount,
-  
     rejectedInvoicecount,
-    rejectedAmount,
     paidInvoicecount,
-    paidAmount,
     lineData,
+    clinet,
   } = dashboardData;
 
   useEffect(() => {
@@ -192,8 +172,11 @@ const ClientAdminashboard = () => {
             dateLabel="Start date"
             defaultValue={tenDaysAgoJS}
           />
-          <BasicDatePicker onDateChange={endDateChange} dateLabel="End date"
-          defaultValue={currentDateJS} />
+          <BasicDatePicker
+            onDateChange={endDateChange}
+            dateLabel="End date"
+            defaultValue={currentDateJS}
+          />
 
           <Button
             color="secondary"
@@ -240,8 +223,8 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(totalAmount)}
-            subtitle="Total Invoices"
+            title=""
+            subtitle="Total Request"
             progress="0.70"
             increase={totalInvoicecount}
             icon={
@@ -252,14 +235,11 @@ const ClientAdminashboard = () => {
           />
         </Box>
 
-       
         <Box
           onClick={actionNewInvoice}
           gridColumn="span 2"
           bgcolor={
-            action === "newInvoice"
-              ? colors.primary[800]
-              : colors.primary[400]
+            action === "newInvoice" ? colors.primary[800] : colors.primary[400]
           }
           display="flex"
           alignItems="center"
@@ -273,8 +253,8 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(dashboardData.newInvoiceAmount)}
-            subtitle="New Invoices"
+            title=""
+            subtitle="New Request"
             progress="0.70"
             increase={dashboardData.newInvoicecount}
             icon={
@@ -303,7 +283,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(dashboardData.wipAmount)}
+            title=""
             subtitle="Under Processes"
             progress="0.50"
             increase={dashboardData.wipInvoicecount}
@@ -332,7 +312,7 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(rejectedAmount)}
+            title=""
             subtitle="Rejected Invoices"
             progress="0.30"
             increase={rejectedInvoicecount}
@@ -361,8 +341,8 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(paidAmount)}
-            subtitle="Paid Invoices"
+            title=""
+            subtitle="Completed Request"
             progress="0.80"
             increase={paidInvoicecount}
             icon={
@@ -373,16 +353,14 @@ const ClientAdminashboard = () => {
           />
         </Box>
         <Box
-        
           gridColumn="span 2"
-          bgcolor={
-            
-           
-              colors.primary[400]
-          }
+          bgcolor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={() => {
+            navigate("client");
+          }}
           sx={{
             transition: "background-color 0.3s ease",
             "&:hover": {
@@ -392,10 +370,10 @@ const ClientAdminashboard = () => {
           }}
         >
           <StatBox
-            title="0"
-            subtitle="Purchase Orders"
+            title=""
+            subtitle="Client"
             progress="0.70"
-            increase="0"
+            increase={clinet}
             icon={
               <ShoppingBagIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

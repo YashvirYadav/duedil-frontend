@@ -15,13 +15,9 @@ import { useEffect, useState } from "react";
 
 import { loading, vendorData, message } from "./venderSlice/vendor.selector";
 import { Loader } from "../../components/Lodar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Toast } from "../../components/Toast";
 import { useNavigate } from "react-router-dom";
 import {
-  deleteVendor,
   getVandor,
   updateVendorStatus,
 } from "./venderSlice/vendor.slice";
@@ -53,7 +49,7 @@ const Vendor = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "vendorname", headerName: "Vonder Name" },
+    { field: "clientname", headerName: "Vonder Name" },
 
     {
       field: "code",
@@ -132,69 +128,69 @@ const Vendor = () => {
         />
       ),
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      sortable: false,
-      headerAlign: "center",
-      align: "center",
-      width: 200,
-      // Remove the 'disableClickEventBubbling' property
-      // from the object literal
-      // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
-      renderCell: (params: GridRenderCellParams) => {
-        const onClickEdit = () => {
-          const id = params.id;
-          // handle edit operation here
-          console.log("id => ", id);
-          navigate(`addcmapany/${id || ""}`);
-        };
+    // {
+    //   field: "actions",
+    //   headerName: "Actions",
+    //   sortable: false,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   width: 200,
+    //   // Remove the 'disableClickEventBubbling' property
+    //   // from the object literal
+    //   // The 'disableClickEventBubbling' property does not exist in type 'GridColDef<any>'
+    //   renderCell: (params: GridRenderCellParams) => {
+    //     const onClickEdit = () => {
+    //       const id = params.id;
+    //       // handle edit operation here
+    //       console.log("id => ", id);
+    //       navigate(`addcmapany/${id || ""}`);
+    //     };
 
-        const onClickDelete = () => {
-          const id = params.id.toString();
+    //     const onClickDelete = () => {
+    //       const id = params.id.toString();
 
-          dispatch(deleteVendor(id)).then(() => {
-            dispatch(getVandor(sessionStorage.getItem("companyId") || ""));
-          });
-          // handle delete operation here
-        };
+    //       dispatch(deleteVendor(id)).then(() => {
+    //         dispatch(getVandor(sessionStorage.getItem("companyId") || ""));
+    //       });
+    //       // handle delete operation here
+    //     };
 
-        const onClickView = () => {
-          // const id = params.id;
-          // handle view operation here
-        };
+    //     const onClickView = () => {
+    //       // const id = params.id;
+    //       // handle view operation here
+    //     };
 
-        return (
-          <div>
-            <IconButton color="primary" onClick={onClickEdit}>
-              <EditIcon />
-            </IconButton>
-            <IconButton color="secondary" onClick={onClickDelete}>
-              <DeleteIcon />
-            </IconButton>
-            <IconButton onClick={onClickView}>
-              <VisibilityIcon />
-            </IconButton>
-          </div>
-        );
-      },
-    },
+    //     return (
+    //       <div>
+    //         <IconButton color="primary" onClick={onClickEdit}>
+    //           <EditIcon />
+    //         </IconButton>
+    //         <IconButton color="secondary" onClick={onClickDelete}>
+    //           <DeleteIcon />
+    //         </IconButton>
+    //         <IconButton onClick={onClickView}>
+    //           <VisibilityIcon />
+    //         </IconButton>
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   return (
     <>
       <Box m="20px">
-        <Header title="VENDOR" subtitle="List of vendor for Future Reference" />
+        <Header title="Client" subtitle="List of Client for Future Reference" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => {
-              navigate("addVendor");
+              navigate("addClient");
             }}
             color="secondary"
             variant="contained"
             sx={{ textTransform: 'none' }}
           >
-            Create New vendor
+            Create New Client
           </Button>
         </Box>
         <Box
