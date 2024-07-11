@@ -83,14 +83,14 @@ const DashboardVendor = () => {
   }, [lodingState]);
 
   const columns: GridColDef<any[number]>[] = [
-    { field: "invoicenumber", headerName: "Invoice Number" },
+    { field: "clientname", headerName: "Client name" , flex: 1, },
 
     {
-      field: "invoicedate",
-      headerName: "Invoice date",
+      field: "createdAt",
+      headerName: "Creation Date",
       flex: 1,
       valueGetter: (params) =>
-        params.row.invoicedate && params.row.invoicedate.split("T")[0],
+        params.row.createdAt && params.row.createdAt.split("T")[0],
     },
     {
       field: "duedate",
@@ -102,26 +102,11 @@ const DashboardVendor = () => {
     },
 
     {
-      field: "amount",
-      headerName: "Amount",
+      field: "movementstatus",
+      headerName: "Status",
       flex: 1,
     },
-    {
-      field: "gstamount",
-      headerName: "GST Amount",
-      flex: 1,
-    },
-
-    {
-      field: "totalamount",
-      headerName: "Total Amount",
-      flex: 1,
-    },
-    {
-      field: "purchaseordernumber",
-      headerName: "PO Number",
-      flex: 1,
-    },
+    
     {
       field: "actions",
       headerName: "Actions",
@@ -242,8 +227,8 @@ const DashboardVendor = () => {
           
         >
           <StatBox
-            title={formatNumberIndian(data.totalAmount)}
-            subtitle="Total invoice"
+            title=""
+            subtitle="Total Request"
             progress="0.75"
             increase={data.totalInvoice}
            
@@ -270,8 +255,8 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.newInvoiceAmount)}
-            subtitle="New Invoice"
+            title=""
+            subtitle="New Request"
             progress="0.50"
             increase={data.newInvoice}
             icon={
@@ -298,8 +283,8 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.rejectedInvoiceAmount)}
-            subtitle="Rejected Invoice"
+            title=""
+            subtitle="Rejected Request"
             progress="0.50"
             increase={data.rejectedInvoice}
             icon={
@@ -326,7 +311,7 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.wipInvoiceAmount)} // Amount
+            title="" // Amount
             subtitle="Under approval"
             progress="0.30"
             increase={data.wipInvoice} // count
@@ -353,10 +338,10 @@ const DashboardVendor = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.paidInvoice)}
-            subtitle="Paid invoice"
+            title=""
+            subtitle="Completed"
             progress="0.80"
-            increase={data.paidInvoiceAmount}
+            increase={data.paidInvoice}
             icon={
               <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

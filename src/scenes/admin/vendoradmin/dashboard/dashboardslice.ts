@@ -7,15 +7,15 @@ const initialState: IVendorDashboardResponce = {
   status: "idle",
   data: {
     totalInvoice: 0,
-    totalAmount: 0,
+  
     newInvoice: 0,
-    newInvoiceAmount: 0,
+
     wipInvoice: 0,
-    wipInvoiceAmount: 0,
+ 
     paidInvoice: 0,
-    paidInvoiceAmount: 0,
+
     rejectedInvoice: 0,
-    rejectedInvoiceAmount: 0
+
   },
   message: "",
   success: false,

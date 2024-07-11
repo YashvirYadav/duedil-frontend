@@ -50,14 +50,14 @@ const InvoiceTable = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "invoicenumber", headerName: "Invoice Number" },
+    { field: "clientname", headerName: "Client name" , flex: 1, },
 
     {
-      field: "invoicedate",
-      headerName: "Invoice date",
+      field: "createdAt",
+      headerName: "Creation Date",
       flex: 1,
       valueGetter: (params) =>
-        params.row.invoicedate && params.row.invoicedate.split("T")[0],
+        params.row.createdAt && params.row.createdAt.split("T")[0],
     },
     {
       field: "duedate",
@@ -68,28 +68,12 @@ const InvoiceTable = () => {
     },
 
     {
-      field: "amount",
-      headerName: "Amount",
-      flex: 1,
-      valueGetter: (params) =>
-        params.row.amount && formatNumberIndian(params.row.amount),
-    },
-    {
-      field: "gstamount",
-      headerName: "GST Amount",
+      field: "movementstatus",
+      headerName: "Status",
       flex: 1,
     },
-
-    {
-      field: "totalamount",
-      headerName: "Total Amount",
-      flex: 1,
-    },
-    {
-      field: "purchaseordernumber",
-      headerName: "PO Number",
-      flex: 1,
-    },
+   
+   
     {
       field: "actions",
       headerName: "Actions",
@@ -106,6 +90,7 @@ const InvoiceTable = () => {
           // handle edit operation here
           console.log("id => ", id);
           navigate(`addcmapany/${id || ""}`);
+
         };
 
         const onClickDelete = () => {
@@ -119,8 +104,9 @@ const InvoiceTable = () => {
         };
 
         const onClickView = () => {
-          // const id = params.id;
+           const id = params.id;
           // handle view operation here
+          navigate(`viewinvoice/${id || ""}`);
         };
 
         return (
@@ -142,7 +128,7 @@ const InvoiceTable = () => {
     <>
       <Box m="20px">
         <Header
-          title="invoice"
+          title="Due diligence"
           subtitle="List of invoice for Future Reference"
         />
         <Box display="flex" justifyContent="end" mt="20px">

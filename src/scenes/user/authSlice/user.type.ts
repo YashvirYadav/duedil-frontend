@@ -48,14 +48,7 @@ export interface ILoginRequest {
 
 export interface IUserDashboard {
   needtoact: number;
-  needtoacttotal: number;
-
   invoiceWip: number;
-  invoiceWipAmount: number;
-
   invoiceCompleted: number;
-  invoiceCompletedAmount: number;
-
   invoiceRejected: number;
-  invoiceRejectedAmount: number;
 }

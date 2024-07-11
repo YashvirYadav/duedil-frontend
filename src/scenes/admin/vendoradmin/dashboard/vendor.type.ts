@@ -13,18 +13,8 @@ export interface IVendorDashboardResponce {
     
     export interface IVendorDashboard {
         totalInvoice: number
-        totalAmount: number,
-        
         newInvoice: number,
-        newInvoiceAmount: number,
-
         rejectedInvoice: number,
-        rejectedInvoiceAmount: number,
-        
-
         wipInvoice: number,
-        wipInvoiceAmount: number
-
         paidInvoice: number,
-        paidInvoiceAmount: number
     } 

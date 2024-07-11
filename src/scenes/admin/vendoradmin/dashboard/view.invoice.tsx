@@ -7,6 +7,9 @@ import {
   DialogContentText,
   DialogContent,
   DialogActions,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../../../theme";
@@ -24,23 +27,18 @@ import { Toast } from "../../../../components/Toast";
 import {
   getAttachment,
   getInvoiceById,
-  userapprove,
-  userreject,
 } from "../../executive/needtoact/needtoact.slice";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import DownloadIcon from "@mui/icons-material/Download";
-import LayersIcon from "@mui/icons-material/Layers";
 import { Iinvoicemovement } from "../../executive/needtoact/needtoact.type";
-import PersonIcon from '@mui/icons-material/Person';
-import { formatNumberIndian } from "../../../../utils/utils";
+import LinearProgressWithLabel from "../../../../components/LinearProgressWithLabel";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CommentIcon from "@mui/icons-material/Comment";
+
 
 const ViewInvice = () => {
   const theme = useTheme();
@@ -53,15 +51,6 @@ const ViewInvice = () => {
   console.log("=>>", invoice);
   const navigate = useNavigate();
 
-  const currentDate = new Date();
-  const formattedDate = `${String(currentDate.getDate()).padStart(
-    2,
-    "0"
-  )}-${String(currentDate.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}-${currentDate.getFullYear()}`;
-
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
@@ -70,44 +59,9 @@ const ViewInvice = () => {
     }
   }, [dispatch]);
 
-  const [invoicenumber, setinvoicenumber] = useState<string>("");
-
-  const [invoicemovement, setinvoicemovement] = useState<Iinvoicemovement[]>(
-    []
-  );
-
-  const [invoicedate, setinvoicedate] = useState<string>(formattedDate);
-
-  const [duedate, setduedate] = useState<string>(formattedDate);
-
-  const [amount, setamount] = useState<number>(0);
-
-  const [purchaseordernumber, setpurchaseordernumber] = useState<string>("");
-
-  const [gstamount, setgstamount] = useState<number | string>(0);
-
-  const [attachments, setattachments] = useState<string>();
-
-  const [totalamount, settotalamount] = useState<number>(0);
-
   const [open, setOpen] = useState<boolean>(false);
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [vendorName, setVendorName] = useState<string>("")
-  const [currentuser, setCurrentUser] = useState<string>("");
-
-
-  useEffect(() => {
-    settotalamount(Number(amount) + Number(gstamount));
-  }, [gstamount, amount]);
-
-  useEffect(() => {
-    if (invoice) {
-     
-      setCurrentUser(invoice.workflowemovement && invoice.workflowemovement[invoice.workflowemovement?.length-1].username || "");
-     
-    }
-  }, [invoice]);
 
   useEffect(() => {
     if (id) {
@@ -126,28 +80,26 @@ const ViewInvice = () => {
 
   // Declare the 'rows' variable here
   const columns: GridColDef<any[number]>[] = [
-    { field: "index", headerName: "Sequence"},
+    { field: "index", headerName: "Seq" },
 
     {
       field: "username",
       headerName: "Action with",
-      flex: 1,
+      flex: 1.5,
       valueGetter: (params) => `${params.row.username} - ${params.row.role}`,
     },
     {
       field: "tat",
       headerName: "TAT",
-     
     },
     {
       field: "atat",
       headerName: "ATAT",
-     
     },
     {
       field: "indate",
       headerName: "In Date",
-      flex: 1,
+
       valueGetter: (params) =>
         params.row.indate && params.row.indate.split("T")[0],
     },
@@ -158,7 +110,6 @@ const ViewInvice = () => {
       valueGetter: (params) =>
         params.row.outdate && params.row.outdate.split("T")[0],
     },
-
     {
       field: "comment",
       headerName: "Remarks",
@@ -168,7 +119,6 @@ const ViewInvice = () => {
     {
       field: "status",
       headerName: "Status",
-   
     },
   ];
 
@@ -178,6 +128,95 @@ const ViewInvice = () => {
   };
 
   console.log("userrole", sessionStorage.getItem("rolename"));
+
+  const actionSteps = invoice?.productrequest.map((item) => (
+    <Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+          sx={{
+            backgroundColor:
+              item.status !== "Done"
+                ? colors.primary[800]
+                : colors.primary[400],
+          }}
+        >
+          <Box display="flex" alignItems="center" gap="10px">
+            {item.productname} : Due Date
+            <Typography
+              sx={{ textDecoration: "underline" }}
+              variant="h5"
+              fontWeight="600"
+              color={colors.greenAccent[300]}
+            >
+              {item.duedate.toString().split("T")[0]}
+            </Typography>
+          </Box>
+
+         
+        </AccordionSummary>
+        <AccordionDetails sx={{ backgroundColor: "#080b12" }}>
+          {item.remark.map((action, index) => (
+            <Box display="flex" justifyContent="left" mt="20px">
+              <Typography
+                sx={{ textDecoration: "underline" }}
+                variant="h5"
+                fontWeight="600"
+                color={colors.greenAccent[300]}
+              >
+                {new Date(action.split("::")[0]).toDateString()}
+              </Typography>
+              - {action.split("::")[1]}
+              {item.status === "Done" && index === item.remark.length - 1 ? (
+                <Box sx={{ cursor: "pointer" }}>
+                  <DownloadIcon
+                    onClick={() => {
+                      console.log("Add remark", item.finaldocument);
+                      item.finaldocument &&  dispatch(getAttachment(item.finaldocument));
+                    }}
+                  ></DownloadIcon>{" "}
+                </Box>
+              ) : null}
+            </Box>
+          ))}
+
+          {item.status !== "Done" ? (
+            <Box display="flex" justifyContent="end">
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    console.log("Add remark", item._id);
+                   
+                  }}
+                  color="error"
+                  variant="contained"
+                  startIcon={<CommentIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Add remark
+                </Button>
+              </Box>
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                   
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DoneAllIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Completed
+                </Button>
+              </Box>
+            </Box>
+          ) : null}
+        </AccordionDetails>
+      </Accordion>
+    </Box>
+  ));
 
   return (
     <>
@@ -191,11 +230,12 @@ const ViewInvice = () => {
               color="inherit"
               variant="contained"
               startIcon={<KeyboardBackspaceIcon />}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Back to list
             </Button>
           </Box>
+          
         </Box>
 
         <Box
@@ -213,7 +253,7 @@ const ViewInvice = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Invoice Detail
+              Request Detail
             </Typography>
             <Box
               m="0px 0 0 0"
@@ -238,14 +278,14 @@ const ViewInvice = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Invoice Number
+                    Client name
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {invoicenumber}
+                    {invoice?.clientname}
                   </Typography>
                 </Box>
               </Box>
@@ -266,14 +306,14 @@ const ViewInvice = () => {
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Purchase Order Number
+                    Sataus
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {purchaseordernumber}
+                    {invoice?.movementstatus}
                   </Typography>
                 </Box>
               </Box>
@@ -292,24 +332,24 @@ const ViewInvice = () => {
                 gridColumn="span 3"
               >
                 <Box>
-                  <DateRangeIcon
+                  <NumbersIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DateRangeIcon>{" "}
+                  ></NumbersIcon>{" "}
                 </Box>
-                <Box p="5px">
+                <Box>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Invoice Date
+                    Request date
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {invoicedate.split("T")[0]}
+                    {invoice?.requestdate?.toString().split("T")[0]}
                   </Typography>
                 </Box>
               </Box>
@@ -320,92 +360,81 @@ const ViewInvice = () => {
                 gridColumn="span 3"
               >
                 <Box>
-                  <DateRangeIcon
+                  <NumbersIcon
                     style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DateRangeIcon>{" "}
+                  ></NumbersIcon>{" "}
                 </Box>
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Due Date
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {duedate.split("T")[0]}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
                 <Box>
-                  <PersonIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></PersonIcon>{" "}
-                </Box>
-                <Box p="5px">
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    Vender Name
+                    Due date
                   </Typography>
                   <Typography
                     variant="h5"
                     fontWeight="600"
                     color={colors.grey[100]}
                   >
-                    {vendorName}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <PersonIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></PersonIcon>{" "}
-                </Box>
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Current User
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {currentuser}
+                    {invoice?.duedate?.toString().toString().split("T")[0]}
                   </Typography>
                 </Box>
               </Box>
             </Box>
 
+            <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
+              Progress bar
+            </Typography>
+
+            {/* <ProgressCircle size="50" /> */}
+            <Box sx={{ width: "100%" }}>
+              <LinearProgressWithLabel
+                value={
+                  invoice &&
+                  (invoice.movementstatus === "wip" ||
+                    invoice.movementstatus === "completed")
+                    ? (invoice?.progressstepsdone /
+                        invoice?.progressstepscount) *
+                      100
+                    : 0
+                }
+              />
+            </Box>
+
+            <Box display="flex" justifyContent="center" mt="20px">
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    // setActionType("reject");
+                    // setDialogOpen(!dialogOpen);
+                    invoice?.biodata &&  dispatch(getAttachment(invoice?.biodata));
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Download biodata
+                </Button>
+              </Box>
+
+              <Box m="10px">
+                <Button
+                  onClick={() => {
+                    // setActionType("approve");
+                    // setDialogOpen(!dialogOpen);
+                    invoice?.concentdoc &&  dispatch(getAttachment(invoice?.concentdoc));
+                  }}
+                  color="secondary"
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  sx={{ textTransform: "none" }}
+                >
+                  Download consent letter
+                </Button>
+              </Box>
+            </Box>
           </Box>
 
           <Box
@@ -417,183 +446,10 @@ const ViewInvice = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Other invoice Detail
+              Requested Products
             </Typography>
 
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(amount)}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    GST Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(Number(gstamount))}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Total Amount
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    {formatNumberIndian(totalamount)}
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  {/* <DownloadIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></DownloadIcon>{" "} */}
-                </Box>
-                <Box p="5px">
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  ></Typography>
-
-                  <Button
-                    onClick={() => {
-                      attachments && dispatch(getAttachment(attachments));
-                    }}
-                    color="secondary"
-                    variant="contained"
-                    startIcon={<DownloadIcon />}
-                  >
-                    Download Attachment
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-            <Box
-              m="0px 0 0 0"
-              display="grid"
-              gridTemplateColumns="repeat(6, 1fr)"
-              gap="20px"
-            >
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                <Box>
-                  <CurrencyRupeeIcon
-                    style={{ fontSize: 50, color: "#94e2cd" }}
-                  ></CurrencyRupeeIcon>{" "}
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Credit/Debit Note
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    XXXXXXX
-                  </Typography>
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="left"
-                mt="20px"
-                gridColumn="span 3"
-              >
-                
-                
-              </Box>
-            </Box>
-
+            {actionSteps}
           </Box>
         </Box>
 
@@ -625,14 +481,14 @@ const ViewInvice = () => {
             Movement details
           </Typography>
           <DataGrid
-          sx={{
-            "& .MuiDataGrid-cell": {
-              fontSize: "14px", // Change this value to your desired font size
-            },
-          }}
-          density="compact"
+            sx={{
+              "& .MuiDataGrid-cell": {
+                fontSize: "14px", // Change this value to your desired font size
+              },
+            }}
+            density="compact"
             // checkboxSelection
-            rows={Array.isArray(invoicemovement) ? invoicemovement : []} // Ensure that invoice is an array
+            rows={invoice?.workflowemovement|| []} // Ensure that invoice is an array
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             getRowId={(row) => row._id} // Use the `_id` field as the unique id
@@ -653,50 +509,6 @@ const ViewInvice = () => {
           <Loader />
         ) : null
       ) : null}
-
-      <Dialog
-        sx={{
-          borderRadius: "20px",
-          "& .MuiDialog-paper": {
-            borderRadius: "10px",
-            backgroundColor: colors.primary[500],
-            color: colors.grey[100],
-            height: "300px",
-            WebkitAlignContent: "center",
-            width: "400px",
-          },
-        }}
-        open={dialogOpen}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Confirm Approval"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to approve?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            color="error"
-            startIcon={<CloseIcon />}
-            variant="contained"
-          >
-            No
-          </Button>
-          <Button
-            onClick={handleApprove}
-            color="warning"
-            startIcon={<DoneAllIcon />}
-            variant="contained"
-            autoFocus
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };

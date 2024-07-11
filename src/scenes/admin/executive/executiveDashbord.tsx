@@ -61,7 +61,7 @@ const DashboardUser = () => {
   }, [dispatch]);
 
   const columns: GridColDef<any[number]>[] = [
-    { field: "clientname", headerName: "Clientname"  ,   flex: 1,},
+    { field: "clientname", headerName: "Client name"  ,   flex: 1,},
 
     {
       field: "createdAt",
@@ -188,7 +188,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.needtoacttotal)}
+            title=""
             subtitle="Need to act"
             progress="0.75"
             increase={data.needtoact}
@@ -215,7 +215,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.invoiceWipAmount)}
+            title=""
             subtitle="Under approval"
             progress="0.50"
             increase={data.invoiceWip}
@@ -243,7 +243,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.invoiceRejectedAmount)} // Amount
+            title="" // Amount
             subtitle="Rejected invoice"
             progress="0.30"
             increase={data.invoiceRejected} // count
@@ -270,7 +270,7 @@ const DashboardUser = () => {
           }}
         >
           <StatBox
-            title={formatNumberIndian(data.invoiceCompletedAmount)}
+            title=""
             subtitle="Paid invoice"
             progress="0.80"
             increase={data.invoiceCompleted}

@@ -194,6 +194,7 @@ function App() {
             <Route path="invoice" element={<InvoiceContainer />}>
               <Route path="" element={<InvoiceTable />} />
               <Route path="addinvoice" element={<RegisterInvoice />} />
+              <Route path="viewinvoice/:id?" element={<ViewInvice />} />
             </Route>
 
             <Route path="generateinvoice" element={<InvoiceContainer />}>

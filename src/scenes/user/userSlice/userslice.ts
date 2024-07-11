@@ -17,13 +17,9 @@ const initialState: ILoginSuccessResponce = {
   message: "",
   dashboard: {
     needtoact: 0,
-    needtoacttotal: 0,
     invoiceWip: 0,
-    invoiceWipAmount: 0,
     invoiceCompleted: 0,
-    invoiceCompletedAmount: 0,
     invoiceRejected: 0,
-    invoiceRejectedAmount: 0,
   },
   
 };

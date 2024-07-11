@@ -23,9 +23,6 @@ import { AppDispatch } from "../../../../app/store";
 import { Toast } from "../../../../components/Toast";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import LinearProgress, {
-  LinearProgressProps,
-} from "@mui/material/LinearProgress";
 
 import {
   addRemarks,
@@ -42,7 +39,6 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import ProgressCircle from "../../../../components/ProgressCircle";
 import LinearProgressWithLabel from "../../../../components/LinearProgressWithLabel";
 import CommentIcon from "@mui/icons-material/Comment";
 
