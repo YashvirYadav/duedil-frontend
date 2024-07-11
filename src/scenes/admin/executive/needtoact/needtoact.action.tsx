@@ -11,6 +11,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContentText,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { tokens } from "../../../../theme";
@@ -29,6 +31,7 @@ import {
   getAttachment,
   getInvoiceById,
   setproductstatusdone,
+  userapprove,
 } from "./needtoact.slice";
 import { Iinvoicemovement } from "./needtoact.type";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
@@ -62,6 +65,7 @@ const NeedToactAction = () => {
   const [remarksid, setRemarksid] = useState<string>("");
   const [completedkOpen, setCompletedOpen] = useState<boolean>(false);
   const [doneProduct, setDoneProduct] = useState<File>();
+  const [isCompleted, setisCompleted] = useState<boolean>(false);
 
   const { id } = useParams<{ id?: string }>();
   const doneproductFileChange = (
@@ -70,6 +74,13 @@ const NeedToactAction = () => {
     if (event.target.files && event.target.files[0]) {
       setDoneProduct(event.target.files[0]);
     }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    // Handle the change (e.g., update state, make API call, etc.)
+    setisCompleted(isChecked);
+    console.log(isChecked); // Example action
   };
 
   const submitProductDone = () => {
@@ -86,6 +97,8 @@ const NeedToactAction = () => {
         dispatch(getInvoiceById(id))
       );
       setCompletedOpen(false);
+      setisCompleted(false);
+      setRemarkOpen(false);
     }
   };
   useEffect(() => {
@@ -99,7 +112,11 @@ const NeedToactAction = () => {
   );
 
   const submitRemark = () => {
-    id &&
+
+    if(isCompleted){
+      submitProductDone()
+    }else{
+      id &&
       dispatch(
         addRemarks({
           id: id,
@@ -108,6 +125,9 @@ const NeedToactAction = () => {
         })
       ).then(() => dispatch(getInvoiceById(id)));
     setRemarkOpen(false);
+    }
+
+    
   };
 
   const [open, setOpen] = useState<boolean>(false);
@@ -142,7 +162,8 @@ const NeedToactAction = () => {
   };
 
   const handleApprove = () => {
-    if (actionType === "approve") {
+    if (actionType === "approve" && id) {
+      dispatch(userapprove({ id: id, comment: remark }));
     } else if (actionType === "reject") {
     }
 
@@ -192,34 +213,40 @@ const NeedToactAction = () => {
       headerName: "Status",
     },
   ];
+//map the action steps
+  const actionSteps = invoice?.productrequest.map((item) => {
+    const currentDate = new Date();
+    const dueDate = new Date(item.duedate);
+    const timeDiff = dueDate.getTime() - currentDate.getTime();
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return (
+      <Box>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+            sx={{
+              backgroundColor:
+                item.status !== "Done"
+                  ? colors.primary[800]
+                  : colors.blueAccent[500],
+            }}
+          >
+            <Box display="flex" alignItems="center" gap="10px">
+              {item.productname} : Due Date
+              <Typography
+                sx={{ textDecoration: "underline" }}
+                color={colors.greenAccent[300]}
+              >
+                {item.duedate.toString().split("T")[0]}
+                
+                {/* diffrence duedate and current date */}
+              </Typography>
+            </Box>
+            , { diffDays} days left
 
-  const actionSteps = invoice?.productrequest.map((item) => (
-    <Box>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-          sx={{
-            backgroundColor:
-              item.status !== "Done"
-                ? colors.primary[800]
-                : colors.primary[400],
-          }}
-        >
-          <Box display="flex" alignItems="center" gap="10px">
-            {item.productname} : Due Date
-            <Typography
-              sx={{ textDecoration: "underline" }}
-              variant="h5"
-              fontWeight="600"
-              color={colors.greenAccent[300]}
-            >
-              {item.duedate.toString().split("T")[0]}
-            </Typography>
-          </Box>
-
-          {/* {item.productname} : Due Date  
+            {/* {item.productname} : Due Date  
               <Typography
                 sx={{ textDecoration: "underline" }}
                 variant="h5"
@@ -228,69 +255,75 @@ const NeedToactAction = () => {
               >
                 {item.duedate.toString().split("T")[0]}
               </Typography> */}
-        </AccordionSummary>
-        <AccordionDetails sx={{ backgroundColor: "#080b12" }}>
-          {item.remark.map((action, index) => (
-            <Box display="flex" justifyContent="left" mt="20px">
-              <Typography
-                sx={{ textDecoration: "underline" }}
-                variant="h5"
-                fontWeight="600"
-                color={colors.greenAccent[300]}
-              >
-                {new Date(action.split("::")[0]).toDateString()}
-              </Typography>
-              - {action.split("::")[1]}
-              {item.status === "Done" && index === item.remark.length - 1 ? (
-                <Box sx={{ cursor: "pointer" }}>
-                  <DownloadIcon
-                    onClick={() => {
-                      console.log("Add remark", item.finaldocument);
-                      item.finaldocument &&  dispatch(getAttachment(item.finaldocument));
-                    }}
-                  ></DownloadIcon>{" "}
-                </Box>
-              ) : null}
-            </Box>
-          ))}
+          </AccordionSummary>
+          <AccordionDetails sx={{ backgroundColor: "#080b12" }}>
+            {item.remark.map((action, index) => (
+              <Box display="flex" justifyContent="left" mt="20px">
+                <Typography
+                  sx={{ textDecoration: "underline" }}
+                  variant="h5"
+                  fontWeight="600"
+                  color={colors.greenAccent[300]}
+                >
+                  {new Date(action.split("::")[0]).toDateString()}
+                </Typography>
+                - {action.split("::")[1]}
+                {item.status === "Done" && index === item.remark.length - 1 ? (
+                  <Box sx={{ cursor: "pointer" }}>
+                {
+                  item.finaldocument ? 
+                    <DownloadIcon
+                      onClick={() => {
+                        console.log("Add Action", item.finaldocument);
+                        item.finaldocument &&
+                          dispatch(getAttachment(item.finaldocument));
+                      }}
+                    />
+                  :null
+                }    
+                  </Box>
+                ) : null}
+              </Box>
+            ))}
 
-          {item.status !== "Done" ? (
-            <Box display="flex" justifyContent="end">
-              <Box m="10px">
-                <Button
-                  onClick={() => {
-                    console.log("Add remark", item._id);
-                    setRemarksid(item._id);
-                    setRemarkOpen(true);
-                  }}
-                  color="error"
-                  variant="contained"
-                  startIcon={<CommentIcon />}
-                  sx={{ textTransform: "none" }}
-                >
-                  Add remark
-                </Button>
+            {item.status !== "Done" ? (
+              <Box display="flex" justifyContent="end">
+                <Box m="10px">
+                  <Button
+                    onClick={() => {
+                      console.log("Add remark", item._id);
+                      setRemarksid(item._id);
+                      setRemarkOpen(true);
+                    }}
+                     color="secondary"
+                    variant="contained"
+                    startIcon={<CommentIcon />}
+                    sx={{ textTransform: "none" }}
+                  >
+                    Add remark
+                  </Button>
+                </Box>
+                {/* <Box m="10px">
+                  <Button
+                    onClick={() => {
+                      setRemarksid(item._id);
+                      setCompletedOpen(true);
+                    }}
+                    color="secondary"
+                    variant="contained"
+                    startIcon={<DoneAllIcon />}
+                    sx={{ textTransform: "none" }}
+                  >
+                    Completed
+                  </Button>
+                </Box> */}
               </Box>
-              <Box m="10px">
-                <Button
-                  onClick={() => {
-                    setRemarksid(item._id);
-                    setCompletedOpen(true);
-                  }}
-                  color="secondary"
-                  variant="contained"
-                  startIcon={<DoneAllIcon />}
-                  sx={{ textTransform: "none" }}
-                >
-                  Completed
-                </Button>
-              </Box>
-            </Box>
-          ) : null}
-        </AccordionDetails>
-      </Accordion>
-    </Box>
-  ));
+            ) : null}
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+    );
+  });
 
   return (
     <>
@@ -510,7 +543,8 @@ const NeedToactAction = () => {
                   onClick={() => {
                     // setActionType("reject");
                     // setDialogOpen(!dialogOpen);
-                    invoice?.biodata &&  dispatch(getAttachment(invoice?.biodata));
+                    invoice?.biodata &&
+                      dispatch(getAttachment(invoice?.biodata));
                   }}
                   color="secondary"
                   variant="contained"
@@ -526,7 +560,8 @@ const NeedToactAction = () => {
                   onClick={() => {
                     // setActionType("approve");
                     // setDialogOpen(!dialogOpen);
-                    invoice?.concentdoc &&  dispatch(getAttachment(invoice?.concentdoc));
+                    invoice?.concentdoc &&
+                      dispatch(getAttachment(invoice?.concentdoc));
                   }}
                   color="secondary"
                   variant="contained"
@@ -712,7 +747,11 @@ const NeedToactAction = () => {
             onChange={(e) => setRemark(e.target.value)}
             sx={{ gridColumn: "span 12", marginTop: "12px" }}
           />
+          <FormControlLabel control={<Checkbox onChange={handleChange} />} label="Mark as completed" />
         </DialogContent>
+
+        
+
         <DialogActions>
           <Button
             onClick={handleRemarkClose}
