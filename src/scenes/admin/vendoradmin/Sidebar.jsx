@@ -138,7 +138,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            <Item
+            {/* <Item
               title="Generate invoice"
               to="generateinvoice"
               icon={<ReceiptOutlinedIcon />}
@@ -152,7 +152,7 @@ const Sidebar = () => {
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Item
               title="Bank"

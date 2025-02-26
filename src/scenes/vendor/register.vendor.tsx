@@ -183,7 +183,7 @@ const Registervendor = () => {
     <>
       <Box m="20px">
         {/* HEADER */}
-        <Header title="Register Vendor" subtitle="" />
+        <Header title="Register Client" subtitle="" />
         <Box display="flex" justifyContent="end" mt="20px">
           <Button
             onClick={() => navigate(-1)}
@@ -210,14 +210,14 @@ const Registervendor = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Vendor Detail
+              Client Detail
             </Typography>
             <TextField
               fullWidth
               variant="outlined"
               type="text"
-              label="Vendor Name*"
-              name="Vendor Name*"
+              label="Client Name*"
+              name="Client Name*"
               value={VendorName}
               onChange={(e) => {
                 setErrorVendorName(false);

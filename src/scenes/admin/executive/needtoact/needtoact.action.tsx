@@ -32,6 +32,7 @@ import {
   getInvoiceById,
   setproductstatusdone,
   userapprove,
+  userreject,
 } from "./needtoact.slice";
 import { Iinvoicemovement } from "./needtoact.type";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
@@ -66,6 +67,7 @@ const NeedToactAction = () => {
   const [completedkOpen, setCompletedOpen] = useState<boolean>(false);
   const [doneProduct, setDoneProduct] = useState<File>();
   const [isCompleted, setisCompleted] = useState<boolean>(false);
+  const [showAction, setShowAction] = useState<boolean>(false);
 
   const { id } = useParams<{ id?: string }>();
   const doneproductFileChange = (
@@ -164,7 +166,10 @@ const NeedToactAction = () => {
   const handleApprove = () => {
     if (actionType === "approve" && id) {
       dispatch(userapprove({ id: id, comment: remark }));
-    } else if (actionType === "reject") {
+    } else if (actionType === "reject" && id) {
+    
+        dispatch(userreject({ id: id, comment: remark }));
+   
     }
 
     setDialogOpen(!dialogOpen);
@@ -325,6 +330,17 @@ const NeedToactAction = () => {
     );
   });
 
+  
+
+  useEffect(() => {
+    const user = sessionStorage.getItem("user");
+  if(user){
+    const show = JSON.parse(user)?._id === invoice?.currentuser;
+    setShowAction(show);
+  }
+  }, [invoice]);
+ 
+
   return (
     <>
       <Box m="20px">
@@ -342,7 +358,10 @@ const NeedToactAction = () => {
               Back to list
             </Button>
           </Box>
-          <Box m="10px">
+          {// check local storage role id equal to api response role id currentuser
+
+          }
+          {showAction &&<Box m="10px">
             <Button
               onClick={() => {
                 setActionType("reject");
@@ -355,9 +374,9 @@ const NeedToactAction = () => {
             >
               Reject
             </Button>
-          </Box>
+          </Box>}
 
-          <Box m="10px">
+          {showAction &&<Box m="10px">
             <Button
               onClick={() => {
                 setActionType("approve");
@@ -370,7 +389,7 @@ const NeedToactAction = () => {
             >
               Approve
             </Button>
-          </Box>
+          </Box>}
         </Box>
 
         <Box
@@ -388,7 +407,7 @@ const NeedToactAction = () => {
             gap="10px"
           >
             <Typography variant="h5" fontWeight="600" color={colors.grey[100]}>
-              Request Detail
+              Request Detail 
             </Typography>
             <Box
               m="0px 0 0 0"

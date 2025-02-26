@@ -244,7 +244,7 @@ const DashboardUser = () => {
         >
           <StatBox
             title="" // Amount
-            subtitle="Rejected invoice"
+            subtitle="Rejected Request"
             progress="0.30"
             increase={data.invoiceRejected} // count
             icon={
@@ -271,7 +271,7 @@ const DashboardUser = () => {
         >
           <StatBox
             title=""
-            subtitle="Paid invoice"
+            subtitle="Done Request"
             progress="0.80"
             increase={data.invoiceCompleted}
             icon={
